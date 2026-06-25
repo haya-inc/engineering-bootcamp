@@ -1,0 +1,72 @@
+---
+title: "付録D: 外部参照一覧"
+part: 7
+partLabel: "付録"
+order: 4
+---
+
+- [k16shikano: japanese-tech-writing/SKILL](https://gist.github.com/k16shikano/fd287c3133457c4fd8f5601d34aa817d)：日本語技術文書の文章規範。段落、論証、用語導入、冗長なLLM口調の抑制を編集方針に採用する。
+- [Software Engineering at Google](https://abseil.io/resources/swe-book/html/toc.html)：ソフトウェアを時間、変更、規模、チーム、レビュー、テスト、文書として扱う基礎参照。
+- [Manifesto for Agile Software Development](https://agilemanifesto.org/)：価値、動くソフトウェア、顧客協働、変化への応答を説明する導入参照。
+- [Principles behind the Agile Manifesto](https://agilemanifesto.org/principles.html)：早く価値あるソフトウェアを届けること、動くソフトウェア、単純さ、継続的なふりかえりの参照。
+- [Pro Git](https://git-scm.com/book/en/v2)：Gitの公式に近い体系的な入門書。履歴、ブランチ、リモート、GitHub連携の補助参照。
+- [GitHub Docs: Collaborating with pull requests](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests)：Pull Request、レビュー、ステータスチェック、マージの公式参照。
+- [GitHub Docs: About issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/learning-about-issues/about-issues)：ideas、tasks、bugsをissueとして記録し、sub-issues、dependencies、labelsなどで作業を小さく追跡する公式参照。
+- [GitHub Docs: About Projects](https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects)：IssuesやPull Requestsと連動するtable、board、roadmapで作業を計画し追跡する公式参照。
+- [Google Engineering Practices: Code Review](https://google.github.io/eng-practices/review/)：小さな変更、レビューの姿勢、変更説明を扱う参照。
+- [MDN: Overview of HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Overview)：HTTPの要求、応答、クライアント、サーバーを説明する参照。
+- [MDN: Using HTTP cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Cookies)：Cookie、セッション、状態管理の補助参照。
+- [MDN: Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API)：フロントエンドからAPIを呼び出す基本参照。
+- [Martin Fowler: Ubiquitous Language](https://martinfowler.com/bliki/UbiquitousLanguage.html)：ドメインの言葉を開発者と利用者の共通語にする考え方。
+- [Martin Fowler: Bounded Context](https://martinfowler.com/bliki/BoundedContext.html)：用語とモデルの境界を明示する考え方。
+- [PostgreSQL Documentation: Constraints](https://www.postgresql.org/docs/current/ddl-constraints.html)：NOT NULL、UNIQUE、PRIMARY KEY、FOREIGN KEY、CHECKの具体参照。
+- [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)：API契約を機械にも人にも読める形で表す参照。
+- [W3C WAI: WCAG 2 Overview](https://www.w3.org/WAI/standards-guidelines/wcag/)：WCAGの位置づけと支援資料の入口。2026年6月時点でWCAG 2.2利用が推奨されている。
+- [W3C Recommendation: WCAG 2.2](https://www.w3.org/TR/WCAG22/)：知覚可能、操作可能、理解可能、堅牢の原則と成功基準の一次参照。
+- [Martin Fowler: The Practical Test Pyramid](https://martinfowler.com/articles/practical-test-pyramid.html)：テストを速度、範囲、信頼性の組み合わせとして考える参照。
+- [Martin Fowler: Refactoring](https://martinfowler.com/books/refactoring.html)：既存コードの設計を、ふるまいを保つ小さな変換の積み重ねで改善する考え方の参照。
+- [OWASP Top Ten](https://owasp.org/www-project-top-ten/)：Webアプリケーションセキュリティの共通リスク。2026年6月時点ではTop Ten 2025が現行リリース。
+- [OWASP Application Security Verification Standard](https://owasp.org/www-project-application-security-verification-standard/)：アプリケーションセキュリティの確認項目を体系化する参照。2026年6月時点ではASVS 5.0.0がlatest stable。
+- [NIST SP 800-218: Secure Software Development Framework](https://csrc.nist.gov/pubs/sp/800/218/final)：セキュアなソフトウェア開発の高水準プラクティス。2026年6月時点ではfinalはVersion 1.1。
+- [Docker Docs: What is Docker?](https://docs.docker.com/get-started/docker-overview/)：イメージ、コンテナ、Dockerfile、Composeの入口参照。
+- [The Twelve-Factor App](https://12factor.net/)：設定、依存関係、ログ、環境差分などSaaSアプリの運用原則。
+- [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)：クラウド構成を安全性、信頼性、効率、コスト、持続可能性でレビューする参照。
+- [AWS App Runner: Service based on a source image](https://docs.aws.amazon.com/apprunner/latest/dg/service-source-image.html)：ECRなどのimage repositoryからApp Runner serviceを作るときの公式参照。
+- [AWS App Runner: Managing environment variables](https://docs.aws.amazon.com/apprunner/latest/dg/env-variable-manage.html)：App Runnerで環境変数、Secrets Manager、Parameter Store参照を扱う公式参照。
+- [GitHub Docs: Configuring OpenID Connect in Amazon Web Services](https://docs.github.com/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)：GitHub ActionsからAWSへOIDCで接続し、長期credentialを置かない方針の公式参照。
+- [Martin Fowler: Continuous Integration](https://martinfowler.com/articles/continuousIntegration.html)：継続的インテグレーションの実践、ビルド、テスト、デプロイの参照。
+- [Google SRE Book](https://sre.google/sre-book/table-of-contents/)：SLO、モニタリング、インシデント、ポストモーテム、信頼性の参照。
+- [Google SRE Book: Monitoring Distributed Systems](https://sre.google/sre-book/monitoring-distributed-systems/)：アラート、ダッシュボード、Four Golden Signalsを説明する一次参照。
+- [Google SRE Book: Service Level Objectives](https://sre.google/sre-book/service-level-objectives/)：SLI、SLO、SLAの区別と、利用者体験から信頼性目標を定義する参照。
+- [Google SRE Book: Postmortem Culture](https://sre.google/sre-book/postmortem-culture/)：インシデントを責任追及ではなく学習と再発防止へつなげる参照。
+- [OpenTelemetry: What is OpenTelemetry?](https://opentelemetry.io/docs/what-is-opentelemetry/)：ログ、メトリクス、トレース、計装の共通語彙。
+- [OpenTelemetry: Signals](https://opentelemetry.io/docs/concepts/signals/)：traces、metrics、logs、baggageなど、テレメトリ信号の役割を整理する参照。
+- [AWS App Runner: Observability for your service](https://docs.aws.amazon.com/apprunner/latest/dg/monitor.html)：App Runner serviceのlogs、metrics、events、CloudTrail、X-Ray tracingへの入口参照。
+- [Amazon CloudWatch User Guide: What is Amazon CloudWatch?](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html)：metrics、alarms、dashboards、logs、SLOなどAWS上の観測基盤の参照。
+- [Amazon CloudWatch Logs: Analyzing log data with Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html)：CloudWatch Logsの検索、集計、原因調査、修正検証に使う参照。
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)：AIのリスク、評価、ガバナンスを扱う参照。
+- [NIST AI RMF: Generative Artificial Intelligence Profile](https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence)：生成AI固有のリスクをAI RMFへ対応づける参照。2026年6月時点ではNIST AI 600-1が公開版。
+- [OWASP Top 10 for Large Language Model Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/)：プロンプトインジェクション、過信、過剰な権限などLLMアプリ固有のリスク参照。
+- [OWASP 2025 Top 10 Risk & Mitigations for LLMs and Gen AI Apps](https://genai.owasp.org/llm-top-10/)：2025版のprompt injection、sensitive information disclosure、excessive agency、misinformationなどの参照。
+- [OpenAI API Docs: Prompt engineering](https://developers.openai.com/api/docs/guides/prompt-engineering)：promptを要件に合う出力を得るためのinstruction設計として扱う参照。
+- [OpenAI API Docs: Retrieval](https://developers.openai.com/api/docs/guides/retrieval)：検索で取り出した情報をモデル応答に組み合わせる考え方の参照。
+- [OpenAI API Docs: Function calling](https://developers.openai.com/api/docs/guides/function-calling)：tool callingやschemaに沿った外部機能呼び出しの参照。
+- [OpenAI API Docs: Evaluation best practices](https://developers.openai.com/api/docs/guides/evaluation-best-practices)：AIシステムの出力をタスク固有のeval、rubric、test caseで測る参照。
+- [Claude Code Docs: Overview](https://code.claude.com/docs/en/overview)：Claude Codeがcodebaseを読み、file編集、command実行、開発tool連携を行うagentic coding toolであることの一次参照。
+- [Claude Code Docs: Common workflows](https://code.claude.com/docs/en/common-workflows)：codebase探索、bug修正、refactoring、testing、PR、documentationなど日常開発workflowの公式参照。
+- [Claude Code Docs: Configure permissions](https://code.claude.com/docs/en/permissions)：allow、ask、denyでtool permissionを管理し、sandboxとの関係を扱う公式参照。
+- [Claude Code Docs: Settings](https://code.claude.com/docs/en/settings)：managed、user、project、local scopeの使い分けと、team-shared settingsの参照。
+- [Claude Code Docs: Memory](https://code.claude.com/docs/en/memory)：CLAUDE.md、CLAUDE.local.md、memoryの読み込みと運用上の注意の参照。
+- [Claude Code Docs: Hooks](https://code.claude.com/docs/en/hooks)：Claude Code lifecycleの特定時点でshell command、HTTP endpoint、LLM promptを実行するhookの参照。
+- [Claude Code Docs: Skills](https://code.claude.com/docs/en/skills)：繰り返し使う手順や専門的な作業能力をClaude Codeへ拡張するskillの参照。
+- [OpenAI Codex Docs: Overview](https://developers.openai.com/codex)：Codexがコード調査、実装、レビュー、debugなどを支援するcoding agentであることの一次参照。
+- [OpenAI Codex Docs: CLI](https://developers.openai.com/codex/cli)：ローカルterminal上でCodexがコードを読み、変更し、commandを実行する利用形態の参照。
+- [OpenAI Codex Docs: Cloud tasks](https://developers.openai.com/codex/cloud)：Codexがcloud環境で背景タスクとして動くときの作業環境の参照。
+- [OpenAI Codex Docs: Agent approvals and security](https://developers.openai.com/codex/agent-approvals-security)：Codexのapproval、sandbox、network、secretの扱いを説明する公式参照。
+- [OpenAI Codex Docs: Sandboxing](https://developers.openai.com/codex/concepts/sandboxing)：sandboxとapprovalを分けて考えるための公式参照。
+- [OpenAI Codex Docs: Permissions](https://developers.openai.com/codex/permissions)：Codexのlocal command execution、file write、networkなどのpermission profileを扱う参照。
+- [Michael Nygard: Documenting Architecture Decisions](https://www.cognitect.com/blog/2011/11/15/documenting-architecture-decisions)：ADRを小さな判断記録として残し、context、decision、status、consequencesを扱う原典的な参照。
+- [Google Engineering Practices: Writing good CL descriptions](https://google.github.io/eng-practices/review/developer/cl-descriptions.html)：変更説明を将来の読者にも分かる履歴として書くための参照。
+- [Google Engineering Practices: Small CLs](https://google.github.io/eng-practices/review/developer/small-cls.html)：レビューしやすく、安全に戻しやすい小さな変更単位を扱う参照。
+- [Google for Developers: Technical Writing](https://developers.google.com/tech-writing)：技術文書の読者、構造、明確さを扱う教材参照。
+- [Diátaxis](https://diataxis.fr/)：チュートリアル、ハウツー、説明、リファレンスを分ける文書設計参照。
