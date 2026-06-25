@@ -7,6 +7,10 @@
 
 import { getCollection, getEntry } from "astro:content";
 import data from "../data/videos.json";
+import { docHref, siteBase } from "./content.ts";
+
+// content.ts と URL 組み立てロジックを共有する (base 正規化・docHref を二重定義しない)。
+export { docHref };
 
 /** 1 動画分のメタデータ。 */
 export interface VideoMeta {
@@ -41,11 +45,6 @@ export interface VideoData {
 }
 
 const videoData = data as VideoData;
-
-/** base を除いたパス先頭 (例: "/engineering-bootcamp")。 */
-function base(): string {
-  return import.meta.env.BASE_URL.replace(/\/$/, "");
-}
 
 /**
  * 章番号順に並んだ全動画。videos コレクション (content.config.ts) から読み込み、
@@ -99,23 +98,25 @@ export const playlistUrl = videoData.playlistUrl;
 
 /** 動画一覧ページの URL。 */
 export function videosIndexHref(): string {
-  return `${base()}/videos/`;
+  return `${siteBase()}/videos/`;
 }
 
 /** 各動画ページの URL。 */
 export function videoHref(slug: string): string {
-  return `${base()}/videos/${slug}/`;
-}
-
-/** docHref と同じく content id からページ URL を作る (テキスト/用語解説への導線用)。 */
-export function docHref(id: string): string {
-  return `${base()}/${id}/`;
+  return `${siteBase()}/videos/${slug}/`;
 }
 
 /** YouTube サムネイル URL。 */
 export function youtubeThumb(id: string): string {
   return `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
 }
+
+/**
+ * YouTube 埋め込み iframe の allow 属性 (再生に必要な最小限)。
+ * accelerometer / gyroscope / clipboard-write など再生に不要な権限は付与しない。
+ * 全画面は iframe の allowfullscreen 属性で別途許可する。
+ */
+export const youtubeIframeAllow = "autoplay; encrypted-media; picture-in-picture";
 
 /** プライバシー強化モード (youtube-nocookie) の埋め込み URL。 */
 export function youtubeEmbed(id: string): string {

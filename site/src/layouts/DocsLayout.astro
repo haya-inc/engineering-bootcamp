@@ -18,8 +18,10 @@ interface Props {
   headings: MarkdownHeading[];
   prev?: NavLink;
   next?: NavLink;
-  /** 用語解説の用語ページ (intro 以外) のとき、カード表示と索引UIを有効にする */
+  /** 用語解説の用語ページ (intro 以外) のとき、用語のカード表示を有効にする */
   glossary?: boolean;
+  /** JSON-LD (Article / BreadcrumbList など)。BaseLayout の WebSite に追記される。 */
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
 }
 const {
   title,
@@ -30,10 +32,17 @@ const {
   prev,
   next,
   glossary = false,
+  structuredData = [],
 } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description} contained={false} ogType="article">
+<BaseLayout
+  title={title}
+  description={description}
+  contained={false}
+  ogType="article"
+  structuredData={structuredData}
+>
   <div class="docs">
     <button
       type="button"

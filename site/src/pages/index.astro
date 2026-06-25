@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { docHref } from "../lib/content.ts";
 import {
@@ -30,6 +31,7 @@ const courseStructuredData = {
   alternateName: SITE_ALTERNATE_NAME,
   description: SITE_DESCRIPTION,
   inLanguage: "ja",
+  url: new URL(`${base}/`, Astro.site).toString(),
   provider: {
     "@type": "Organization",
     name: SITE_PUBLISHER,
@@ -139,7 +141,7 @@ const materials = [
 >
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero__content">
-      <p class="kicker">{SITE_ALTERNATE_NAME}</p>
+      <p class="kicker" lang="en">{SITE_ALTERNATE_NAME}</p>
       {/* ワードマークは折り返し位置を制御する。CSS の word-break: keep-all で
           「エンジニア」のようなカタカナ語を途中で割らせず、意味の切れ目にだけ
           <wbr> で改行機会を与える (狭幅では「エンジニア / 入門研修」で折り返す)。 */}
@@ -173,20 +175,22 @@ const materials = [
       </div>
     </div>
     <div class="hero__art">
-      <img
-        src={HeroTop.src}
+      {/* LCP 要素。astro:assets で表示幅に合わせた srcset を生成し、最適化フォーマットで配信する。
+          eager + fetchpriority=high は維持。寸法は ImageMetadata から入るので CLS は出ない。 */}
+      <Image
+        src={HeroTop}
         alt="教材、動画、コード、検証、最終プロジェクトまでを一本の道でつなぐ学習サイトのイラスト"
-        width={1184}
-        height={1328}
+        widths={[592, 888, 1184]}
+        sizes="(max-width: 860px) 92vw, 46vw"
         loading="eager"
-        decoding="async"
         fetchpriority="high"
+        decoding="async"
       />
     </div>
   </section>
 
   <section class="section intro" aria-labelledby="intro-title">
-    <p class="section__label">Intro</p>
+    <p class="section__label" lang="en">Intro</p>
     <div>
       <h2 id="intro-title">自分の言葉で説明できるエンジニアへ。</h2>
       <p>
@@ -194,11 +198,11 @@ const materials = [
       </p>
     </div>
     <div class="intro__band">
-      <img
-        src={IntroImage.src}
+      <Image
+        src={IntroImage}
         alt="目的、実装、検証、共有、最終到達点へ進む学習の道を描いた概観図"
-        width={IntroImage.width}
-        height={IntroImage.height}
+        widths={[700, 1100, 1600]}
+        sizes="(max-width: 1180px) 92vw, 1100px"
         loading="lazy"
         decoding="async"
       />
@@ -206,7 +210,7 @@ const materials = [
   </section>
 
   <section class="section parts" aria-labelledby="parts-title">
-    <p class="section__label">Chapters</p>
+    <p class="section__label" lang="en">Chapters</p>
     <h2 id="parts-title">6つのPartで進む</h2>
     {/* CSS Carousel: 対応ブラウザでは ::scroll-button / ::scroll-marker による
         JSなしカルーセル、非対応では通常の横スクロール/グリッドに退化する。 */}
@@ -217,11 +221,11 @@ const materials = [
             <li class="part-card">
               <a href={p.href}>
                 <span class="part-card__media">
-                  <img
-                    src={p.art.src}
+                  <Image
+                    src={p.art}
                     alt=""
-                    width={p.art.width}
-                    height={p.art.height}
+                    widths={[340, 680]}
+                    sizes="(max-width: 900px) 86vw, 340px"
                     loading="lazy"
                     decoding="async"
                   />
@@ -241,7 +245,7 @@ const materials = [
 
   <section class="section materials" aria-labelledby="materials-title">
     <div class="materials__inner">
-      <p class="section__label">Materials</p>
+      <p class="section__label" lang="en">Materials</p>
       <h2 id="materials-title">視聴する、読む、手を動かす。</h2>
       <ul class="material-list" role="list">
         {
@@ -280,7 +284,7 @@ const materials = [
 
   <section class="cta" aria-labelledby="cta-title">
     <div class="cta__panel">
-      <p class="section__label">Start here</p>
+      <p class="section__label" lang="en">Start here</p>
       <h2 id="cta-title">さあ、最初の一歩を。</h2>
       <p>
         序章から読み始めても、動画で流れをつかんでも構いません。あなたのペースで、説明できる変更を作れるようになりましょう。

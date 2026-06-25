@@ -8,10 +8,11 @@ import {
   SITE_NAME_PARTS,
   SITE_PUBLISHER,
   SITE_PUBLISHER_URL,
+  SITE_REPOSITORY_URL,
 } from "../lib/site";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-const repo = "https://github.com/haya-inc/engineering-bootcamp";
+const repo = SITE_REPOSITORY_URL;
 const year = new Date().getFullYear();
 
 interface FooterLink {

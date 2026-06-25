@@ -26,16 +26,10 @@ const visibleSections = currentSection ? [currentSection] : sections;
     visibleSections.map((section) => (
       <div class="sidebar__section">
         <p class="sidebar__section-title">{section.label}</p>
-        {section.groups.map((group) => (
-          <details
-            class="sidebar__group"
-            open={
-              group.items.length <= 6 || groupHasCurrent(group.items)
-                ? true
-                : undefined
-            }
-          >
-            <summary class="sidebar__group-title">{group.label}</summary>
+        {section.groups.map((group) =>
+          // グループ名がセクション名と同じ (例: 用語解説) ときは見出しの二重表示を避け、
+          // 折りたたみを挟まずリストをフラットに出す。
+          group.label === section.label ? (
             <ul class="sidebar__list">
               {group.items.map((item) => (
                 <li>
@@ -49,8 +43,30 @@ const visibleSections = currentSection ? [currentSection] : sections;
                 </li>
               ))}
             </ul>
-          </details>
-        ))}
+          ) : (
+            <details
+              class="sidebar__group"
+              open={
+                group.items.length <= 6 || groupHasCurrent(group.items) ? true : undefined
+              }
+            >
+              <summary class="sidebar__group-title">{group.label}</summary>
+              <ul class="sidebar__list">
+                {group.items.map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      class="sidebar__link"
+                      aria-current={item.id === currentId ? "page" : undefined}
+                    >
+                      {item.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ),
+        )}
       </div>
     ))
   }

@@ -21,6 +21,8 @@ interface Props {
   contained?: boolean;
   ogType?: "website" | "article";
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  /** 早めに TCP/TLS を張っておきたい外部オリジン (例: 動画ページの YouTube サムネ配信元)。 */
+  preconnect?: string[];
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   contained = true,
   ogType = "website",
   structuredData = [],
+  preconnect = [],
 } = Astro.props;
 
 const siteName = SITE_NAME;
@@ -58,6 +61,8 @@ const structuredDataItems = [
   },
   ...(Array.isArray(structuredData) ? structuredData : [structuredData]),
 ];
+// `<` だけ < へ退避すれば、JSON 文字列値に "</script>" 等が混じっても script 要素を
+// 閉じられない (XSS 防止)。現状は静的データのみだが、将来 frontmatter 由来の値を入れても安全。
 const jsonLd = JSON.stringify(structuredDataItems).replace(/</g, "\\u003c");
 ---
 
@@ -71,11 +76,19 @@ const jsonLd = JSON.stringify(structuredDataItems).replace(/</g, "\\u003c");
     <meta name="application-name" content={siteName} />
     <meta name="author" content={SITE_PUBLISHER} />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#d84f2a" />
+    {/* モバイルのブラウザ UI 色を本文背景 (--bg) に合わせ、OS のライト/ダークへ追従させる。
+        手動テーマトグルは OS 設定までは上書きしないが、OS 既定の利用者には地続きの見え方になる。 */}
+    <meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)" />
     <link rel="icon" href={favicon} type="image/svg+xml" />
     <link rel="icon" href={faviconPng} type="image/png" sizes="32x32" />
     <link rel="icon" href={faviconIco} sizes="any" />
     <link rel="apple-touch-icon" href={appleTouchIcon} />
+    {/* ページが指定した外部オリジンへ事前接続 (動画ページの i.ytimg.com など)。サムネは別オリジン
+        画像なので crossorigin は付けない (anonymous 画像取得の接続を再利用させる)。 */}
+    {preconnect.map((origin) => (
+      <link rel="preconnect" href={origin} />
+    ))}
     {/* 欧文 Inter をセルフホスト。@font-face 生成 + above-the-fold 用に preload */}
     <Font cssVariable="--font-sans-web" preload />
     {/* ブランドワードマーク「エンジニア入門研修」専用書体 (9文字サブセット)。

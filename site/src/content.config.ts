@@ -1,5 +1,6 @@
 import { defineCollection, reference } from "astro:content";
-import { z } from "astro:schema";
+// z は astro:schema 経由だと deprecated 警告 (ts6385) が出るため、正規の astro/zod から取る。
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 import videosData from "./data/videos.json";
 
@@ -69,8 +70,8 @@ const videos = defineCollection({
     glossaryId: reference("docs"),
     // 動画台本 (scripts コレクション) への参照。例: "01-roadmap"
     scriptId: reference("scripts"),
-    scriptUrl: z.string().url(),
-    assignmentUrl: z.string().url(),
+    scriptUrl: z.url(),
+    assignmentUrl: z.url(),
   }),
 });
 

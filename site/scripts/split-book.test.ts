@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   deriveAliases,
+  deriveDescription,
   extractGlossaryTerms,
   indexOfTerm,
   linkifyGlossaryTerms,
@@ -9,7 +10,9 @@ import {
   parseFrontmatter,
   parseVideoTable,
   rewriteLinks,
+  stripInlineMarkdown,
   trimBlank,
+  truncateForMeta,
   yamlString,
 } from "./split-book.mjs";
 
@@ -49,6 +52,31 @@ describe("normalizeHeadings", () => {
 
   it("既に h2 起点なら変えない", () => {
     expect(normalizeHeadings(["## A", "### B"])).toEqual(["## A", "### B"]);
+  });
+
+  it("入れ子フェンス (4連の中の3連) の内側 # はシフトしない", () => {
+    // 旧実装は内側の ``` で外側の ```` を誤って閉じ、# を本文見出し扱いしていた (回帰防止)。
+    expect(
+      normalizeHeadings([
+        "### 章",
+        "````md",
+        "```dockerfile",
+        "# syntax",
+        "```",
+        "````",
+        "#### 節",
+      ]),
+    ).toEqual(["## 章", "````md", "```dockerfile", "# syntax", "```", "````", "### 節"]);
+  });
+
+  it("情報文字列付きの行ではフェンスを閉じない (閉じは記号+空白のみ)", () => {
+    expect(
+      normalizeHeadings(["### A", "```", "# inside", "```ruby", "# also", "```", "#### B"]),
+    ).toEqual(["## A", "```", "# inside", "```ruby", "# also", "```", "### B"]);
+  });
+
+  it("空見出し `# ` だけの行は見出し扱いせず全体シフトを起こさない", () => {
+    expect(normalizeHeadings(["## A", "# ", "### B"])).toEqual(["## A", "# ", "### B"]);
   });
 });
 
@@ -202,6 +230,58 @@ describe("indexOfTerm", () => {
   });
 });
 
+describe("stripInlineMarkdown", () => {
+  it("リンクはラベルだけ残し、画像・コード・強調記号を外す", () => {
+    expect(stripInlineMarkdown("本文 [book/](book/) の別冊である。")).toBe(
+      "本文 book/ の別冊である。",
+    );
+    expect(stripInlineMarkdown("`commit` と **太字** と *斜体*")).toBe("commit と 太字 と 斜体");
+    expect(stripInlineMarkdown("図 ![alt](x.png) を消す")).toBe("図  を消す");
+  });
+
+  it("snake_case のアンダースコアは壊さない", () => {
+    expect(stripInlineMarkdown("api_key を使う")).toBe("api_key を使う");
+  });
+});
+
+describe("truncateForMeta", () => {
+  it("maxLen 以下はそのまま返す", () => {
+    expect(truncateForMeta("短い文。", 120)).toBe("短い文。");
+  });
+
+  it("句点で完全文を詰め、超える文は落とす", () => {
+    const text = "一文目です。二文目です。三文目です。";
+    expect(truncateForMeta(text, 8)).toBe("一文目です。"); // 2 文目を足すと 8 字超なので 1 文で止める
+    expect(truncateForMeta(text, 13)).toBe("一文目です。二文目です。"); // 2 文 (12 字) は収まる
+  });
+
+  it("1 文目が長すぎるときは字数で丸めて省略記号", () => {
+    expect(truncateForMeta("あいうえおかきくけこさしすせそ", 10)).toBe("あいうえおかきくけ…");
+  });
+});
+
+describe("deriveDescription", () => {
+  it("最初の地の文の段落を 1 文に丸めて返す", () => {
+    const lines = ["# 見出し", "", "最初の段落です。続きの文もあります。", "", "次の段落。"];
+    expect(deriveDescription(lines, 120)).toBe("最初の段落です。続きの文もあります。");
+  });
+
+  it("見出し・箇条書き・コードフェンスを飛ばして地の文を拾う", () => {
+    const lines = ["## 用語名", "- **読み**：…", "```", "code", "```", "", "ここが地の文。"];
+    expect(deriveDescription(lines, 120)).toBe("ここが地の文。");
+  });
+
+  it("地の文が無ければ空文字 (テンプレへフォールバックさせる)", () => {
+    expect(deriveDescription(["## 見出しだけ", "- 箇条書き"], 120)).toBe("");
+  });
+
+  it("段落内のインライン Markdown は素のテキストへ落とす", () => {
+    expect(deriveDescription(["本文 [章](ch.md) と `code` を含む段落。"], 120)).toBe(
+      "本文 章 と code を含む段落。",
+    );
+  });
+});
+
 describe("linkifyGlossaryTerms", () => {
   const terms = [
     { term: "HTTP", anchor: "http", reading: "エイチティーティーピー" },
@@ -212,13 +292,13 @@ describe("linkifyGlossaryTerms", () => {
   it("初出だけをリンクし、2回目以降はそのまま残す", () => {
     const out = run(["HTTPで取りに行き、続いてHTTPで返す。"]);
     expect(out).toBe(
-      '<a class="term-link" href="/engineering-bootcamp/glossary/07-web/#http" title="エイチティーティーピー">HTTP</a>で取りに行き、続いてHTTPで返す。',
+      '<a class="term-link" href="/glossary/07-web/#http" title="エイチティーティーピー">HTTP</a>で取りに行き、続いてHTTPで返す。',
     );
   });
 
   it("インラインコード内・既存リンク内は対象にしない", () => {
     expect(run(["`HTTP` は素のまま、本文の HTTP だけ貼る"])).toBe(
-      '`HTTP` は素のまま、本文の <a class="term-link" href="/engineering-bootcamp/glossary/07-web/#http" title="エイチティーティーピー">HTTP</a> だけ貼る',
+      '`HTTP` は素のまま、本文の <a class="term-link" href="/glossary/07-web/#http" title="エイチティーティーピー">HTTP</a> だけ貼る',
     );
     expect(run(["[HTTP入門](https://example.com) は触らない"])).toBe(
       "[HTTP入門](https://example.com) は触らない",

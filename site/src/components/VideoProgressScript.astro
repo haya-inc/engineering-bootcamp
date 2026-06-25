@@ -79,7 +79,7 @@
       if (track) {
         track.setAttribute("aria-valuenow", String(done));
         track.setAttribute("aria-valuemax", String(total));
-        track.setAttribute("aria-valuetext", `${total}章中 ${done}章 視聴済み`);
+        track.setAttribute("aria-valuetext", `全${total}章中 ${done}章 視聴済み`);
       }
       el.dataset.complete = total > 0 && done >= total ? "true" : "false";
     });

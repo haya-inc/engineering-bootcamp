@@ -17,3 +17,8 @@ src/data/videos.json
 
 # Pagefind 索引の一時物
 .pagefind/
+
+# 秘密情報 (.env は作ってよいが公開リポジトリには含めない。.env.example は追跡してよい)
+.env
+.env.*
+!.env.example

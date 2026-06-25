@@ -9,10 +9,14 @@ const sectionLabel: Record<string, string> = {
   glossary: "用語解説",
 };
 
-/** base を考慮したドキュメントの URL を作る。 */
+/** base path の末尾スラッシュを除いた接頭辞 (例: "/engineering-bootcamp")。URL 組み立ての単一起点。 */
+export function siteBase(): string {
+  return import.meta.env.BASE_URL.replace(/\/$/, "");
+}
+
+/** base を考慮したドキュメントの URL を作る (videos.ts もこれを再利用する)。 */
 export function docHref(id: string): string {
-  const base = import.meta.env.BASE_URL.replace(/\/$/, "");
-  return `${base}/${id}/`;
+  return `${siteBase()}/${id}/`;
 }
 
 /** section → part → order の優先度でソートする。 */
@@ -45,15 +49,15 @@ export async function getNav(): Promise<{
   const sections: { id: string; label: string; groups: NavGroup[] }[] = [];
 
   for (const d of ordered) {
-    const sec = sections.find((s) => s.id === d.data.section);
-    const section =
-      sec ??
-      (sections.push({
+    let section = sections.find((s) => s.id === d.data.section);
+    if (!section) {
+      section = {
         id: d.data.section,
         label: sectionLabel[d.data.section] ?? d.data.section,
         groups: [],
-      }),
-      sections[sections.length - 1]);
+      };
+      sections.push(section);
+    }
 
     const label = d.data.partLabel || section.label;
     let group = section.groups.find((g) => g.label === label);

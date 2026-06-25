@@ -20,10 +20,11 @@ const total = videos.length;
   title="動画一覧"
   description={`${SITE_NAME}の全24章の動画を一覧し、各動画を埋め込みで視聴できます。どこまで見たかはブラウザに記録されます。`}
   contained={false}
+  preconnect={["https://i.ytimg.com"]}
 >
   <section class="videos">
     <header class="videos__head">
-      <p class="kicker">Videos</p>
+      <p class="kicker" lang="en">Videos</p>
       <h1 style="view-transition-name: doc-title">動画一覧</h1>
       <p class="videos__lead">
         全{total}章の動画を Part 順に並べています。各カードから埋め込み再生のページへ進めます。視聴済みにした章はこのブラウザに記録され、進捗バーに反映されます。
@@ -36,11 +37,15 @@ const total = videos.length;
         role="group"
         aria-label="視聴の進捗"
       >
-        <div class="videos-progress__meta" aria-live="polite">
-          <span class="videos-progress__count">
-            <b data-progress-count>0 / {total}</b> 視聴済み
+        <div class="videos-progress__meta">
+          {/* ライブ領域は進捗の数値だけに限定する (リセットボタンを含めない)。
+              display:contents なので flex レイアウトには影響しない。 */}
+          <span class="videos-progress__status" aria-live="polite">
+            <span class="videos-progress__count">
+              <b data-progress-count>0 / {total}</b> 視聴済み
+            </span>
+            <span class="videos-progress__pct" data-progress-pct>0%</span>
           </span>
-          <span class="videos-progress__pct" data-progress-pct>0%</span>
           <button
             type="button"
             class="videos-progress__reset"
@@ -135,7 +140,12 @@ const total = videos.length;
 
     <p class="videos__playlist">
       YouTube で続けて見るなら{" "}
-      <a href={playlistUrl} rel="noopener">
+      <a
+        href={playlistUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="YouTube再生リスト（外部サイト・新しいタブで開く）"
+      >
         <Icon name="ph:youtube-logo" aria-hidden="true" />再生リスト</a
       >{" "}
       からどうぞ。

@@ -7,6 +7,8 @@ on:
       - "site/**"
       - "textbook/book/**"
       - "textbook/glossary.md"
+      # 台本は各動画ページに埋め込まれる正本。変更時もサイトを再生成・再デプロイする。
+      - "video-scripts/**"
       - "README.md"
       - ".github/workflows/deploy.yml"
   workflow_dispatch:
@@ -62,16 +64,19 @@ jobs:
       - name: Build (split → astro build → pagefind)
         run: bun run build
 
-      # 生成が無動作だと空サイトになるため、ページ数の下限を assert (split-book の exit1 と二重化)
+      # 生成が無動作だと空サイトになるため、出力 dist のページ枚数を別観点から検査する。
+      # split-book.mjs の章番号検査 (assertChapters) とは相補的: あちらは「正本の章が 1..24 揃うか」、
+      # ここは「実際に静的 HTML が出力されたか」を見る。videos は詳細ページ (mindepth 2) だけ数える
+      # (一覧 index を含めない = 閾値24が「動画詳細24本」と一致して意図が明確になる)。
       - name: Assert pages generated
         run: |
           tb=$(find dist/textbook -name index.html | wc -l)
           gl=$(find dist/glossary -name index.html | wc -l)
-          vd=$(find dist/videos -name index.html | wc -l)
-          echo "textbook=$tb glossary=$gl videos=$vd"
+          vd=$(find dist/videos -mindepth 2 -name index.html | wc -l)
+          echo "textbook=$tb glossary=$gl videos(detail)=$vd"
           test "$tb" -ge 28 || { echo "::error::textbook pages too few ($tb)"; exit 1; }
           test "$gl" -ge 24 || { echo "::error::glossary pages too few ($gl)"; exit 1; }
-          test "$vd" -ge 25 || { echo "::error::videos pages too few ($vd)"; exit 1; }
+          test "$vd" -ge 24 || { echo "::error::video detail pages too few ($vd)"; exit 1; }
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

@@ -18,7 +18,6 @@
 
     /* OKLCH 相対色でアクセントの濃淡を派生 */
     --accent: var(--c-accent);
-    --accent-strong: oklch(from var(--c-accent) calc(l - 0.08) c h);
     --accent-soft: oklch(from var(--c-accent) calc(l + 0.06) calc(c - 0.04) h);
     --accent-weak: color-mix(in oklab, var(--c-accent) 16%, transparent);
     /* テキスト用アクセント (WCAG AA 4.5:1 を満たすよう一段濃く/明るく) */
@@ -48,6 +47,9 @@
     /* sticky ヘッダーの高さ。ヒーローの min-height など、ヘッダー分を差し引く
        計算で共有する (.site-header の min-height と同じ値に揃える)。 */
     --header-h: 60px;
+    /* sticky なサイドバー/目次/動画の上端オフセット。ヘッダー高 + 余白を --header-h から導き、
+       直値 (旧 76px/90px) の散在を避ける。--header-h を変えれば追従する。 */
+    --sticky-top: calc(var(--header-h) + 16px);
     /* ルートスクローラの上端 inset。sticky ヘッダーの裏にフォーカス/アンカー対象が
        隠れないようにする量。ヘッダー高 + 余白。狭幅でヘッダーが2段に折り返すぶんは
        下の @media (max-width: 640px) で増やす。 */
@@ -741,8 +743,8 @@
   .docs__sidebar,
   .docs__toc {
     position: sticky;
-    top: 76px;
-    max-height: calc(100svh - 90px);
+    top: var(--sticky-top);
+    max-height: calc(100svh - var(--sticky-top) - 14px);
     overflow-y: auto;
     overscroll-behavior: contain;
     padding-block: 12px;
@@ -1091,12 +1093,14 @@
       color: var(--ink);
       cursor: pointer;
     }
+    /* content の "グリフ / 代替テキスト" 構文で、視覚は矢印・読み上げは日本語ラベルにする
+       (スクリーンリーダーが「左向き矢印」ではなく「前へ/次へ」と読む)。 */
     .part-carousel::scroll-button(left) {
-      content: "←";
+      content: "←" / "前のPartへスクロール";
       inset-inline-end: 56px;
     }
     .part-carousel::scroll-button(right) {
-      content: "→";
+      content: "→" / "次のPartへスクロール";
       inset-inline-end: 8px;
     }
     .part-carousel::scroll-button(*):disabled {
@@ -1495,8 +1499,9 @@
     text-underline-offset: 3px;
     text-decoration-thickness: 1px;
   }
-  /* 用語の自動リンク (rehype-glossary-links が初出に付与)。通常の本文リンク (accent 実線下線) とは
-     役割が違うので、地の文の色のまま控えめな点線下線にして「定義へ飛べる用語」だと示す。
+  /* 用語の自動リンク。生成時に split-book.mjs が本文の専門用語の初出へ <a class="term-link"> を差し込む
+     (rehype プラグインではなくビルド前の文字列変換)。通常の本文リンク (accent 実線下線) とは役割が違うので、
+     地の文の色のまま控えめな点線下線にして「定義へ飛べる用語」だと示す。
      hover/フォーカスで副アクセント色へ持ち上げ、押せると分かるようにする。 */
   .prose a.term-link {
     color: inherit;
@@ -1532,13 +1537,25 @@
     overflow-x: auto;
     font-size: 0.86rem;
   }
-  /* 本文の data-theme に応じて shiki のダーク/ライトを切り替える */
-  :root[data-theme="dark"] .prose pre.astro-code {
-    background-color: var(--shiki-dark-bg) !important;
-  }
+  /* shiki のダーク/ライト切り替え。JS でトグルしたとき = data-theme="dark"。
+     JS 無効時はトグルが立たないので、OS がダーク かつ 明示ライトでない (= 配色トークンの
+     light-dark() が OS 追従でダーク表示になる) ときも、コードブロックをダークに揃える。
+     これで「no-JS + OS ダーク」でコードだけ白地、という不整合を防ぐ (本文と地続きになる)。 */
   :root[data-theme="dark"] .prose pre.astro-code,
   :root[data-theme="dark"] .prose pre.astro-code span {
     color: var(--shiki-dark) !important;
+  }
+  :root[data-theme="dark"] .prose pre.astro-code {
+    background-color: var(--shiki-dark-bg) !important;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .prose pre.astro-code,
+    :root:not([data-theme="light"]) .prose pre.astro-code span {
+      color: var(--shiki-dark) !important;
+    }
+    :root:not([data-theme="light"]) .prose pre.astro-code {
+      background-color: var(--shiki-dark-bg) !important;
+    }
   }
   .prose table {
     width: 100%;
@@ -1675,7 +1692,7 @@
     .video-detail__media {
       grid-column: 1;
       position: sticky;
-      top: 76px;
+      top: var(--sticky-top);
     }
     /* 下に流していた台本を、動画の右隣・上端そろえに切り替える */
     .video-detail > .video-script {
@@ -1713,6 +1730,10 @@
     flex-wrap: wrap;
     align-items: baseline;
     gap: 10px 16px;
+  }
+  /* ライブ領域 (count + pct) はレイアウトに影響させず、flex の直接の子として振る舞わせる。 */
+  .videos-progress__status {
+    display: contents;
   }
   .videos-progress__count b {
     font-size: 1.2rem;
@@ -2159,10 +2180,10 @@
 }
 
 /* ---------------------------------------------------------- glossary --- */
-/* 用語解説ページ専用の「用語カード + ページ内索引」。
+/* 用語解説ページ専用の「用語カード」。
    - 本文 Markdown は不変。クライアント (GlossaryIndex) が各用語を <section.gl-card> に包み、
      用語名・読み・要約 (一言で言うと) を 1 つの見出し帯 (.gl-card__head) にまとめ、
-     「くわしく」ラベルを外し、頭文字索引としぼり込みを後付けする。
+     「くわしく」ラベルを外す (カード化のみ。頭文字索引やしぼり込みUIは持たない)。
    - スクリプトが無くても CSS 側の h2 + ul フォールバックで連結カードの体裁は保つ。
    - 配色はテキスト資料の暖色テラコッタと差別化し、副アクセント(ティール)を基調にする。
    - レイヤ順は components < prose なので、見出し上書きと scroll-margin は prose 側に置く。 */

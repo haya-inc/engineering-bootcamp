@@ -3,11 +3,11 @@ import { defineConfig, fontProviders } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 
-// GitHub Pages (project site) 用の公開設定。
-// 想定URL: https://haya-inc.github.io/engineering-bootcamp/
+// GitHub Pages + カスタムドメイン (ルート配信) 用の公開設定。
+// 想定URL: https://bootcamp.haya-inc.co.jp/
 export default defineConfig({
-  site: "https://haya-inc.github.io",
-  base: "/engineering-bootcamp",
+  site: "https://bootcamp.haya-inc.co.jp",
+  base: "/",
   trailingSlash: "always",
   integrations: [icon(), sitemap()],
 
@@ -31,7 +31,9 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: "Inter",
       cssVariable: "--font-sans-web",
-      weights: [400, 600, 700],
+      // 400 と 700 のみ。custom.css のウェイト (500→400, 620以上→700 に CSS フォント照合で
+      // 解決) では 600 が選ばれないため、生成も preload もしない (無駄な高優先フェッチを避ける)。
+      weights: [400, 700],
       styles: ["normal"],
       subsets: ["latin"],
       display: "swap",

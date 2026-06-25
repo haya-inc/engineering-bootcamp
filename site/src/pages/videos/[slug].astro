@@ -6,13 +6,16 @@ import VideoProgressScript from "../../components/VideoProgressScript.astro";
 import {
   getVideos,
   videoHref,
+  videosIndexHref,
   docHref,
   youtubeThumb,
   youtubeEmbed,
   playlistEmbed,
+  youtubeIframeAllow,
   watchUrl,
   type VideoMeta,
 } from "../../lib/videos.ts";
+import { SITE_NAME, SITE_PUBLISHER, SITE_PUBLISHER_URL } from "../../lib/site.ts";
 
 export async function getStaticPaths() {
   const videos = await getVideos();
@@ -35,8 +38,47 @@ interface Props {
 const { video, prev, next } = Astro.props;
 const embed = video.youtubeId ? youtubeEmbed(video.youtubeId) : playlistEmbed();
 const heading = `第${video.chapter}章 ${video.title}`;
-const iframeAllow =
-  "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+const description = `第${video.chapter}章「${video.title}」の動画を視聴し、テキスト・用語解説・台本・課題へ進めます。`;
+
+// JSON-LD: 動画を VideoObject として宣言し、ホーム → 動画一覧 → この動画 のパンくずを添える。
+// (uploadDate は videos.json に持たないため省略。Google のリッチリザルト適格性は限定されるが、
+//  マークアップとしては妥当で、検索エンジンに動画ページであることを正しく伝えられる。)
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const homeUrl = new URL(`${base}/`, Astro.site).toString();
+const structuredData = [
+  {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: heading,
+    description,
+    inLanguage: "ja",
+    url: canonical,
+    ...(video.youtubeId
+      ? {
+          embedUrl: youtubeEmbed(video.youtubeId),
+          thumbnailUrl: youtubeThumb(video.youtubeId),
+          contentUrl: watchUrl(video),
+        }
+      : {}),
+    isPartOf: { "@type": "WebSite", name: SITE_NAME, url: homeUrl },
+    publisher: { "@type": "Organization", name: SITE_PUBLISHER, url: SITE_PUBLISHER_URL },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "ホーム", item: homeUrl },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "動画一覧",
+        item: new URL(videosIndexHref(), Astro.site).toString(),
+      },
+      { "@type": "ListItem", position: 3, name: heading, item: canonical },
+    ],
+  },
+];
 
 // 動画台本 (scripts コレクション) があればページ内に描画する。
 const scriptEntry = await getEntry("scripts", video.scriptId);
@@ -52,9 +94,11 @@ const resources = [
 
 <BaseLayout
   title={heading}
-  description={`第${video.chapter}章「${video.title}」の動画を視聴し、テキスト・用語解説・台本・課題へ進めます。`}
+  description={description}
   contained={false}
   ogType="article"
+  structuredData={structuredData}
+  preconnect={["https://i.ytimg.com"]}
 >
   <article class="video-detail">
     <header class="video-detail__head">
@@ -105,7 +149,7 @@ const resources = [
               src={embed}
               title={heading}
               loading="lazy"
-              allow={iframeAllow}
+              allow={youtubeIframeAllow}
               referrerpolicy="strict-origin-when-cross-origin"
               allowfullscreen
             ></iframe>
@@ -133,7 +177,13 @@ const resources = [
           <span class="watch-toggle__box" aria-hidden="true"></span>
           <span data-watch-label>視聴済みにする</span>
         </button>
-        <a class="button button--secondary" href={watchUrl(video)} rel="noopener">
+        <a
+          class="button button--secondary"
+          href={watchUrl(video)}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="YouTube で開く（外部サイト・新しいタブで開く）"
+        >
           <Icon name="ph:youtube-logo" aria-hidden="true" />
           YouTube で開く
         </a>
@@ -145,7 +195,13 @@ const resources = [
             <a
               class="resource"
               href={r.href}
-              {...(r.external ? { rel: "noopener" } : {})}
+              {...(r.external
+                ? {
+                    target: "_blank",
+                    rel: "noopener noreferrer",
+                    "aria-label": `${r.label}。${r.body}（外部サイト・新しいタブで開く）`,
+                  }
+                : {})}
             >
               <Icon class="resource__icon" name={r.icon} aria-hidden="true" />
               <strong class="resource__label">{r.label}</strong>
@@ -167,7 +223,12 @@ const resources = [
             <ScriptContent />
           </div>
           <p class="video-script__source">
-            <a href={video.scriptUrl} rel="noopener">
+            <a
+              href={video.scriptUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="GitHub で台本を見る（外部サイト・新しいタブで開く）"
+            >
               <Icon name="ph:github-logo" aria-hidden="true" />
               GitHub で台本を見る
             </a>
