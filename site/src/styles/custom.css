@@ -261,16 +261,12 @@
       line-height: 1;
       transform: translateY(1px);
     }
-    /* ブランドマーク: favicon と同じロゴアセットをヘッダーでも使う。 */
+    /* ブランドマーク: favicon と同じ単色ロゴアセットをヘッダーでも使う。 */
     & .brand__mark {
       display: grid;
       place-items: center;
       inline-size: 30px;
       block-size: 30px;
-      border-radius: var(--radius-md);
-      box-shadow:
-        var(--shadow-sm),
-        inset 0 1px 0 color-mix(in oklab, white 35%, transparent);
       transition:
         scale 0.18s,
         rotate 0.18s;
@@ -278,7 +274,6 @@
     & .brand__mark img {
       inline-size: 100%;
       block-size: 100%;
-      border-radius: inherit;
     }
     & .brand:hover .brand__mark {
       scale: 1.06;
@@ -785,13 +780,21 @@
       max-height: 0;
       overflow: hidden;
       padding-block: 0;
-      transition: max-height 0.3s ease;
+      /* 折りたたみ時は visibility:hidden で中の章リンクをタブ順・支援技術から外す。
+         overflow:hidden は視覚的にクリップするだけでフォーカス可能なまま残るため、
+         キーボード操作で見えないリンクへフォーカスが移る (WCAG 2.4.3/2.4.7) のを防ぐ。
+         allow-discrete で max-height のアニメーション終了まで可視を保ち、閉じる動きを残す。 */
+      visibility: hidden;
+      transition:
+        max-height 0.3s ease,
+        visibility 0.3s allow-discrete;
     }
     /* :has() で開状態を親に伝えず、属性で開閉 */
     .docs__sidebar[data-open] {
       max-height: 70svh;
       overflow-y: auto;
       padding-block: 12px;
+      visibility: visible;
     }
   }
 }
@@ -1675,8 +1678,8 @@
     max-width: 920px;
   }
 
-  /* 広い画面では「左=動画(スクロール追従) / 右=台本」の2カラムにする。
-     head と pager は全幅。media と script は同じ行に並び、台本が長いほど行が伸びる。 */
+  /* 広い画面では「左=動画＋課題＋前後ナビ / 右=台本」の2カラムにする。
+     head は全幅。前後ナビは左カラム (media 内) に含めて sticky と一体化させる。 */
   @media (min-width: 1080px) {
     .video-detail {
       max-width: 1280px;
@@ -1685,8 +1688,7 @@
       column-gap: clamp(28px, 4vw, 56px);
       align-items: start;
     }
-    .video-detail__head,
-    .video-detail > .doc-pager {
+    .video-detail__head {
       grid-column: 1 / -1;
     }
     .video-detail__media {
@@ -2089,6 +2091,7 @@
     gap: 12px;
   }
   .resource {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 2px;
@@ -2112,9 +2115,20 @@
   .resource__label {
     font-size: 0.98rem;
   }
-  .resource__body {
+  /* 外部リンク (課題) は別タブで開く。ヘッダーと同じ矢印を右上に常時表示する。 */
+  .resource__ext {
+    position: absolute;
+    inset-block-start: 12px;
+    inset-inline-end: 12px;
+    font-size: 0.95rem;
     color: var(--muted);
-    font-size: 0.82rem;
+  }
+
+  /* 前後の動画ページャは課題ボタンと同じ左カラム内に置く。
+     基底の .doc-pager (ドキュメント末尾用) より区切りを控えめにする。 */
+  .video-detail__media .doc-pager {
+    margin-block-start: 28px;
+    padding-block-start: 20px;
   }
 
   /* --- 動画台本 (ページ内に埋め込む全文) --- */
@@ -2148,8 +2162,14 @@
     font-size: 0.82rem;
     font-weight: 400;
   }
+  /* 台本はページ全体ではなく、領域内に高さを持たせて内部スクロールさせる。
+     summary と source (GitHub リンク) はこの外側にあるので常時見える。 */
   .video-script__body {
     margin-block-start: 16px;
+    max-height: clamp(320px, 60vh, 680px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
   }
   .video-script__source {
     margin-block-start: 20px;

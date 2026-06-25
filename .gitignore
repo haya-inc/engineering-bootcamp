@@ -9,6 +9,7 @@ yarn-error.log*
 coverage/
 dist/
 build/
+.astro/
 .cache/
 .tmp/
 tmp/

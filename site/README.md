@@ -13,7 +13,7 @@
 
 ## 前提
 
-[mise](https://mise.jp/) があれば、`site/` に入るだけで Node 26 と Bun が有効になります（`mise.toml`）。
+[mise](https://mise.jdx.dev/) があれば、`site/` に入るだけで Node 26 と Bun が有効になります（`mise.toml`）。
 mise を使わない場合は Node 26 と Bun 1.3 系を用意してください。
 
 ## セットアップと開発

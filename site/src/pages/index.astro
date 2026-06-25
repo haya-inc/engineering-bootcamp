@@ -175,8 +175,6 @@ const materials = [
       </div>
     </div>
     <div class="hero__art">
-      {/* LCP 要素。astro:assets で表示幅に合わせた srcset を生成し、最適化フォーマットで配信する。
-          eager + fetchpriority=high は維持。寸法は ImageMetadata から入るので CLS は出ない。 */}
       <Image
         src={HeroTop}
         alt="教材、動画、コード、検証、最終プロジェクトまでを一本の道でつなぐ学習サイトのイラスト"

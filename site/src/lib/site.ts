@@ -13,6 +13,8 @@ export const SITE_ALTERNATE_NAME = "Engineering Bootcamp";
 export const SITE_PUBLISHER = "haya株式会社";
 export const SITE_PUBLISHER_URL = "https://www.haya.company/";
 export const SITE_REPOSITORY_URL = "https://github.com/haya-inc/engineering-bootcamp";
+// モバイル SERP のスニペットは先頭〜60文字前後で切れるため、固有の主要語
+// (Webアプリ開発 / AI活用 / 24章) を冒頭へ前寄せし、末尾切れでも価値が伝わるようにする。
 export const SITE_DESCRIPTION =
-  "エンジニア入門研修は、配属直後のエンジニアがWebアプリケーション開発を目的から検証まで説明できるようになるための教材です。Git/GitHub、DB/API、テスト、運用、AI活用を24章で学びます。";
+  "Webアプリケーション開発からAI活用まで24章で学ぶ、配属直後のエンジニア向け入門研修。Git/GitHub、DB/API、テスト、運用を、目的から検証まで自分の言葉で説明できる状態を目指します。";
 export const SITE_OG_IMAGE_ALT = "エンジニア入門研修の学習ロードマップを表すカード画像";

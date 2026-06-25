@@ -86,9 +86,9 @@ const ScriptContent = scriptEntry ? (await render(scriptEntry)).Content : null;
 
 // 台本はページ内 (.video-script) に常時表示するので、教材リンクには「動画台本」を置かない。
 const resources = [
-  { label: "テキスト資料", body: "実務の考え方を読む", href: docHref(video.textbookId), external: false, icon: "ph:book-open" },
-  { label: "用語解説", body: "専門用語を確認する", href: docHref(video.glossaryId), external: false, icon: "ph:cards-three" },
-  { label: "課題", body: "手を動かして残す", href: video.assignmentUrl, external: true, icon: "ph:pencil-simple-line" },
+  { label: "テキスト資料", href: docHref(video.textbookId), external: false, icon: "ph:book-open" },
+  { label: "用語解説", href: docHref(video.glossaryId), external: false, icon: "ph:cards-three" },
+  { label: "課題", href: video.assignmentUrl, external: true, icon: "ph:pencil-simple-line" },
 ];
 ---
 
@@ -199,17 +199,54 @@ const resources = [
                 ? {
                     target: "_blank",
                     rel: "noopener noreferrer",
-                    "aria-label": `${r.label}。${r.body}（外部サイト・新しいタブで開く）`,
+                    "aria-label": `${r.label}（外部サイト・新しいタブで開く）`,
                   }
                 : {})}
             >
               <Icon class="resource__icon" name={r.icon} aria-hidden="true" />
               <strong class="resource__label">{r.label}</strong>
-              <span class="resource__body">{r.body}</span>
+              {/* 外部リンク (課題) は別タブで開く。ヘッダーと同じ矢印アイコンで一目で分かるようにする。 */}
+              {r.external && (
+                <Icon name="ph:arrow-up-right" class="resource__ext" aria-hidden="true" />
+              )}
             </a>
           ))
         }
       </section>
+
+      {/* 前後の動画ページャは課題ボタン (video-resources) と同じ左カラム内・その直下に
+          置く。sticky なメディア列と一体でスクロールさせ、ナビゲーションが課題ボタンと
+          重なったり台本の下に埋もれたりしないようにする。 */}
+      <nav class="doc-pager" aria-label="前後の動画">
+        {
+          prev ? (
+            <a class="doc-pager__link doc-pager__link--prev" href={videoHref(prev.slug)}>
+              <span>
+                <Icon name="ph:arrow-left" aria-hidden="true" />前の動画
+              </span>
+              <strong>
+                第{prev.chapter}章 {prev.title}
+              </strong>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next ? (
+            <a class="doc-pager__link doc-pager__link--next" href={videoHref(next.slug)}>
+              <span>
+                次の動画<Icon name="ph:arrow-right" aria-hidden="true" />
+              </span>
+              <strong>
+                第{next.chapter}章 {next.title}
+              </strong>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
     </div>
 
     {
@@ -236,37 +273,6 @@ const resources = [
         </details>
       )
     }
-
-    <nav class="doc-pager" aria-label="前後の動画">
-      {
-        prev ? (
-          <a class="doc-pager__link doc-pager__link--prev" href={videoHref(prev.slug)}>
-            <span>
-              <Icon name="ph:arrow-left" aria-hidden="true" />前の動画
-            </span>
-            <strong>
-              第{prev.chapter}章 {prev.title}
-            </strong>
-          </a>
-        ) : (
-          <span />
-        )
-      }
-      {
-        next ? (
-          <a class="doc-pager__link doc-pager__link--next" href={videoHref(next.slug)}>
-            <span>
-              次の動画<Icon name="ph:arrow-right" aria-hidden="true" />
-            </span>
-            <strong>
-              第{next.chapter}章 {next.title}
-            </strong>
-          </a>
-        ) : (
-          <span />
-        )
-      }
-    </nav>
   </article>
 
   <VideoProgressScript />

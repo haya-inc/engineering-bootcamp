@@ -21,6 +21,12 @@ interface Props {
   contained?: boolean;
   ogType?: "website" | "article";
   structuredData?: Record<string, unknown> | Record<string, unknown>[];
+  /**
+   * robots メタの内容。既定 (未指定) では meta robots を出力しない。
+   * index/follow はクローラの既定動作で Google は明示しても無視するため、通常ページでは付けない。
+   * 既定を変えたいページ (例: 404 の "noindex, follow") でのみ渡す。
+   */
+  robots?: string;
   /** 早めに TCP/TLS を張っておきたい外部オリジン (例: 動画ページの YouTube サムネ配信元)。 */
   preconnect?: string[];
 }
@@ -31,6 +37,7 @@ const {
   contained = true,
   ogType = "website",
   structuredData = [],
+  robots,
   preconnect = [],
 } = Astro.props;
 
@@ -39,7 +46,7 @@ const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const siteUrl = new URL(`${base}/`, Astro.site);
-const ogImage = new URL(`${base}/og-image.png`, Astro.site);
+const ogImage = new URL(`${base}/og-image.jpg`, Astro.site);
 const favicon = `${base}/favicon.svg`;
 const faviconPng = `${base}/favicon-32x32.png`;
 const faviconIco = `${base}/favicon.ico`;
@@ -75,14 +82,16 @@ const jsonLd = JSON.stringify(structuredDataItems).replace(/</g, "\\u003c");
     <meta name="description" content={description} />
     <meta name="application-name" content={siteName} />
     <meta name="author" content={SITE_PUBLISHER} />
-    <meta name="robots" content="index, follow" />
+    {/* 通常ページは robots を出力しない (index,follow はクローラ既定で Google は無視する)。
+        404 など既定を変えたいページだけ Props 経由で noindex 等を渡す。 */}
+    {robots && <meta name="robots" content={robots} />}
     {/* モバイルのブラウザ UI 色を本文背景 (--bg) に合わせ、OS のライト/ダークへ追従させる。
         手動テーマトグルは OS 設定までは上書きしないが、OS 既定の利用者には地続きの見え方になる。 */}
     <meta name="theme-color" content="#f6f3ec" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)" />
-    <link rel="icon" href={favicon} type="image/svg+xml" />
+    <link rel="icon" href={favicon} type="image/svg+xml" sizes="any" />
     <link rel="icon" href={faviconPng} type="image/png" sizes="32x32" />
-    <link rel="icon" href={faviconIco} sizes="any" />
+    <link rel="icon" href={faviconIco} sizes="32x32" />
     <link rel="apple-touch-icon" href={appleTouchIcon} />
     {/* ページが指定した外部オリジンへ事前接続 (動画ページの i.ytimg.com など)。サムネは別オリジン
         画像なので crossorigin は付けない (anonymous 画像取得の接続を再利用させる)。 */}
@@ -103,7 +112,7 @@ const jsonLd = JSON.stringify(structuredDataItems).replace(/</g, "\\u003c");
     <meta property="og:site_name" content={siteName} />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={SITE_OG_IMAGE_ALT} />
