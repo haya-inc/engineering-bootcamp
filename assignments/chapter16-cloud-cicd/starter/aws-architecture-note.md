@@ -7,9 +7,9 @@
 | CI/CD | GitHub Actions | shared |    |
 | AWS auth | IAM OIDC provider / IAM role | shared |    |
 | image registry | Amazon ECR | shared or per environment |    |
-| Webアプリのランタイム | AWS App Runner | staging / production |    |
+| Webアプリのランタイム | Amazon ECS（Fargate 起動タイプ） | staging / production |    |
 | database | Amazon RDS for PostgreSQL | staging / production |    |
-| config | App Runner environment variables | staging / production |    |
+| config | ECS task definition の環境変数 | staging / production |    |
 | secrets | Secrets Manager / Parameter Store | staging / production |    |
 | logs | CloudWatch Logs | staging / production |    |
 
@@ -17,7 +17,7 @@
 
 | 項目 | local | staging | production |
 | --- | --- | --- | --- |
-| アプリのランタイム | Docker Compose | App Runner | App Runner |
+| アプリのランタイム | Docker Compose | ECS（Fargate） | ECS（Fargate） |
 | データベース | localコンテナ | RDS | RDS |
 | secrets | .env |    |    |
 | domain | localhost |    |    |
@@ -28,7 +28,7 @@
 
 - app:
 - ECRリポジトリ:
-- App Runnerサービス:
+- ECS cluster / service（Fargate）:
 - rds:
 - 秘密情報 path:
 

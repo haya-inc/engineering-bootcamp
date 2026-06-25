@@ -298,7 +298,7 @@ order: 2
 - **depends_on**：Composeでservice間の起動順や依存関係を表す設定。利用可能状態の確認とは分けて考える。
 - **非root実行**：container内のprocessをrootではないuserで動かすこと。
 - **base image**：Dockerfileの `FROM` で指定する、image作成の出発点。
-- **image tag**：imageのversionやvariantを示す名前。例として `node:20-alpine` がある。
+- **image tag**：imageのversionやvariantを示す名前。例として `node:26-alpine` がある。
 - **migration**：アプリの変更に合わせてDB schemaを変更する作業。
 - **seed**：開発や初期起動のためにDBへ入れる初期データ。
 
@@ -312,11 +312,10 @@ order: 2
 - **IAM**：Identity and Access Managementの略。誰が何をできるかを管理するAWSの仕組み。
 - **OIDC**：OpenID Connectの略。GitHub Actionsなどが短期認証情報を得るために使える認証連携方式。
 - **ECR**：Elastic Container Registryの略。container imageを保存するAWSのregistry。
-- **App Runner**：container imageやsourceからWebアプリを実行するAWSのmanaged service。
-- **ECS Express Mode**：container imageからWebアプリやAPIを簡易にdeployするAmazon ECSのモード。Fargate、load balancer、networking、monitoringなどを組み合わせて作る選択肢。
+- **Amazon ECS（Fargate）**：container imageからWebアプリを実行するAWSのmanaged service。Fargate起動タイプではサーバー（EC2）の管理をAWSに任せ、タスクを動かす。第16章の研修標準。
 - **RDS**：Relational Database Serviceの略。AWSが管理するリレーショナルデータベース。
 - **VPC**：Virtual Private Cloudの略。AWS内でnetwork境界を作る仕組み。
-- **VPC connector**：App RunnerなどからVPC内resourceへ通信するための接続設定。
+- **awsvpcネットワークモード**：ECS taskごとにENIを割り当て、taskをVPCへ直接所属させるネットワークモード。Fargateではこれを使い、taskはsubnetとsecurity groupでVPC内のRDSなどへ通信する。
 - **security group**：AWS resourceへ入る通信、出る通信を制御する仮想firewall。
 - **Secrets Manager**：secretを保存、参照、rotationしやすくするAWS service。
 - **Parameter Store**：Systems Managerの機能。設定値やsecret参照を管理する選択肢。

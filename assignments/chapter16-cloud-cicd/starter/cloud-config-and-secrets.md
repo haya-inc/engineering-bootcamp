@@ -5,7 +5,7 @@
 | 名前 | local | staging | production | 担当者 |
 | --- | --- | --- | --- | --- |
 | APP_ENV | local | staging | production |    |
-| APP_PORT | 3000 |    |    |    |
+| PORT | 4000 |    |    | ops-observability-sample は4000で起動する |
 | LOG_LEVEL | debug | info | info |    |
 
 ## 秘密情報
@@ -22,12 +22,12 @@
 | AWS_ROLE_ARN |    | いいえ | account idは公開資料に書かない |
 | AWS_REGION |    | いいえ |    |
 
-## App Runnerで使う値
+## ECS task（コンテナ）で使う値
 
 | 名前 | 出典 | 秘密情報 | メモ |
 | --- | --- | --- | --- |
-| DB_HOST | environment variable | いいえ |    |
-| DB_USER | environment variable | いいえ |    |
+| DB_HOST | task definition の環境変数 | いいえ |    |
+| DB_USER | task definition の環境変数 | いいえ |    |
 | DB_PASSWORD | Secrets Manager / Parameter Store | はい |    |
 
 ## AI、ログ、PR、issueに貼らないもの

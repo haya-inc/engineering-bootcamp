@@ -20,9 +20,9 @@
 
 この章では、次の観察環境を前提にする。
 
-- AWS App Runner
+- Amazon ECS（Fargate 起動タイプ）
 - CloudWatch Logs
-- CloudWatch metrics
+- CloudWatch metrics（Container Insights を含む）
 - 必要に応じたOpenTelemetryまたはX-Rayの概念
 
 ローカルでログ、metrics、health check、error rateを観察する練習には、このリポジトリの `starter-apps/ops-observability-sample` を使ってよい。
@@ -94,7 +94,7 @@ logs、metrics、tracesを何のために使うかを分ける。
 - ログに出してはいけない値は何か。
 - metricsで見る指標は何か。
 - tracesで見たい処理区間はどこか。
-- App RunnerとCloudWatchで見られるものは何か。
+- ECS（Fargate）とCloudWatchで見られるものは何か。
 
 ### 記録すること
 
@@ -130,10 +130,10 @@ logs、metrics、tracesを何のために使うかを分ける。
 
 | メトリクス | 理由 | 出典 | メモ |
 | --- | --- | --- | --- |
-| リクエスト数 | トラフィック | App Runner / app |    |
-| error rate | failure | App Runner / app |    |
+| リクエスト数 | トラフィック | ECS（Fargate）/ app |    |
+| error rate | failure | ECS（Fargate）/ app |    |
 | latency p95 | user experience | app / CloudWatch |    |
-| CPU / memory | saturation | App Runner |    |
+| CPU / memory | saturation | ECS（Fargate）/ Container Insights |    |
 
 ## トレース
 
@@ -145,9 +145,9 @@ logs、metrics、tracesを何のために使うかを分ける。
 
 ## CloudWatchで見る場所
 
-- App Runner デプロイ logs:
-- App Runnerアプリケーションログ:
-- App Runnerメトリクス:
+- ECS デプロイ（service イベント / task 状態）:
+- ECS タスクのアプリケーションログ（CloudWatch Logs）:
+- ECS / Fargate メトリクス（Container Insights）:
 - CloudWatchアラーム:
 
 ## 判断が必要なこと
@@ -392,8 +392,8 @@ AIへの依頼例:
 次のAPIが遅くなっています。原因候補と調査手順を出してください。
 
 前提:
-- AWS App Runnerで動いているWebアプリ
-- logsとmetricsはCloudWatchで見られる
+- Amazon ECS（Fargate 起動タイプ）で動いているWebアプリ
+- logsとmetricsはCloudWatch（Container Insights を含む）で見られる
 - 対象APIはGET /api/mentor/learners
 - p95 latencyが300msから1800msに悪化
 - error rateは大きく変わっていない

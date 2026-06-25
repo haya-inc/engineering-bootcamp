@@ -39,7 +39,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v6
@@ -53,8 +53,8 @@ jobs:
       - name: Push image to ECR
         run: echo "Login, tag, and push image to ECR"
 
-      - name: Deploy to App Runner
-        run: echo "App Runnerサービスを更新するかデプロイを開始する"
+      - name: Deploy to ECS
+        run: echo "新しいtask definitionを登録し、ECS service（Fargate）を更新する（ローリング更新）"
 
       - name: Smoke test
         run: echo "Call health endpoint"

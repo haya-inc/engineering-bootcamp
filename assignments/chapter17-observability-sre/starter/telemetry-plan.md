@@ -27,10 +27,10 @@
 
 | メトリクス | 理由 | 出典 | メモ |
 | --- | --- | --- | --- |
-| リクエスト数 | トラフィック | App Runner / app |    |
-| error rate | failure | App Runner / app |    |
+| リクエスト数 | トラフィック | ECS（Fargate）/ app |    |
+| error rate | failure | ECS（Fargate）/ app |    |
 | latency p95 | user experience | app / CloudWatch |    |
-| CPU / memory | saturation | App Runner |    |
+| CPU / memory | saturation | ECS（Fargate）/ Container Insights |    |
 
 ## トレース
 
@@ -42,9 +42,9 @@
 
 ## CloudWatchで見る場所
 
-- App Runner デプロイ logs:
-- App Runnerアプリケーションログ:
-- App Runnerメトリクス:
+- ECS デプロイ（service イベント / task 状態）:
+- ECS タスクのアプリケーションログ（CloudWatch Logs）:
+- ECS / Fargate メトリクス（Container Insights）:
 - CloudWatchアラーム:
 
 ## 判断が必要なこと

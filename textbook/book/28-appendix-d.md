@@ -31,8 +31,9 @@ order: 4
 - [Docker Docs: What is Docker?](https://docs.docker.com/get-started/docker-overview/)：イメージ、コンテナ、Dockerfile、Composeの入口参照。
 - [The Twelve-Factor App](https://12factor.net/)：設定、依存関係、ログ、環境差分などSaaSアプリの運用原則。
 - [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)：クラウド構成を安全性、信頼性、効率、コスト、持続可能性でレビューする参照。
-- [AWS App Runner: Service based on a source image](https://docs.aws.amazon.com/apprunner/latest/dg/service-source-image.html)：ECRなどのimage repositoryからApp Runner serviceを作るときの公式参照。
-- [AWS App Runner: Managing environment variables](https://docs.aws.amazon.com/apprunner/latest/dg/env-variable-manage.html)：App Runnerで環境変数、Secrets Manager、Parameter Store参照を扱う公式参照。
+- [Amazon ECS: What is Amazon ECS?](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html)：cluster、task definition、serviceなどECSの基本概念の公式参照。
+- [Amazon ECS: AWS Fargate](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html)：サーバー（EC2）の管理をAWSに任せてtaskを動かすFargate起動タイプの公式参照。
+- [Amazon ECS: Specifying sensitive data](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/specifying-sensitive-data.html)：task definitionからSecrets ManagerやSSM Parameter Storeのsecretを環境変数として渡す公式参照。
 - [GitHub Docs: Configuring OpenID Connect in Amazon Web Services](https://docs.github.com/actions/security-for-github-actions/security-hardening-your-deployments/configuring-openid-connect-in-amazon-web-services)：GitHub ActionsからAWSへOIDCで接続し、長期credentialを置かない方針の公式参照。
 - [Martin Fowler: Continuous Integration](https://martinfowler.com/articles/continuousIntegration.html)：継続的インテグレーションの実践、ビルド、テスト、デプロイの参照。
 - [Google SRE Book](https://sre.google/sre-book/table-of-contents/)：SLO、モニタリング、インシデント、ポストモーテム、信頼性の参照。
@@ -41,7 +42,7 @@ order: 4
 - [Google SRE Book: Postmortem Culture](https://sre.google/sre-book/postmortem-culture/)：インシデントを責任追及ではなく学習と再発防止へつなげる参照。
 - [OpenTelemetry: What is OpenTelemetry?](https://opentelemetry.io/docs/what-is-opentelemetry/)：ログ、メトリクス、トレース、計装の共通語彙。
 - [OpenTelemetry: Signals](https://opentelemetry.io/docs/concepts/signals/)：traces、metrics、logs、baggageなど、テレメトリ信号の役割を整理する参照。
-- [AWS App Runner: Observability for your service](https://docs.aws.amazon.com/apprunner/latest/dg/monitor.html)：App Runner serviceのlogs、metrics、events、CloudTrail、X-Ray tracingへの入口参照。
+- [Amazon ECS: CloudWatch metrics](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-metrics.html)：ECS serviceやtaskのlogs、metrics、Container Insightsへの入口参照。
 - [Amazon CloudWatch User Guide: What is Amazon CloudWatch?](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html)：metrics、alarms、dashboards、logs、SLOなどAWS上の観測基盤の参照。
 - [Amazon CloudWatch Logs: Analyzing log data with Logs Insights](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html)：CloudWatch Logsの検索、集計、原因調査、修正検証に使う参照。
 - [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)：AIのリスク、評価、ガバナンスを扱う参照。

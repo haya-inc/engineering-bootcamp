@@ -106,7 +106,7 @@ performance確認例では、一覧件数が増えたときの影響を見ます
 
 ### Slide 24. observability確認例
 
-observability確認例では、問題が起きたときにどこを見るかを書きます。起動に失敗したら起動ログ、画面操作でエラーが出たらアプリのログ、デプロイに失敗したらGitHub ActionsやApp Runnerのイベントを見る、という形です。CloudWatch Logsなどのサービス名は、実際に使っている環境に合わせて書きます。同時に、ログにsecretや個人情報を出していないかも確認します。
+observability確認例では、問題が起きたときにどこを見るかを書きます。起動に失敗したら起動ログ、画面操作でエラーが出たらアプリのログ、デプロイに失敗したらGitHub ActionsやECS service（Fargate）のイベントを見る、という形です。CloudWatch Logsなどのサービス名は、実際に使っている環境に合わせて書きます。同時に、ログにsecretや個人情報を出していないかも確認します。
 
 ### Slide 25. runbook例
 

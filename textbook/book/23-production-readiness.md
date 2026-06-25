@@ -164,7 +164,7 @@ AWS環境に出すのか、ローカルデモまでなのか。
 | --- | --- | --- | --- | --- |
 | local | README手順と主要動作確認 | localhost | yes / no | command result |
 | staging | 本番相当の事前確認 | 研修環境があれば記入 | yes / no / n/a | deploy log |
-| AWS services | 実行環境、DB、ログ確認 | App Runnerまたは代替実行環境、RDS、CloudWatch Logsなど | yes / no / n/a | console/log note |
+| AWS services | 実行環境、DB、ログ確認 | ECS（Fargate）、RDS、CloudWatch Logsなど | yes / no / n/a | console/log note |
 
 ## Inputs
 
@@ -190,10 +190,7 @@ AWS環境を使う場合もある。
 staging相当の環境で確認したことは、stagingと書く。
 AWSで確認したことは、service名と見る場所を書く。
 
-AWS App Runnerを使う前提の教材では、App Runner、ECR、RDS、Secrets ManagerまたはParameter Store、CloudWatch Logsなどが関係する。
-ただし、2026年6月時点のAWS公式ドキュメントでは、App Runnerは新規顧客には開放されておらず、既存顧客は通常通り利用できると説明されている。
-AWSは移行先としてAmazon ECS Express Modeを案内している。
-そのため、新しい環境で使う場合は、研修アカウントでApp Runnerを利用可能か、ECS Express Modeなどの代替実行環境を使うのかを確認する。
+AWS環境を使う場合は、Amazon ECS（Fargate 起動タイプ）、ECR、RDS、Secrets ManagerまたはParameter Store、CloudWatch Logsなどが関係する。
 サービス名を暗記することが目的ではない。
 どの環境で、どのログ、metrics、deploy historyを見るかを説明できることである。
 
@@ -391,7 +388,7 @@ performanceの確認では、測定できるなら測る。
 observability readinessでは、問題が起きたときにどこを見るかを決める。
 ログ、metrics、events、deploy history、CloudWatch Logs、アプリの起動ログ、ブラウザのNetworkタブなどである。
 CloudWatchは、AWS上のresourceやapplicationを監視し、metrics、alarms、dashboards、logsなどを使ってobservabilityを提供する。
-App Runnerを使う既存環境では、CloudWatch LogsやCloudWatch metrics、EventBridge、CloudTrail、X-Rayなどと連携して観測できる。
+ECS（Fargate）を使う環境では、CloudWatch LogsやCloudWatch metrics、EventBridge、CloudTrail、X-Rayなどと連携して観測できる。
 
 個人課題では、全部を作り込まなくてよい。
 ただし、少なくとも次を書く。
@@ -711,8 +708,8 @@ runbookとsmoke testで、出す手順、出した後の確認、問題時の戻
 ### 参考資料
 
 - [AWS Well-Architected Framework](https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html)
-- [AWS App Runner availability change](https://docs.aws.amazon.com/apprunner/latest/dg/apprunner-availability-change.html)
-- [AWS App Runner: Observability for your service](https://docs.aws.amazon.com/apprunner/latest/dg/monitor.html)
+- [Amazon ECS とは](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html)
+- [Amazon ECS: Container Insights](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cloudwatch-container-insights.html)
 - [Amazon CloudWatch User Guide: What is Amazon CloudWatch?](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html)
 - [Google SRE Book: Monitoring Distributed Systems](https://sre.google/sre-book/monitoring-distributed-systems/)
 - [OWASP Application Security Verification Standard](https://owasp.org/www-project-application-security-verification-standard/)

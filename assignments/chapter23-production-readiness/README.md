@@ -18,9 +18,8 @@
 学習ログ整理アプリにstatusを追加し、needs-helpだけを絞り込めるようにする。
 ```
 
-研修でAWS環境を使う場合は、App Runnerまたは代替実行環境、ECR、RDS、Secrets ManagerまたはParameter Store、CloudWatch Logsを標準構成として想定する。
-2026年6月時点のAWS公式ドキュメントでは、App Runnerは新規顧客には開放されておらず、既存顧客は通常通り利用できると説明されている。
-新しい環境で使う場合は、研修アカウントでApp Runnerを利用可能か、ECS Express Modeなどの代替実行環境を使うのかを確認する。
+研修でAWS環境を使う場合は、Amazon ECS（Fargate 起動タイプ）、ECR、RDS、Secrets ManagerまたはParameter Store、CloudWatch Logsを標準構成として想定する。
+新しい環境で使う場合は、使う時点のAWS公式ドキュメントで、ECS（Fargate）の設定（cluster・task definition・service、task execution role、awsvpcネットワーク）を確認する。
 AWS環境を使わない場合も、AWSでリリースするならどこを確認するかを説明する。
 
 扱わないこと:

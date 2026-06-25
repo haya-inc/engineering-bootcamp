@@ -25,7 +25,7 @@
 
 ## デプロイ後チェック
 
-- [ ] App Runner serviceがrunning
+- [ ] ECS service（Fargate）のタスクがrunning
 - [ ] health endpointが成功する
 - [ ] 主要画面が表示される
 - [ ] DB接続が成功する
@@ -51,7 +51,7 @@
 
 ## 後片付け
 
-- [ ] 不要なApp Runner serviceを削除した
+- [ ] 不要なECS service / cluster（Fargate）を削除した
 - [ ] 不要なRDS instanceを削除した
 - [ ] 不要なECR imageを整理した
 - [ ] 不要なsecret/parameterを削除した
