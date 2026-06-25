@@ -1,0 +1,2463 @@
+{
+  "01-roadmap": [],
+  "02-feature-value": [
+    {
+      "term": "MVP",
+      "anchor": "mvp",
+      "reading": "エムブイピー（Minimum Viable Product）"
+    },
+    {
+      "term": "Output / Outcome",
+      "anchor": "output--outcome",
+      "reading": "アウトプット／アウトカム"
+    },
+    {
+      "term": "MoSCoW（Must / Should / Could / Won't）",
+      "anchor": "moscowmust--should--could--wont",
+      "reading": "モスクワ（Must / Should / Could / Won't）"
+    }
+  ],
+  "03-ai-verification": [
+    {
+      "term": "検証",
+      "anchor": "検証",
+      "reading": "けんしょう（verification）"
+    }
+  ],
+  "04-collaboration": [],
+  "05-dev-environment": [
+    {
+      "term": "プロジェクトルート",
+      "anchor": "プロジェクトルート",
+      "reading": "プロジェクトルート（project root）"
+    },
+    {
+      "term": "ディレクトリ",
+      "anchor": "ディレクトリ",
+      "reading": "ディレクトリ（directory）"
+    },
+    {
+      "term": "pwd",
+      "anchor": "pwd",
+      "reading": "ピーダブリューディー（print working directory）"
+    },
+    {
+      "term": "ls",
+      "anchor": "ls",
+      "reading": "エルエス（list）"
+    },
+    {
+      "term": "cd",
+      "anchor": "cd",
+      "reading": "シーディー（change directory）"
+    },
+    {
+      "term": "パス",
+      "anchor": "パス",
+      "reading": "パス（path）"
+    },
+    {
+      "term": "絶対パス",
+      "anchor": "絶対パス",
+      "reading": "ぜったいパス（absolute path）"
+    },
+    {
+      "term": "相対パス",
+      "anchor": "相対パス",
+      "reading": "そうたいパス（relative path）"
+    },
+    {
+      "term": "README",
+      "anchor": "readme",
+      "reading": "リードミー（README）"
+    },
+    {
+      "term": "package.json",
+      "anchor": "packagejson",
+      "reading": "パッケージジェイソン（package.json）"
+    },
+    {
+      "term": "lockファイル",
+      "anchor": "lockファイル",
+      "reading": "ロックファイル（lock file）"
+    },
+    {
+      "term": "ランタイム",
+      "anchor": "ランタイム",
+      "reading": "ランタイム（runtime）"
+    },
+    {
+      "term": "依存関係",
+      "anchor": "依存関係",
+      "reading": "いぞんかんけい（dependency）"
+    },
+    {
+      "term": "CLI",
+      "anchor": "cli",
+      "reading": "シーエルアイ（Command Line Interface）"
+    },
+    {
+      "term": "GUI",
+      "anchor": "gui",
+      "reading": "ジーユーアイ（Graphical User Interface）"
+    },
+    {
+      "term": "ターミナル",
+      "anchor": "ターミナル",
+      "reading": "ターミナル（terminal）"
+    },
+    {
+      "term": "Node.js",
+      "anchor": "nodejs",
+      "reading": "ノードジェイエス（Node.js）"
+    },
+    {
+      "term": "npm",
+      "anchor": "npm",
+      "reading": "エヌピーエム（npm／node package manager）"
+    },
+    {
+      "term": "標準出力",
+      "anchor": "標準出力",
+      "reading": "ひょうじゅんしゅつりょく（standard output／stdout）"
+    },
+    {
+      "term": "標準エラー",
+      "anchor": "標準エラー",
+      "reading": "ひょうじゅんエラー（standard error／stderr）"
+    },
+    {
+      "term": "終了コード",
+      "anchor": "終了コード",
+      "reading": "しゅうりょうコード（exit code／exit status）"
+    },
+    {
+      "term": "ログ",
+      "anchor": "ログ",
+      "reading": "ログ（log）"
+    },
+    {
+      "term": "ローカル",
+      "anchor": "ローカル",
+      "reading": "ローカル（local）"
+    },
+    {
+      "term": "開発サーバー",
+      "anchor": "開発サーバー",
+      "reading": "かいはつサーバー（development server）"
+    },
+    {
+      "term": "localhost",
+      "anchor": "localhost",
+      "reading": "ローカルホスト（localhost）"
+    },
+    {
+      "term": "ポート",
+      "anchor": "ポート",
+      "reading": "ポート（port）"
+    },
+    {
+      "term": "プロセス",
+      "anchor": "プロセス",
+      "reading": "プロセス（process）"
+    },
+    {
+      "term": "Ctrl+C",
+      "anchor": "ctrlc",
+      "reading": "コントロールシー（Ctrl+C）"
+    },
+    {
+      "term": "curl",
+      "anchor": "curl",
+      "reading": "カール（curl）"
+    },
+    {
+      "term": "API",
+      "anchor": "api",
+      "reading": "エーピーアイ（Application Programming Interface）"
+    },
+    {
+      "term": "エディタ",
+      "anchor": "エディタ",
+      "reading": "エディタ（editor）"
+    },
+    {
+      "term": "環境変数",
+      "anchor": "環境変数",
+      "reading": "かんきょうへんすう（environment variable）"
+    },
+    {
+      "term": ".env.example",
+      "anchor": "envexample",
+      "reading": "ドットエンブイサンプル／ドットエンブイイグザンプル（.env.example）"
+    },
+    {
+      "term": "secret",
+      "anchor": "secret",
+      "reading": "シークレット（secret）"
+    },
+    {
+      "term": "再現性",
+      "anchor": "再現性",
+      "reading": "さいげんせい（reproducibility）"
+    },
+    {
+      "term": "EADDRINUSE",
+      "anchor": "eaddrinuse",
+      "reading": "イーアドレスインユース（EADDRINUSE／Error: ADDRess IN USE）"
+    },
+    {
+      "term": "which",
+      "anchor": "which",
+      "reading": "ウィッチ（which）"
+    }
+  ],
+  "06-git-github": [
+    {
+      "term": "Git",
+      "anchor": "git",
+      "reading": "ギット（Git）／略語ではない固有名称"
+    },
+    {
+      "term": "GitHub",
+      "anchor": "github",
+      "reading": "ギットハブ（GitHub）／固有のサービス名"
+    },
+    {
+      "term": "repository",
+      "anchor": "repository",
+      "reading": "リポジトリ（repository）／略してrepoとも書く"
+    },
+    {
+      "term": "working tree",
+      "anchor": "working-tree",
+      "reading": "ワーキングツリー（working tree）／作業ツリー"
+    },
+    {
+      "term": "staging area",
+      "anchor": "staging-area",
+      "reading": "ステージングエリア（staging area）／インデックスとも呼ぶ"
+    },
+    {
+      "term": "staging（git add）",
+      "anchor": "staginggit-add",
+      "reading": "ステージング（staging）／`git add`（ギットアド）"
+    },
+    {
+      "term": "commit",
+      "anchor": "commit",
+      "reading": "コミット（commit）"
+    },
+    {
+      "term": "commit message",
+      "anchor": "commit-message",
+      "reading": "コミットメッセージ（commit message）"
+    },
+    {
+      "term": "status（git status）",
+      "anchor": "statusgit-status",
+      "reading": "ステータス（status）／`git status`（ギットステータス）"
+    },
+    {
+      "term": "diff",
+      "anchor": "diff",
+      "reading": "ディフ（diff／difference の略）"
+    },
+    {
+      "term": "staged diff",
+      "anchor": "staged-diff",
+      "reading": "ステージドディフ（staged diff）／`git diff --staged`"
+    },
+    {
+      "term": "branch",
+      "anchor": "branch",
+      "reading": "ブランチ（branch）"
+    },
+    {
+      "term": "remote",
+      "anchor": "remote",
+      "reading": "リモート（remote）"
+    },
+    {
+      "term": "push",
+      "anchor": "push",
+      "reading": "プッシュ（push）"
+    },
+    {
+      "term": "Pull Request",
+      "anchor": "pull-request",
+      "reading": "プルリクエスト（Pull Request）／略してPR"
+    },
+    {
+      "term": "review comment",
+      "anchor": "review-comment",
+      "reading": "レビューコメント（review comment）"
+    },
+    {
+      "term": "merge",
+      "anchor": "merge",
+      "reading": "マージ（merge）"
+    },
+    {
+      "term": "conflict",
+      "anchor": "conflict",
+      "reading": "コンフリクト（conflict）／競合"
+    },
+    {
+      "term": "conflict marker",
+      "anchor": "conflict-marker",
+      "reading": "コンフリクトマーカー（conflict marker）"
+    },
+    {
+      "term": "log（git log）",
+      "anchor": "loggit-log",
+      "reading": "ログ（log）／`git log`（ギットログ）"
+    },
+    {
+      "term": "show（git show）",
+      "anchor": "showgit-show",
+      "reading": "ショー（show）／`git show`（ギットショー）"
+    },
+    {
+      "term": "checkout",
+      "anchor": "checkout",
+      "reading": "チェックアウト（checkout）"
+    },
+    {
+      "term": "main（main branch）",
+      "anchor": "mainmain-branch",
+      "reading": "メイン（main）／main branch"
+    },
+    {
+      "term": ".gitignore",
+      "anchor": "gitignore",
+      "reading": "ギットイグノア（.gitignore）"
+    },
+    {
+      "term": "gh（GitHub CLI）",
+      "anchor": "ghgithub-cli",
+      "reading": "ジーエイチ（GitHub CLI）／コマンド名は `gh`"
+    },
+    {
+      "term": "HEAD",
+      "anchor": "head",
+      "reading": "ヘッド（HEAD）"
+    },
+    {
+      "term": "git switch",
+      "anchor": "git-switch",
+      "reading": "ギットスイッチ（git switch）"
+    }
+  ],
+  "07-web": [
+    {
+      "term": "HTTP",
+      "anchor": "http",
+      "reading": "エイチティーティーピー（HyperText Transfer Protocol）"
+    },
+    {
+      "term": "HTTPS",
+      "anchor": "https",
+      "reading": "エイチティーティーピーエス（HyperText Transfer Protocol Secure）"
+    },
+    {
+      "term": "URL",
+      "anchor": "url",
+      "reading": "ユーアールエル（Uniform Resource Locator）"
+    },
+    {
+      "term": "scheme",
+      "anchor": "scheme",
+      "reading": "スキーム"
+    },
+    {
+      "term": "host",
+      "anchor": "host",
+      "reading": "ホスト"
+    },
+    {
+      "term": "localhost",
+      "anchor": "localhost",
+      "reading": "ローカルホスト"
+    },
+    {
+      "term": "port",
+      "anchor": "port",
+      "reading": "ポート"
+    },
+    {
+      "term": "path",
+      "anchor": "path",
+      "reading": "パス"
+    },
+    {
+      "term": "query string",
+      "anchor": "query-string",
+      "reading": "クエリ（クエリ文字列 / query string）"
+    },
+    {
+      "term": "fragment",
+      "anchor": "fragment",
+      "reading": "フラグメント"
+    },
+    {
+      "term": "origin",
+      "anchor": "origin",
+      "reading": "オリジン"
+    },
+    {
+      "term": "DNS",
+      "anchor": "dns",
+      "reading": "ディーエヌエス（Domain Name System）"
+    },
+    {
+      "term": "HTTP request",
+      "anchor": "http-request",
+      "reading": "エイチティーティーピー リクエスト"
+    },
+    {
+      "term": "HTTP response",
+      "anchor": "http-response",
+      "reading": "エイチティーティーピー レスポンス"
+    },
+    {
+      "term": "method",
+      "anchor": "method",
+      "reading": "メソッド（HTTP method）"
+    },
+    {
+      "term": "GET",
+      "anchor": "get",
+      "reading": "ゲット"
+    },
+    {
+      "term": "POST",
+      "anchor": "post",
+      "reading": "ポスト"
+    },
+    {
+      "term": "PATCH",
+      "anchor": "patch",
+      "reading": "パッチ"
+    },
+    {
+      "term": "PUT",
+      "anchor": "put",
+      "reading": "プット"
+    },
+    {
+      "term": "DELETE",
+      "anchor": "delete",
+      "reading": "デリート"
+    },
+    {
+      "term": "headers",
+      "anchor": "headers",
+      "reading": "ヘッダー（HTTP headers）"
+    },
+    {
+      "term": "body",
+      "anchor": "body",
+      "reading": "ボディ（HTTP body）"
+    },
+    {
+      "term": "JSON",
+      "anchor": "json",
+      "reading": "ジェイソン（JavaScript Object Notation）"
+    },
+    {
+      "term": "status code",
+      "anchor": "status-code",
+      "reading": "ステータスコード（HTTP status code）"
+    },
+    {
+      "term": "Networkタブ",
+      "anchor": "networkタブ",
+      "reading": "ネットワークタブ（Network tab）"
+    },
+    {
+      "term": "curl",
+      "anchor": "curl",
+      "reading": "カール"
+    },
+    {
+      "term": "Cookie",
+      "anchor": "cookie",
+      "reading": "クッキー"
+    },
+    {
+      "term": "session",
+      "anchor": "session",
+      "reading": "セッション"
+    },
+    {
+      "term": "HttpOnly / Secure / SameSite",
+      "anchor": "httponly--secure--samesite",
+      "reading": "エイチティーティーピーオンリー／セキュア／セイムサイト"
+    },
+    {
+      "term": "API",
+      "anchor": "api",
+      "reading": "エーピーアイ（Application Programming Interface）"
+    },
+    {
+      "term": "CORS",
+      "anchor": "cors",
+      "reading": "コルス（Cross-Origin Resource Sharing）"
+    }
+  ],
+  "08-debugging": [
+    {
+      "term": "再現",
+      "anchor": "再現",
+      "reading": "さいげん（reproduction / repro）"
+    },
+    {
+      "term": "入口",
+      "anchor": "入口",
+      "reading": "いりぐち（entry point）"
+    },
+    {
+      "term": "検索語",
+      "anchor": "検索語",
+      "reading": "けんさくご（search term / search query）"
+    },
+    {
+      "term": "rg / ripgrep",
+      "anchor": "rg--ripgrep",
+      "reading": "リップグレップ（ripgrep、コマンド名は `rg`）"
+    },
+    {
+      "term": "スタックトレース",
+      "anchor": "スタックトレース",
+      "reading": "スタックトレース（stack trace）"
+    },
+    {
+      "term": "仮説",
+      "anchor": "仮説",
+      "reading": "かせつ（hypothesis）"
+    },
+    {
+      "term": "正常系",
+      "anchor": "正常系",
+      "reading": "せいじょうけい（happy path / normal case）"
+    },
+    {
+      "term": "最小修正",
+      "anchor": "最小修正",
+      "reading": "さいしょうしゅうせい（minimal fix）"
+    },
+    {
+      "term": "リファクタリング",
+      "anchor": "リファクタリング",
+      "reading": "リファクタリング（refactoring）"
+    },
+    {
+      "term": "差分",
+      "anchor": "差分",
+      "reading": "さぶん（diff）"
+    },
+    {
+      "term": "回帰確認",
+      "anchor": "回帰確認",
+      "reading": "かいきかくにん（regression check / regression testing）"
+    },
+    {
+      "term": "既存テスト",
+      "anchor": "既存テスト",
+      "reading": "きぞんテスト（existing tests）"
+    }
+  ],
+  "09-domain": [
+    {
+      "term": "ドメイン",
+      "anchor": "ドメイン",
+      "reading": "ドメイン（domain）"
+    },
+    {
+      "term": "DDD",
+      "anchor": "ddd",
+      "reading": "ディーディーディー（Domain-Driven Design、ドメイン駆動設計）"
+    },
+    {
+      "term": "機能要求",
+      "anchor": "機能要求",
+      "reading": "きのうようきゅう（functional requirement）"
+    },
+    {
+      "term": "ユースケース",
+      "anchor": "ユースケース",
+      "reading": "ユースケース（use case）"
+    },
+    {
+      "term": "用語集",
+      "anchor": "用語集",
+      "reading": "ようごしゅう（glossary）"
+    },
+    {
+      "term": "状態",
+      "anchor": "状態",
+      "reading": "じょうたい（state）"
+    },
+    {
+      "term": "イベント",
+      "anchor": "イベント",
+      "reading": "イベント（event）"
+    },
+    {
+      "term": "ルール",
+      "anchor": "ルール",
+      "reading": "ルール（rule、業務ルール／ビジネスルール）"
+    },
+    {
+      "term": "スコープ／境界",
+      "anchor": "スコープ境界",
+      "reading": "スコープ（scope）／さかい（boundary）"
+    },
+    {
+      "term": "MVP",
+      "anchor": "mvp",
+      "reading": "エムブイピー（Minimum Viable Product）"
+    },
+    {
+      "term": "ドメインモデル",
+      "anchor": "ドメインモデル",
+      "reading": "ドメインモデル（domain model）"
+    },
+    {
+      "term": "受け入れ条件",
+      "anchor": "受け入れ条件",
+      "reading": "うけいれじょうけん（acceptance criteria）"
+    },
+    {
+      "term": "Given / When / Then",
+      "anchor": "given--when--then",
+      "reading": "ギブン・ウェン・ゼン（Given / When / Then）"
+    }
+  ],
+  "10-database": [
+    {
+      "term": "SQL",
+      "anchor": "sql",
+      "reading": "エスキューエル／シークェル（Structured Query Language）"
+    },
+    {
+      "term": "RDB",
+      "anchor": "rdb",
+      "reading": "アールディービー（Relational Database）"
+    },
+    {
+      "term": "スキーマ",
+      "anchor": "スキーマ",
+      "reading": "スキーマ（schema）"
+    },
+    {
+      "term": "テーブル",
+      "anchor": "テーブル",
+      "reading": "テーブル（table）"
+    },
+    {
+      "term": "行",
+      "anchor": "行",
+      "reading": "ぎょう（row／レコード）"
+    },
+    {
+      "term": "カラム",
+      "anchor": "カラム",
+      "reading": "カラム（column／列）"
+    },
+    {
+      "term": "NULL",
+      "anchor": "null",
+      "reading": "ヌル／ナル（NULL）"
+    },
+    {
+      "term": "制約",
+      "anchor": "制約",
+      "reading": "せいやく（constraint）"
+    },
+    {
+      "term": "主キー",
+      "anchor": "主キー",
+      "reading": "しゅキー（primary key／PRIMARY KEY）"
+    },
+    {
+      "term": "外部キー",
+      "anchor": "外部キー",
+      "reading": "がいぶキー（foreign key／FOREIGN KEY）"
+    },
+    {
+      "term": "参照整合性",
+      "anchor": "参照整合性",
+      "reading": "さんしょうせいごうせい（referential integrity）"
+    },
+    {
+      "term": "NOT NULL",
+      "anchor": "not-null",
+      "reading": "ノットヌル（NOT NULL）"
+    },
+    {
+      "term": "UNIQUE",
+      "anchor": "unique",
+      "reading": "ユニーク（UNIQUE／一意制約）"
+    },
+    {
+      "term": "CHECK制約",
+      "anchor": "check制約",
+      "reading": "チェックせいやく（CHECK constraint）"
+    },
+    {
+      "term": "DDL",
+      "anchor": "ddl",
+      "reading": "ディーディーエル（Data Definition Language）"
+    },
+    {
+      "term": "DML",
+      "anchor": "dml",
+      "reading": "ディーエムエル（Data Manipulation Language）"
+    },
+    {
+      "term": "SELECT",
+      "anchor": "select",
+      "reading": "セレクト（SELECT）"
+    },
+    {
+      "term": "JOIN",
+      "anchor": "join",
+      "reading": "ジョイン（JOIN）"
+    },
+    {
+      "term": "LEFT JOIN",
+      "anchor": "left-join",
+      "reading": "レフトジョイン（LEFT JOIN）"
+    },
+    {
+      "term": "COALESCE",
+      "anchor": "coalesce",
+      "reading": "コアレス（COALESCE）"
+    },
+    {
+      "term": "プレースホルダー",
+      "anchor": "プレースホルダー",
+      "reading": "プレースホルダー（placeholder）"
+    },
+    {
+      "term": "UPSERT",
+      "anchor": "upsert",
+      "reading": "アップサート（upsert）"
+    },
+    {
+      "term": "ON CONFLICT",
+      "anchor": "on-conflict",
+      "reading": "オンコンフリクト（ON CONFLICT）"
+    },
+    {
+      "term": "正規化",
+      "anchor": "正規化",
+      "reading": "せいきか（normalization）"
+    },
+    {
+      "term": "インデックス",
+      "anchor": "インデックス",
+      "reading": "インデックス（index）"
+    },
+    {
+      "term": "トランザクション",
+      "anchor": "トランザクション",
+      "reading": "トランザクション（transaction）"
+    },
+    {
+      "term": "マイグレーション",
+      "anchor": "マイグレーション",
+      "reading": "マイグレーション（migration）"
+    },
+    {
+      "term": "バックフィル",
+      "anchor": "バックフィル",
+      "reading": "バックフィル（backfill）"
+    },
+    {
+      "term": "DBMS",
+      "anchor": "dbms",
+      "reading": "ディービーエムエス（Database Management System／データベース管理システム）"
+    },
+    {
+      "term": "中間テーブル",
+      "anchor": "中間テーブル",
+      "reading": "ちゅうかんテーブル（junction table／中間テーブル）"
+    }
+  ],
+  "11-backend-api": [
+    {
+      "term": "API",
+      "anchor": "api",
+      "reading": "エーピーアイ（Application Programming Interface）"
+    },
+    {
+      "term": "HTTP JSON API",
+      "anchor": "http-json-api",
+      "reading": "エイチティーティーピー ジェイソン エーピーアイ（HTTP JSON API）"
+    },
+    {
+      "term": "REST",
+      "anchor": "rest",
+      "reading": "レスト（REST／Representational State Transfer）"
+    },
+    {
+      "term": "endpoint",
+      "anchor": "endpoint",
+      "reading": "エンドポイント（endpoint）"
+    },
+    {
+      "term": "HTTP method",
+      "anchor": "http-method",
+      "reading": "エイチティーティーピー メソッド（HTTP method）"
+    },
+    {
+      "term": "HTTP status code",
+      "anchor": "http-status-code",
+      "reading": "エイチティーティーピー ステータスコード（HTTP status code）"
+    },
+    {
+      "term": "200 OK",
+      "anchor": "200-ok",
+      "reading": "にひゃく オーケー（200 OK）"
+    },
+    {
+      "term": "400 Bad Request",
+      "anchor": "400-bad-request",
+      "reading": "よんひゃく バッドリクエスト（400 Bad Request）"
+    },
+    {
+      "term": "401 Unauthorized",
+      "anchor": "401-unauthorized",
+      "reading": "よんひゃくいち アンオーソライズド（401 Unauthorized）"
+    },
+    {
+      "term": "403 Forbidden",
+      "anchor": "403-forbidden",
+      "reading": "よんひゃくさん フォービドゥン（403 Forbidden）"
+    },
+    {
+      "term": "404 Not Found",
+      "anchor": "404-not-found",
+      "reading": "よんひゃくよん ノットファウンド（404 Not Found）"
+    },
+    {
+      "term": "422 Unprocessable Content",
+      "anchor": "422-unprocessable-content",
+      "reading": "よんひゃくにじゅうに アンプロセッサブル コンテント（422 Unprocessable Content）"
+    },
+    {
+      "term": "500 Internal Server Error",
+      "anchor": "500-internal-server-error",
+      "reading": "ごひゃく インターナル サーバーエラー（500 Internal Server Error）"
+    },
+    {
+      "term": "request",
+      "anchor": "request",
+      "reading": "リクエスト（request）"
+    },
+    {
+      "term": "response",
+      "anchor": "response",
+      "reading": "レスポンス（response）"
+    },
+    {
+      "term": "path params",
+      "anchor": "path-params",
+      "reading": "パスパラメータ（path parameters）"
+    },
+    {
+      "term": "query params",
+      "anchor": "query-params",
+      "reading": "クエリパラメータ（query parameters）"
+    },
+    {
+      "term": "headers",
+      "anchor": "headers",
+      "reading": "ヘッダー（headers）"
+    },
+    {
+      "term": "body",
+      "anchor": "body",
+      "reading": "ボディ（body）"
+    },
+    {
+      "term": "success response",
+      "anchor": "success-response",
+      "reading": "サクセスレスポンス（success response）"
+    },
+    {
+      "term": "error response",
+      "anchor": "error-response",
+      "reading": "エラーレスポンス（error response）"
+    },
+    {
+      "term": "認証",
+      "anchor": "認証",
+      "reading": "にんしょう（authentication／authn）"
+    },
+    {
+      "term": "認可",
+      "anchor": "認可",
+      "reading": "にんか（authorization／authz）"
+    },
+    {
+      "term": "入力検証",
+      "anchor": "入力検証",
+      "reading": "にゅうりょくけんしょう（input validation）"
+    },
+    {
+      "term": "業務ルール",
+      "anchor": "業務ルール",
+      "reading": "ぎょうむルール（business rule）"
+    },
+    {
+      "term": "handler",
+      "anchor": "handler",
+      "reading": "ハンドラー（handler）"
+    },
+    {
+      "term": "route",
+      "anchor": "route",
+      "reading": "ルート（route）"
+    },
+    {
+      "term": "use case",
+      "anchor": "use-case",
+      "reading": "ユースケース（use case）"
+    },
+    {
+      "term": "repository",
+      "anchor": "repository",
+      "reading": "リポジトリ（repository）"
+    },
+    {
+      "term": "レイヤード設計",
+      "anchor": "レイヤード設計",
+      "reading": "レイヤードせっけい（layered architecture）"
+    },
+    {
+      "term": "CRUD",
+      "anchor": "crud",
+      "reading": "クラッド（CRUD／Create, Read, Update, Delete）"
+    },
+    {
+      "term": "Content-Type",
+      "anchor": "content-type",
+      "reading": "コンテントタイプ（Content-Type）"
+    },
+    {
+      "term": "トランザクション",
+      "anchor": "トランザクション",
+      "reading": "トランザクション（transaction）"
+    },
+    {
+      "term": "curl",
+      "anchor": "curl",
+      "reading": "カール（curl）"
+    },
+    {
+      "term": "OpenAPI",
+      "anchor": "openapi",
+      "reading": "オープンエーピーアイ（OpenAPI）"
+    },
+    {
+      "term": "Bearer token",
+      "anchor": "bearer-token",
+      "reading": "ベアラートークン（Bearer token）"
+    },
+    {
+      "term": "ISO 8601",
+      "anchor": "iso-8601",
+      "reading": "アイエスオー はちろくまるいち（ISO 8601）"
+    }
+  ],
+  "12-frontend-accessibility": [
+    {
+      "term": "フロントエンド",
+      "anchor": "フロントエンド",
+      "reading": "フロントエンド（frontend）"
+    },
+    {
+      "term": "UI state",
+      "anchor": "ui-state",
+      "reading": "ユーアイステート（UI state）／日本語では画面状態"
+    },
+    {
+      "term": "loading / empty / error / success",
+      "anchor": "loading--empty--error--success",
+      "reading": "ローディング／エンプティ／エラー／サクセス（loading / empty / error / success）"
+    },
+    {
+      "term": "アクセシビリティ",
+      "anchor": "アクセシビリティ",
+      "reading": "アクセシビリティ（accessibility）。a11yと略すこともある"
+    },
+    {
+      "term": "セマンティックHTML",
+      "anchor": "セマンティックhtml",
+      "reading": "セマンティックエイチティーエムエル（semantic HTML）"
+    },
+    {
+      "term": "label",
+      "anchor": "label",
+      "reading": "ラベル（label）。HTMLの `<label>` 要素"
+    },
+    {
+      "term": "form",
+      "anchor": "form",
+      "reading": "フォーム（form）。HTMLの `<form>` 要素"
+    },
+    {
+      "term": "button",
+      "anchor": "button",
+      "reading": "ボタン（button）。HTMLの `<button>` 要素"
+    },
+    {
+      "term": "フォーカス",
+      "anchor": "フォーカス",
+      "reading": "フォーカス（focus）"
+    },
+    {
+      "term": "キーボード操作",
+      "anchor": "キーボード操作",
+      "reading": "キーボードそうさ（keyboard operation／keyboard navigation）"
+    },
+    {
+      "term": "WCAG",
+      "anchor": "wcag",
+      "reading": "ダブリューシーエージー（WCAG。Web Content Accessibility Guidelinesの略）"
+    },
+    {
+      "term": "ARIA",
+      "anchor": "aria",
+      "reading": "アリア（ARIA。Accessible Rich Internet Applicationsの略）"
+    },
+    {
+      "term": "スクリーンリーダー",
+      "anchor": "スクリーンリーダー",
+      "reading": "スクリーンリーダー（screen reader）。支援技術の一つ"
+    },
+    {
+      "term": "コントラスト比",
+      "anchor": "コントラスト比",
+      "reading": "コントラストひ（contrast ratio）"
+    },
+    {
+      "term": "Network",
+      "anchor": "network",
+      "reading": "ネットワーク（Network）。ブラウザ開発者ツールのパネル"
+    },
+    {
+      "term": "Console",
+      "anchor": "console",
+      "reading": "コンソール（Console）。ブラウザ開発者ツールのパネル"
+    },
+    {
+      "term": "Elements",
+      "anchor": "elements",
+      "reading": "エレメンツ（Elements）。ブラウザ開発者ツールのパネル"
+    },
+    {
+      "term": "コンポーネント",
+      "anchor": "コンポーネント",
+      "reading": "コンポーネント（component）"
+    },
+    {
+      "term": "レスポンシブ",
+      "anchor": "レスポンシブ",
+      "reading": "レスポンシブ（responsive）"
+    },
+    {
+      "term": "CSS",
+      "anchor": "css",
+      "reading": "シーエスエス（CSS。Cascading Style Sheetsの略）"
+    },
+    {
+      "term": "二重送信",
+      "anchor": "二重送信",
+      "reading": "にじゅうそうしん（double submission）"
+    },
+    {
+      "term": "table / list",
+      "anchor": "table--list",
+      "reading": "テーブル／リスト（table / list）"
+    }
+  ],
+  "13-testing": [
+    {
+      "term": "テスト戦略",
+      "anchor": "テスト戦略",
+      "reading": "テストせんりゃく（test strategy）"
+    },
+    {
+      "term": "テストケース",
+      "anchor": "テストケース",
+      "reading": "テストケース（test case）"
+    },
+    {
+      "term": "単体テスト",
+      "anchor": "単体テスト",
+      "reading": "たんたいテスト（unit test／ユニットテスト）"
+    },
+    {
+      "term": "APIテスト",
+      "anchor": "apiテスト",
+      "reading": "エーピーアイテスト（API test／API=Application Programming Interface）"
+    },
+    {
+      "term": "E2E（エンドツーエンド）",
+      "anchor": "e2eエンドツーエンド",
+      "reading": "イーツーイー（end-to-end／略語の正式名称は End-to-End）"
+    },
+    {
+      "term": "統合テスト",
+      "anchor": "統合テスト",
+      "reading": "とうごうテスト（integration test）"
+    },
+    {
+      "term": "テストピラミッド",
+      "anchor": "テストピラミッド",
+      "reading": "テストピラミッド（test pyramid）"
+    },
+    {
+      "term": "TDD（テスト駆動開発）",
+      "anchor": "tddテスト駆動開発",
+      "reading": "ティーディーディー（test-driven development／略語の正式名称は Test-Driven Development、日本語ではテスト駆動開発）"
+    },
+    {
+      "term": "red-green-refactor",
+      "anchor": "red-green-refactor",
+      "reading": "レッド・グリーン・リファクタ（red-green-refactor）"
+    },
+    {
+      "term": "境界値",
+      "anchor": "境界値",
+      "reading": "きょうかいち（boundary value）"
+    },
+    {
+      "term": "カバレッジ",
+      "anchor": "カバレッジ",
+      "reading": "カバレッジ（coverage／test coverage、code coverage）"
+    },
+    {
+      "term": "fixture",
+      "anchor": "fixture",
+      "reading": "フィクスチャ（fixture）"
+    },
+    {
+      "term": "factory",
+      "anchor": "factory",
+      "reading": "ファクトリ（factory）"
+    },
+    {
+      "term": "mock（モック）",
+      "anchor": "mockモック",
+      "reading": "モック（mock）"
+    },
+    {
+      "term": "stub（スタブ）",
+      "anchor": "stubスタブ",
+      "reading": "スタブ（stub）"
+    },
+    {
+      "term": "テストダブル",
+      "anchor": "テストダブル",
+      "reading": "テストダブル（test double）"
+    },
+    {
+      "term": "アサーション",
+      "anchor": "アサーション",
+      "reading": "アサーション（assertion／日本語では表明・検証）"
+    },
+    {
+      "term": "テスト名",
+      "anchor": "テスト名",
+      "reading": "テストめい（test name／test naming）"
+    },
+    {
+      "term": "flaky test（フレイキーテスト）",
+      "anchor": "flaky-testフレイキーテスト",
+      "reading": "フレイキーテスト（flaky test）"
+    },
+    {
+      "term": "再現テスト",
+      "anchor": "再現テスト",
+      "reading": "さいげんテスト（regression test／bug reproduction test）"
+    },
+    {
+      "term": "内部品質",
+      "anchor": "内部品質",
+      "reading": "ないぶひんしつ（internal quality）"
+    },
+    {
+      "term": "技術的負債",
+      "anchor": "技術的負債",
+      "reading": "ぎじゅつてきふさい（technical debt）"
+    },
+    {
+      "term": "testability（テスト容易性）",
+      "anchor": "testabilityテスト容易性",
+      "reading": "テスタビリティ（testability／日本語ではテスト容易性）"
+    },
+    {
+      "term": "セルフレビュー",
+      "anchor": "セルフレビュー",
+      "reading": "セルフレビュー（self review）"
+    },
+    {
+      "term": "リファクタリング",
+      "anchor": "リファクタリング",
+      "reading": ""
+    },
+    {
+      "term": "回帰確認",
+      "anchor": "回帰確認",
+      "reading": ""
+    }
+  ],
+  "14-security": [
+    {
+      "term": "資産",
+      "anchor": "資産",
+      "reading": "しさん（asset）"
+    },
+    {
+      "term": "脅威",
+      "anchor": "脅威",
+      "reading": "きょうい（threat）"
+    },
+    {
+      "term": "攻撃者",
+      "anchor": "攻撃者",
+      "reading": "こうげきしゃ（attacker / threat actor）"
+    },
+    {
+      "term": "脅威モデリング",
+      "anchor": "脅威モデリング",
+      "reading": "きょういモデリング（threat modeling）"
+    },
+    {
+      "term": "OWASP Top 10",
+      "anchor": "owasp-top-10",
+      "reading": "オワスプ トップテン（OWASP Top Ten）"
+    },
+    {
+      "term": "ASVS",
+      "anchor": "asvs",
+      "reading": "エーエスブイエス（Application Security Verification Standard）"
+    },
+    {
+      "term": "多層防御",
+      "anchor": "多層防御",
+      "reading": "たそうぼうぎょ（defense in depth）"
+    },
+    {
+      "term": "最小権限",
+      "anchor": "最小権限",
+      "reading": "さいしょうけんげん（least privilege）"
+    },
+    {
+      "term": "認証",
+      "anchor": "認証",
+      "reading": "にんしょう（authentication）"
+    },
+    {
+      "term": "認可",
+      "anchor": "認可",
+      "reading": "にんか（authorization）"
+    },
+    {
+      "term": "入力検証",
+      "anchor": "入力検証",
+      "reading": "にゅうりょくけんしょう（input validation）"
+    },
+    {
+      "term": "SQLインジェクション",
+      "anchor": "sqlインジェクション",
+      "reading": "エスキューエルインジェクション（SQL injection）"
+    },
+    {
+      "term": "パラメータ化クエリ",
+      "anchor": "パラメータ化クエリ",
+      "reading": "パラメータかクエリ（parameterized query / prepared statement、プリペアドステートメント）"
+    },
+    {
+      "term": "XSS",
+      "anchor": "xss",
+      "reading": "エックスエスエス（Cross-Site Scripting）"
+    },
+    {
+      "term": "CSRF",
+      "anchor": "csrf",
+      "reading": "シーエスアールエフ（Cross-Site Request Forgery）"
+    },
+    {
+      "term": "出力エンコード",
+      "anchor": "出力エンコード",
+      "reading": "しゅつりょくエンコード（output encoding）"
+    },
+    {
+      "term": "エスケープ",
+      "anchor": "エスケープ",
+      "reading": "エスケープ（escape）"
+    },
+    {
+      "term": "secret",
+      "anchor": "secret",
+      "reading": "シークレット（secret）"
+    },
+    {
+      "term": "機微情報",
+      "anchor": "機微情報",
+      "reading": "きびじょうほう（sensitive information）"
+    },
+    {
+      "term": "依存関係",
+      "anchor": "依存関係",
+      "reading": "いそんかんけい（dependency）"
+    },
+    {
+      "term": "監査コマンド",
+      "anchor": "監査コマンド",
+      "reading": "かんさコマンド（audit command）"
+    },
+    {
+      "term": "NIST SSDF",
+      "anchor": "nist-ssdf",
+      "reading": "ニスト エスエスディーエフ（NIST Secure Software Development Framework、SP 800-218）"
+    },
+    {
+      "term": "ORM",
+      "anchor": "orm",
+      "reading": "オーアールエム（Object-Relational Mapping／オブジェクト関係マッピング）"
+    }
+  ],
+  "15-containers": [
+    {
+      "term": "container",
+      "anchor": "container",
+      "reading": "コンテナ（container）"
+    },
+    {
+      "term": "image",
+      "anchor": "image",
+      "reading": "イメージ（image／container image）"
+    },
+    {
+      "term": "Dockerfile",
+      "anchor": "dockerfile",
+      "reading": "ドッカーファイル（Dockerfile）"
+    },
+    {
+      "term": "Docker",
+      "anchor": "docker",
+      "reading": "ドッカー（Docker）"
+    },
+    {
+      "term": "build",
+      "anchor": "build",
+      "reading": "ビルド（build）"
+    },
+    {
+      "term": "base image",
+      "anchor": "base-image",
+      "reading": "ベースイメージ（base image）"
+    },
+    {
+      "term": "build context",
+      "anchor": "build-context",
+      "reading": "ビルドコンテキスト（build context）"
+    },
+    {
+      "term": ".dockerignore",
+      "anchor": "dockerignore",
+      "reading": "ドッカーイグノア（.dockerignore）"
+    },
+    {
+      "term": "Compose",
+      "anchor": "compose",
+      "reading": "コンポーズ（Docker Compose）"
+    },
+    {
+      "term": "service",
+      "anchor": "service",
+      "reading": "サービス（service）"
+    },
+    {
+      "term": "network",
+      "anchor": "network",
+      "reading": "ネットワーク（network）"
+    },
+    {
+      "term": "host",
+      "anchor": "host",
+      "reading": "ホスト（host）"
+    },
+    {
+      "term": "port mapping",
+      "anchor": "port-mapping",
+      "reading": "ポートマッピング（port mapping）"
+    },
+    {
+      "term": "volume",
+      "anchor": "volume",
+      "reading": "ボリューム（volume）"
+    },
+    {
+      "term": "named volume",
+      "anchor": "named-volume",
+      "reading": "ネームドボリューム（named volume）"
+    },
+    {
+      "term": "bind mount",
+      "anchor": "bind-mount",
+      "reading": "バインドマウント（bind mount）"
+    },
+    {
+      "term": "environment variable",
+      "anchor": "environment-variable",
+      "reading": "環境変数（environment variable）"
+    },
+    {
+      "term": ".env.example",
+      "anchor": "envexample",
+      "reading": "ドットエンブサンプル（.env.example）"
+    },
+    {
+      "term": "depends_on",
+      "anchor": "depends_on",
+      "reading": "ディペンズオン（depends_on）"
+    },
+    {
+      "term": "healthcheck",
+      "anchor": "healthcheck",
+      "reading": "ヘルスチェック（healthcheck）"
+    },
+    {
+      "term": "registry",
+      "anchor": "registry",
+      "reading": "レジストリ（registry）"
+    },
+    {
+      "term": "Twelve-Factor App",
+      "anchor": "twelve-factor-app",
+      "reading": "トゥエルブファクター アップ（The Twelve-Factor App）"
+    }
+  ],
+  "16-cloud-cicd": [
+    {
+      "term": "クラウド",
+      "anchor": "クラウド",
+      "reading": "クラウド（cloud / cloud computing）"
+    },
+    {
+      "term": "CI",
+      "anchor": "ci",
+      "reading": "シーアイ（Continuous Integration／継続的インテグレーション）"
+    },
+    {
+      "term": "CD",
+      "anchor": "cd",
+      "reading": "シーディー（Continuous Delivery／継続的デリバリー、または Continuous Deployment／継続的デプロイ）"
+    },
+    {
+      "term": "pipeline",
+      "anchor": "pipeline",
+      "reading": "パイプライン（pipeline）"
+    },
+    {
+      "term": "デプロイ",
+      "anchor": "デプロイ",
+      "reading": "デプロイ（deploy／deployment）"
+    },
+    {
+      "term": "AWS",
+      "anchor": "aws",
+      "reading": "エーダブリューエス（Amazon Web Services）"
+    },
+    {
+      "term": "AWS account",
+      "anchor": "aws-account",
+      "reading": "エーダブリューエス アカウント（AWS account）"
+    },
+    {
+      "term": "region",
+      "anchor": "region",
+      "reading": "リージョン（region）"
+    },
+    {
+      "term": "IAM",
+      "anchor": "iam",
+      "reading": "アイアム（Identity and Access Management）"
+    },
+    {
+      "term": "IAM role",
+      "anchor": "iam-role",
+      "reading": "アイアム ロール（IAM role）"
+    },
+    {
+      "term": "least privilege",
+      "anchor": "least-privilege",
+      "reading": "リースト プリビレッジ（least privilege／最小権限）"
+    },
+    {
+      "term": "OIDC",
+      "anchor": "oidc",
+      "reading": "オーアイディーシー（OpenID Connect）"
+    },
+    {
+      "term": "credential",
+      "anchor": "credential",
+      "reading": "クレデンシャル（credential／認証情報）"
+    },
+    {
+      "term": "ECR",
+      "anchor": "ecr",
+      "reading": "イーシーアール（Elastic Container Registry／Amazon ECR）"
+    },
+    {
+      "term": "App Runner",
+      "anchor": "app-runner",
+      "reading": "アップ ランナー（AWS App Runner）"
+    },
+    {
+      "term": "managed service",
+      "anchor": "managed-service",
+      "reading": "マネージド サービス（managed service）"
+    },
+    {
+      "term": "RDS",
+      "anchor": "rds",
+      "reading": "アールディーエス（Relational Database Service／Amazon RDS）"
+    },
+    {
+      "term": "network",
+      "anchor": "network",
+      "reading": "ネットワーク（network）"
+    },
+    {
+      "term": "Secrets Manager",
+      "anchor": "secrets-manager",
+      "reading": "シークレッツ マネージャー（AWS Secrets Manager）"
+    },
+    {
+      "term": "Parameter Store",
+      "anchor": "parameter-store",
+      "reading": "パラメータ ストア（AWS Systems Manager Parameter Store）"
+    },
+    {
+      "term": "secret",
+      "anchor": "secret",
+      "reading": "シークレット（secret）"
+    },
+    {
+      "term": "環境変数(env)",
+      "anchor": "環境変数env",
+      "reading": "かんきょうへんすう（environment variable／env）"
+    },
+    {
+      "term": "CloudWatch Logs",
+      "anchor": "cloudwatch-logs",
+      "reading": "クラウドウォッチ ログズ（Amazon CloudWatch Logs）"
+    },
+    {
+      "term": "GitHub Actions",
+      "anchor": "github-actions",
+      "reading": "ギットハブ アクションズ（GitHub Actions）"
+    },
+    {
+      "term": "workflow",
+      "anchor": "workflow",
+      "reading": "ワークフロー（workflow）"
+    },
+    {
+      "term": "artifact",
+      "anchor": "artifact",
+      "reading": "アーティファクト（artifact）"
+    },
+    {
+      "term": "image tag",
+      "anchor": "image-tag",
+      "reading": "イメージ タグ（image tag）"
+    },
+    {
+      "term": "staging",
+      "anchor": "staging",
+      "reading": "ステージング（staging）"
+    },
+    {
+      "term": "production",
+      "anchor": "production",
+      "reading": "プロダクション（production）"
+    },
+    {
+      "term": "smoke test",
+      "anchor": "smoke-test",
+      "reading": "スモーク テスト（smoke test）"
+    },
+    {
+      "term": "manual approval",
+      "anchor": "manual-approval",
+      "reading": "マニュアル アプルーバル（manual approval／手動承認）"
+    },
+    {
+      "term": "rollback",
+      "anchor": "rollback",
+      "reading": "ロールバック（rollback）"
+    },
+    {
+      "term": "runbook",
+      "anchor": "runbook",
+      "reading": "ランブック（runbook）"
+    },
+    {
+      "term": "cleanup",
+      "anchor": "cleanup",
+      "reading": "クリーンアップ（cleanup）"
+    },
+    {
+      "term": "trust policy",
+      "anchor": "trust-policy",
+      "reading": "トラスト ポリシー（trust policy）"
+    },
+    {
+      "term": "roll forward",
+      "anchor": "roll-forward",
+      "reading": "ロールフォワード（roll forward）"
+    },
+    {
+      "term": "feature flag / feature toggle",
+      "anchor": "feature-flag--feature-toggle",
+      "reading": "フィーチャーフラグ／フィーチャートグル（feature flag / feature toggle）"
+    }
+  ],
+  "17-observability-sre": [
+    {
+      "term": "オブザーバビリティ",
+      "anchor": "オブザーバビリティ",
+      "reading": "オブザーバビリティ（observability／可観測性）"
+    },
+    {
+      "term": "SRE",
+      "anchor": "sre",
+      "reading": "エスアールイー（Site Reliability Engineering）"
+    },
+    {
+      "term": "モニタリング",
+      "anchor": "モニタリング",
+      "reading": "モニタリング（monitoring／監視）"
+    },
+    {
+      "term": "テレメトリ",
+      "anchor": "テレメトリ",
+      "reading": "テレメトリ（telemetry）"
+    },
+    {
+      "term": "OpenTelemetry",
+      "anchor": "opentelemetry",
+      "reading": "オープンテレメトリ（OpenTelemetry、略称OTel）"
+    },
+    {
+      "term": "計装（instrumentation）",
+      "anchor": "計装instrumentation",
+      "reading": "けいそう（instrumentation／インストルメンテーション）"
+    },
+    {
+      "term": "ログ",
+      "anchor": "ログ",
+      "reading": ""
+    },
+    {
+      "term": "構造化ログ",
+      "anchor": "構造化ログ",
+      "reading": "こうぞうかログ（structured log）"
+    },
+    {
+      "term": "メトリクス",
+      "anchor": "メトリクス",
+      "reading": "メトリクス（metrics）"
+    },
+    {
+      "term": "トレース",
+      "anchor": "トレース",
+      "reading": "トレース（trace／distributed tracing）"
+    },
+    {
+      "term": "span",
+      "anchor": "span",
+      "reading": "スパン（span）"
+    },
+    {
+      "term": "request_id",
+      "anchor": "request_id",
+      "reading": "リクエストアイディー（request id）"
+    },
+    {
+      "term": "trace_id",
+      "anchor": "trace_id",
+      "reading": "トレースアイディー（trace id）"
+    },
+    {
+      "term": "latency",
+      "anchor": "latency",
+      "reading": "レイテンシ（latency／遅延）"
+    },
+    {
+      "term": "error rate",
+      "anchor": "error-rate",
+      "reading": "エラーレート（error rate／エラー率）"
+    },
+    {
+      "term": "traffic",
+      "anchor": "traffic",
+      "reading": "トラフィック（traffic／流量）"
+    },
+    {
+      "term": "saturation",
+      "anchor": "saturation",
+      "reading": "サチュレーション（saturation／飽和）"
+    },
+    {
+      "term": "Four Golden Signals",
+      "anchor": "four-golden-signals",
+      "reading": "フォーゴールデンシグナルズ（Four Golden Signals／四つの黄金信号）"
+    },
+    {
+      "term": "percentile（p50 / p95 / p99）",
+      "anchor": "percentilep50--p95--p99",
+      "reading": "パーセンタイル（percentile）。p50、p95、p99"
+    },
+    {
+      "term": "SLI",
+      "anchor": "sli",
+      "reading": "エスエルアイ（Service Level Indicator）"
+    },
+    {
+      "term": "SLO",
+      "anchor": "slo",
+      "reading": "エスエルオー（Service Level Objective）"
+    },
+    {
+      "term": "SLA",
+      "anchor": "sla",
+      "reading": "エスエルエー（Service Level Agreement）"
+    },
+    {
+      "term": "error budget",
+      "anchor": "error-budget",
+      "reading": "エラーバジェット（error budget／エラー予算）"
+    },
+    {
+      "term": "トイル",
+      "anchor": "トイル",
+      "reading": "トイル（toil）"
+    },
+    {
+      "term": "ダッシュボード",
+      "anchor": "ダッシュボード",
+      "reading": "ダッシュボード（dashboard）"
+    },
+    {
+      "term": "アラート",
+      "anchor": "アラート",
+      "reading": "アラート（alert／alarm）"
+    },
+    {
+      "term": "インシデント",
+      "anchor": "インシデント",
+      "reading": "インシデント（incident）"
+    },
+    {
+      "term": "ポストモーテム",
+      "anchor": "ポストモーテム",
+      "reading": "ポストモーテム（postmortem）。インシデントレビューとも呼ぶ"
+    },
+    {
+      "term": "on-call",
+      "anchor": "on-call",
+      "reading": "オンコール（on-call）"
+    },
+    {
+      "term": "CloudWatch Logs",
+      "anchor": "cloudwatch-logs",
+      "reading": ""
+    },
+    {
+      "term": "X-Ray",
+      "anchor": "x-ray",
+      "reading": "エックスレイ（AWS X-Ray）"
+    },
+    {
+      "term": "N+1 query",
+      "anchor": "n1-query",
+      "reading": "エヌプラスワン クエリ（N+1 query）"
+    }
+  ],
+  "18-llm-generative-ai": [
+    {
+      "term": "LLM",
+      "anchor": "llm",
+      "reading": "エルエルエム（Large Language Model、大規模言語モデル）"
+    },
+    {
+      "term": "生成AI",
+      "anchor": "生成ai",
+      "reading": "せいせいエーアイ（generative AI）"
+    },
+    {
+      "term": "model",
+      "anchor": "model",
+      "reading": "モデル（model）"
+    },
+    {
+      "term": "model snapshot",
+      "anchor": "model-snapshot",
+      "reading": "モデルスナップショット（model snapshot）"
+    },
+    {
+      "term": "prompt",
+      "anchor": "prompt",
+      "reading": "プロンプト（prompt）"
+    },
+    {
+      "term": "instruction",
+      "anchor": "instruction",
+      "reading": "インストラクション（instruction、指示）"
+    },
+    {
+      "term": "context",
+      "anchor": "context",
+      "reading": "コンテキスト（context、文脈）"
+    },
+    {
+      "term": "context window",
+      "anchor": "context-window",
+      "reading": "コンテキストウィンドウ（context window）"
+    },
+    {
+      "term": "token",
+      "anchor": "token",
+      "reading": "トークン（token）"
+    },
+    {
+      "term": "output format",
+      "anchor": "output-format",
+      "reading": "アウトプットフォーマット（output format、出力形式）"
+    },
+    {
+      "term": "structured output",
+      "anchor": "structured-output",
+      "reading": "ストラクチャードアウトプット（structured output、構造化出力）"
+    },
+    {
+      "term": "JSON mode",
+      "anchor": "json-mode",
+      "reading": "ジェイソンモード（JSON mode）"
+    },
+    {
+      "term": "temperature",
+      "anchor": "temperature",
+      "reading": "テンペラチャー（temperature）"
+    },
+    {
+      "term": "hallucination",
+      "anchor": "hallucination",
+      "reading": "ハルシネーション（hallucination、幻覚）"
+    },
+    {
+      "term": "stale knowledge",
+      "anchor": "stale-knowledge",
+      "reading": "ステイルナレッジ（stale knowledge、古くなった知識）"
+    },
+    {
+      "term": "uncertainty",
+      "anchor": "uncertainty",
+      "reading": "アンサーテンティ（uncertainty、不確実性）"
+    },
+    {
+      "term": "RAG",
+      "anchor": "rag",
+      "reading": "ラグ（Retrieval-Augmented Generation、検索拡張生成）"
+    },
+    {
+      "term": "retrieval",
+      "anchor": "retrieval",
+      "reading": "リトリーバル（retrieval、検索・取り出し）"
+    },
+    {
+      "term": "semantic search",
+      "anchor": "semantic-search",
+      "reading": "セマンティックサーチ（semantic search、意味検索）"
+    },
+    {
+      "term": "chunk",
+      "anchor": "chunk",
+      "reading": "チャンク（chunk）"
+    },
+    {
+      "term": "metadata filter",
+      "anchor": "metadata-filter",
+      "reading": "メタデータフィルター（metadata filter）"
+    },
+    {
+      "term": "permission filtering",
+      "anchor": "permission-filtering",
+      "reading": "パーミッションフィルタリング（permission filtering、権限による絞り込み）"
+    },
+    {
+      "term": "grounding",
+      "anchor": "grounding",
+      "reading": "グラウンディング（grounding、接地）"
+    },
+    {
+      "term": "citation",
+      "anchor": "citation",
+      "reading": "サイテーション（citation、引用・出典表示）"
+    },
+    {
+      "term": "tool use",
+      "anchor": "tool-use",
+      "reading": "ツールユース（tool use、ツール利用）"
+    },
+    {
+      "term": "function calling",
+      "anchor": "function-calling",
+      "reading": "ファンクションコーリング（function calling、関数呼び出し）"
+    },
+    {
+      "term": "schema",
+      "anchor": "schema",
+      "reading": "スキーマ（schema）"
+    },
+    {
+      "term": "agent",
+      "anchor": "agent",
+      "reading": "エージェント（agent）"
+    },
+    {
+      "term": "guardrail",
+      "anchor": "guardrail",
+      "reading": "ガードレール（guardrail）"
+    },
+    {
+      "term": "human-in-the-loop",
+      "anchor": "human-in-the-loop",
+      "reading": "ヒューマンインザループ（human-in-the-loop、HITL）"
+    },
+    {
+      "term": "audit log",
+      "anchor": "audit-log",
+      "reading": "オーディットログ（audit log、監査ログ）"
+    },
+    {
+      "term": "idempotency",
+      "anchor": "idempotency",
+      "reading": "アイデンポテンシー（idempotency、冪等性）"
+    },
+    {
+      "term": "評価",
+      "anchor": "評価",
+      "reading": "ひょうか（evaluation）"
+    },
+    {
+      "term": "rubric",
+      "anchor": "rubric",
+      "reading": "ルーブリック（rubric、採点表）"
+    },
+    {
+      "term": "test case",
+      "anchor": "test-case",
+      "reading": "テストケース（test case）"
+    },
+    {
+      "term": "golden case",
+      "anchor": "golden-case",
+      "reading": "ゴールデンケース（golden case）"
+    },
+    {
+      "term": "adversarial test case",
+      "anchor": "adversarial-test-case",
+      "reading": "アドバーサリアルテストケース（adversarial test case、意地悪な評価ケース）"
+    },
+    {
+      "term": "regression eval",
+      "anchor": "regression-eval",
+      "reading": "リグレッションイーバル（regression eval、回帰評価）"
+    },
+    {
+      "term": "prompt injection",
+      "anchor": "prompt-injection",
+      "reading": "プロンプトインジェクション（prompt injection）"
+    },
+    {
+      "term": "indirect prompt injection",
+      "anchor": "indirect-prompt-injection",
+      "reading": "インダイレクトプロンプトインジェクション（indirect prompt injection、間接的なプロンプトインジェクション）"
+    },
+    {
+      "term": "sensitive information disclosure",
+      "anchor": "sensitive-information-disclosure",
+      "reading": "センシティブインフォメーションディスクロージャー（sensitive information disclosure、機密情報の漏えい）"
+    },
+    {
+      "term": "excessive agency",
+      "anchor": "excessive-agency",
+      "reading": "エクセッシブエージェンシー（excessive agency、過剰な権限・自律）"
+    },
+    {
+      "term": "overreliance",
+      "anchor": "overreliance",
+      "reading": "オーバーリライアンス（overreliance、過度の依存）"
+    },
+    {
+      "term": "improper output handling",
+      "anchor": "improper-output-handling",
+      "reading": "インプロパーアウトプットハンドリング（improper output handling、不適切な出力処理）"
+    },
+    {
+      "term": "system prompt leakage",
+      "anchor": "system-prompt-leakage",
+      "reading": "システムプロンプトリーケージ（system prompt leakage、system promptの漏えい）"
+    },
+    {
+      "term": "unbounded consumption",
+      "anchor": "unbounded-consumption",
+      "reading": "アンバウンデッドコンサンプション（unbounded consumption、無制限な消費）"
+    },
+    {
+      "term": "fine-tuning",
+      "anchor": "fine-tuning",
+      "reading": "ファインチューニング（fine-tuning、微調整）"
+    },
+    {
+      "term": "Transformer",
+      "anchor": "transformer",
+      "reading": "トランスフォーマー（Transformer）"
+    },
+    {
+      "term": "NIST AI RMF",
+      "anchor": "nist-ai-rmf",
+      "reading": "ニストエーアイアールエムエフ（NIST AI Risk Management Framework）"
+    },
+    {
+      "term": "OWASP Top 10 for LLM",
+      "anchor": "owasp-top-10-for-llm",
+      "reading": "オワスプトップテンフォーエルエルエム（OWASP Top 10 for Large Language Model Applications）"
+    }
+  ],
+  "19-ai-coding-workflow": [
+    {
+      "term": "AIコーディング",
+      "anchor": "aiコーディング",
+      "reading": "エーアイコーディング（AI coding／agentic coding、AI支援開発）"
+    },
+    {
+      "term": "AI coding agent",
+      "anchor": "ai-coding-agent",
+      "reading": "エーアイ コーディング エージェント（AI coding agent）"
+    },
+    {
+      "term": "Claude Code",
+      "anchor": "claude-code",
+      "reading": "クロードコード（Claude Code）"
+    },
+    {
+      "term": "Codex",
+      "anchor": "codex",
+      "reading": "コーデックス（Codex）"
+    },
+    {
+      "term": "plan mode",
+      "anchor": "plan-mode",
+      "reading": "プランモード（plan mode、計画モード）"
+    },
+    {
+      "term": "permission",
+      "anchor": "permission",
+      "reading": "パーミッション（permission、権限）"
+    },
+    {
+      "term": "sandbox",
+      "anchor": "sandbox",
+      "reading": "サンドボックス（sandbox）"
+    },
+    {
+      "term": "approval",
+      "anchor": "approval",
+      "reading": "アプルーバル（approval、承認）"
+    },
+    {
+      "term": "settings",
+      "anchor": "settings",
+      "reading": "セッティングス（settings、設定）"
+    },
+    {
+      "term": "CLAUDE.md",
+      "anchor": "claudemd",
+      "reading": "クロードエムディー（CLAUDE.md、Claude Codeのmemory file）"
+    },
+    {
+      "term": "hook",
+      "anchor": "hook",
+      "reading": "フック（hook）"
+    },
+    {
+      "term": "skill",
+      "anchor": "skill",
+      "reading": "スキル（skill）"
+    },
+    {
+      "term": "MCP",
+      "anchor": "mcp",
+      "reading": "エムシーピー（Model Context Protocol）"
+    },
+    {
+      "term": "small diff",
+      "anchor": "small-diff",
+      "reading": "スモールディフ（small diff、小さな差分）"
+    },
+    {
+      "term": "diff review",
+      "anchor": "diff-review",
+      "reading": "ディフレビュー（diff review、差分レビュー）"
+    },
+    {
+      "term": "manual check",
+      "anchor": "manual-check",
+      "reading": "マニュアルチェック（manual check、手動確認）"
+    },
+    {
+      "term": "feature brief",
+      "anchor": "feature-brief",
+      "reading": "フィーチャーブリーフ（feature brief、機能概要）"
+    },
+    {
+      "term": "acceptance criteria",
+      "anchor": "acceptance-criteria",
+      "reading": ""
+    }
+  ],
+  "20-technical-writing": [
+    {
+      "term": "テクニカルライティング",
+      "anchor": "テクニカルライティング",
+      "reading": "てくにかるらいてぃんぐ／technical writing"
+    },
+    {
+      "term": "知識共有",
+      "anchor": "知識共有",
+      "reading": "ちしききょうゆう／knowledge sharing"
+    },
+    {
+      "term": "Diátaxis",
+      "anchor": "diátaxis",
+      "reading": "でぃあたくしす／Diátaxis"
+    },
+    {
+      "term": "チュートリアル",
+      "anchor": "チュートリアル",
+      "reading": "ちゅーとりある／tutorial"
+    },
+    {
+      "term": "ハウツー",
+      "anchor": "ハウツー",
+      "reading": "はうつー／how-to guide"
+    },
+    {
+      "term": "リファレンス",
+      "anchor": "リファレンス",
+      "reading": "りふぁれんす／reference"
+    },
+    {
+      "term": "説明",
+      "anchor": "説明",
+      "reading": "せつめい／explanation"
+    },
+    {
+      "term": "ADR",
+      "anchor": "adr",
+      "reading": "えーでぃーあーる／Architecture Decision Record"
+    },
+    {
+      "term": "設計メモ",
+      "anchor": "設計メモ",
+      "reading": "せっけいめも／design doc・設計文書"
+    },
+    {
+      "term": "runbook",
+      "anchor": "runbook",
+      "reading": "らんぶっく／runbook・運用手順書"
+    },
+    {
+      "term": "インシデント報告",
+      "anchor": "インシデント報告",
+      "reading": "いんしでんとほうこく／incident report"
+    },
+    {
+      "term": "PR説明",
+      "anchor": "pr説明",
+      "reading": "ぴーあーるせつめい／PR description・pull request description"
+    },
+    {
+      "term": "文書レビュー",
+      "anchor": "文書レビュー",
+      "reading": "ぶんしょれびゅー／doc review・document review"
+    },
+    {
+      "term": "last reviewed",
+      "anchor": "last-reviewed",
+      "reading": "らすとれびゅーど／last reviewed・最終確認日"
+    },
+    {
+      "term": "superseded",
+      "anchor": "superseded",
+      "reading": "すーぱーしーでっど／superseded・置き換え済み"
+    },
+    {
+      "term": "source of truth",
+      "anchor": "source-of-truth",
+      "reading": "そーす おぶ とぅるーす／source of truth・正本"
+    },
+    {
+      "term": "事実・判断・推測・未決定",
+      "anchor": "事実判断推測未決定",
+      "reading": "じじつ・はんだん・すいそく・みけってい"
+    },
+    {
+      "term": "README",
+      "anchor": "readme",
+      "reading": ""
+    },
+    {
+      "term": "再現性",
+      "anchor": "再現性",
+      "reading": ""
+    }
+  ],
+  "21-individual-project": [
+    {
+      "term": "Success Signal",
+      "anchor": "success-signal",
+      "reading": "サクセス シグナル（success signal／成功のサイン）"
+    },
+    {
+      "term": "Riskiest Assumption",
+      "anchor": "riskiest-assumption",
+      "reading": "リスキエスト アサンプション（riskiest assumption／いちばん不確かな前提）"
+    },
+    {
+      "term": "Data Lifecycle",
+      "anchor": "data-lifecycle",
+      "reading": "データ ライフサイクル（data lifecycle）"
+    },
+    {
+      "term": "AI利用ログ",
+      "anchor": "ai利用ログ",
+      "reading": "エーアイりようログ"
+    },
+    {
+      "term": "vertical slice（縦切り実装）",
+      "anchor": "vertical-slice縦切り実装",
+      "reading": "バーティカルスライス（vertical slice／縦切り実装）"
+    },
+    {
+      "term": "GitHub Issues / GitHub Projects",
+      "anchor": "github-issues--github-projects",
+      "reading": "ギットハブ イシューズ／プロジェクツ（GitHub Issues / GitHub Projects）"
+    }
+  ],
+  "22-existing-product-improvement": [
+    {
+      "term": "現在の約束",
+      "anchor": "現在の約束",
+      "reading": "げんざいのやくそく"
+    },
+    {
+      "term": "status contract",
+      "anchor": "status-contract",
+      "reading": "ステータス コントラクト（status contract）"
+    },
+    {
+      "term": "characterization test",
+      "anchor": "characterization-test",
+      "reading": "キャラクタライゼーション テスト／characterization test（特性化テスト）"
+    },
+    {
+      "term": "backfill",
+      "anchor": "backfill",
+      "reading": "バックフィル／backfill"
+    },
+    {
+      "term": "read-time fallback",
+      "anchor": "read-time-fallback",
+      "reading": "リードタイム フォールバック（read-time fallback／読み取り時補完）"
+    },
+    {
+      "term": "nullable",
+      "anchor": "nullable",
+      "reading": "ナラブル／nullable（NULL可）"
+    },
+    {
+      "term": "default",
+      "anchor": "default",
+      "reading": "デフォルト／default（既定値）"
+    },
+    {
+      "term": "migration",
+      "anchor": "migration",
+      "reading": "マイグレーション／migration（データ移行）"
+    },
+    {
+      "term": "revert",
+      "anchor": "revert",
+      "reading": "リバート／revert"
+    },
+    {
+      "term": "互換性 / 後方互換性",
+      "anchor": "互換性--後方互換性",
+      "reading": "ごかんせい／こうほうごかんせい（compatibility／backward compatibility）"
+    },
+    {
+      "term": "release note",
+      "anchor": "release-note",
+      "reading": "リリースノート／release note"
+    },
+    {
+      "term": "回帰確認 / regression test",
+      "anchor": "回帰確認--regression-test",
+      "reading": "かいきかくにん／リグレッション テスト（regression test）"
+    },
+    {
+      "term": "リファクタリング",
+      "anchor": "リファクタリング",
+      "reading": "リファクタリング／refactoring"
+    }
+  ],
+  "23-production-readiness": [
+    {
+      "term": "Production Readiness Review / PRR",
+      "anchor": "production-readiness-review--prr",
+      "reading": "プロダクション レディネス レビュー／Production Readiness Review（略PRR）"
+    },
+    {
+      "term": "release candidate",
+      "anchor": "release-candidate",
+      "reading": "リリース キャンディデート／release candidate（略RC）"
+    },
+    {
+      "term": "artifact",
+      "anchor": "artifact",
+      "reading": "アーティファクト／artifact"
+    },
+    {
+      "term": "evidence index",
+      "anchor": "evidence-index",
+      "reading": "エビデンス インデックス／evidence index"
+    },
+    {
+      "term": "blocker",
+      "anchor": "blocker",
+      "reading": "ブロッカー／blocker"
+    },
+    {
+      "term": "accepted risk",
+      "anchor": "accepted-risk",
+      "reading": "アクセプテッド リスク／accepted risk"
+    },
+    {
+      "term": "skipped check",
+      "anchor": "skipped-check",
+      "reading": "スキップド チェック／skipped check"
+    },
+    {
+      "term": "follow-up",
+      "anchor": "follow-up",
+      "reading": "フォローアップ／follow-up"
+    },
+    {
+      "term": "go / no-go",
+      "anchor": "go--no-go",
+      "reading": "ゴー ノーゴー／go / no-go"
+    },
+    {
+      "term": "decision matrix",
+      "anchor": "decision-matrix",
+      "reading": "ディシジョン マトリクス／decision matrix"
+    },
+    {
+      "term": "release decision",
+      "anchor": "release-decision",
+      "reading": "リリース ディシジョン／release decision"
+    },
+    {
+      "term": "smoke test",
+      "anchor": "smoke-test",
+      "reading": "スモーク テスト／smoke test"
+    },
+    {
+      "term": "runbook",
+      "anchor": "runbook",
+      "reading": "ランブック／runbook"
+    },
+    {
+      "term": "operations readiness",
+      "anchor": "operations-readiness",
+      "reading": "オペレーションズ レディネス／operations readiness"
+    },
+    {
+      "term": "rollback",
+      "anchor": "rollback",
+      "reading": "ロールバック／rollback"
+    },
+    {
+      "term": "cleanup",
+      "anchor": "cleanup",
+      "reading": "クリーンアップ／cleanup"
+    }
+  ],
+  "24-final-presentation": [
+    {
+      "term": "final evidence index",
+      "anchor": "final-evidence-index",
+      "reading": "ファイナル エビデンス インデックス／final evidence index"
+    },
+    {
+      "term": "core message",
+      "anchor": "core-message",
+      "reading": "コア メッセージ／core message"
+    },
+    {
+      "term": "presentation brief",
+      "anchor": "presentation-brief",
+      "reading": "プレゼンテーション ブリーフ／presentation brief"
+    },
+    {
+      "term": "fallback evidence",
+      "anchor": "fallback-evidence",
+      "reading": "フォールバック エビデンス／fallback evidence"
+    },
+    {
+      "term": "learning reflection",
+      "anchor": "learning-reflection",
+      "reading": "ラーニング リフレクション／learning reflection"
+    },
+    {
+      "term": "next 90 days plan",
+      "anchor": "next-90-days-plan",
+      "reading": "ネクスト ナインティ デイズ プラン／next 90 days plan"
+    },
+    {
+      "term": "success signal",
+      "anchor": "success-signal",
+      "reading": "サクセス シグナル／success signal"
+    },
+    {
+      "term": "trade-off",
+      "anchor": "trade-off",
+      "reading": "トレードオフ（trade-off）"
+    }
+  ]
+}

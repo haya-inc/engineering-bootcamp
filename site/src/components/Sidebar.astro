@@ -1,0 +1,57 @@
+---
+import { getNav } from "../lib/content.ts";
+
+interface Props {
+  currentId: string;
+}
+const { currentId } = Astro.props;
+const { sections } = await getNav();
+
+// 現在ページが属するグループは開いた状態にする。
+function groupHasCurrent(items: { id: string }[]) {
+  return items.some((i) => i.id === currentId);
+}
+
+// テキスト資料と用語解説はそれぞれ独立した教材なので、サイドバーには
+// 現在ページが属するセクションだけを出す (両方を常時並べない)。
+// 万一どのセクションにも一致しなければ、安全側として全セクションを出す。
+const currentSection = sections.find((s) =>
+  s.groups.some((g) => groupHasCurrent(g.items)),
+);
+const visibleSections = currentSection ? [currentSection] : sections;
+---
+
+<nav class="sidebar" aria-label="教材ナビゲーション">
+  {
+    visibleSections.map((section) => (
+      <div class="sidebar__section">
+        <p class="sidebar__section-title">{section.label}</p>
+        {section.groups.map((group) => (
+          <details
+            class="sidebar__group"
+            open={
+              group.items.length <= 6 || groupHasCurrent(group.items)
+                ? true
+                : undefined
+            }
+          >
+            <summary class="sidebar__group-title">{group.label}</summary>
+            <ul class="sidebar__list">
+              {group.items.map((item) => (
+                <li>
+                  <a
+                    href={item.href}
+                    class="sidebar__link"
+                    aria-current={item.id === currentId ? "page" : undefined}
+                  >
+                    {item.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        ))}
+      </div>
+    ))
+  }
+</nav>

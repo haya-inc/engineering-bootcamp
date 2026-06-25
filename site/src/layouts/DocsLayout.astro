@@ -1,0 +1,114 @@
+---
+import type { MarkdownHeading } from "astro";
+import { Icon } from "astro-icon/components";
+import BaseLayout from "./BaseLayout.astro";
+import Sidebar from "../components/Sidebar.astro";
+import Toc from "../components/Toc.astro";
+import GlossaryIndex from "../components/GlossaryIndex.astro";
+
+interface NavLink {
+  href: string;
+  title: string;
+}
+interface Props {
+  title: string;
+  description?: string;
+  currentId: string;
+  partLabel?: string;
+  headings: MarkdownHeading[];
+  prev?: NavLink;
+  next?: NavLink;
+  /** 用語解説の用語ページ (intro 以外) のとき、カード表示と索引UIを有効にする */
+  glossary?: boolean;
+}
+const {
+  title,
+  description,
+  currentId,
+  partLabel,
+  headings,
+  prev,
+  next,
+  glossary = false,
+} = Astro.props;
+---
+
+<BaseLayout title={title} description={description} contained={false} ogType="article">
+  <div class="docs">
+    <button
+      type="button"
+      class="docs__nav-toggle"
+      data-sidebar-toggle
+      aria-expanded="false"
+      aria-controls="docs-sidebar"
+    >
+      <Icon name="ph:list" aria-hidden="true" />
+      教材ナビ
+    </button>
+    <aside class="docs__sidebar" id="docs-sidebar" data-sidebar>
+      <Sidebar currentId={currentId} />
+    </aside>
+
+    <article class="docs__main">
+      <div class="docs__header">
+        {partLabel && <p class="docs__eyebrow">{partLabel}</p>}
+        <h1 style="view-transition-name: doc-title">{title}</h1>
+      </div>
+
+      {glossary && <GlossaryIndex />}
+
+      <div class:list={["prose", { "prose--glossary": glossary }]} data-pagefind-body>
+        <slot />
+      </div>
+
+      <nav class="doc-pager" aria-label="前後のページ">
+        {
+          prev ? (
+            <a class="doc-pager__link doc-pager__link--prev" href={prev.href}>
+              <span>
+                <Icon name="ph:arrow-left" aria-hidden="true" />前へ
+              </span>
+              <strong>{prev.title}</strong>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          next ? (
+            <a class="doc-pager__link doc-pager__link--next" href={next.href}>
+              <span>
+                次へ<Icon name="ph:arrow-right" aria-hidden="true" />
+              </span>
+              <strong>{next.title}</strong>
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+    </article>
+
+    <aside class="docs__toc">
+      <Toc headings={headings} />
+    </aside>
+  </div>
+</BaseLayout>
+
+<script is:inline>
+  // モバイルでサイドバーを開閉する。
+  (() => {
+    const bind = () => {
+      const btn = document.querySelector("[data-sidebar-toggle]");
+      const sidebar = document.querySelector("[data-sidebar]");
+      if (!btn || !sidebar || btn.dataset.bound) return;
+      btn.dataset.bound = "1";
+      btn.addEventListener("click", () => {
+        const open = sidebar.toggleAttribute("data-open");
+        btn.setAttribute("aria-expanded", String(open));
+      });
+    };
+    bind();
+    document.addEventListener("astro:after-swap", bind);
+  })();
+</script>

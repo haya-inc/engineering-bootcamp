@@ -1,0 +1,98 @@
+---
+// 用語解説ページのカード化 (Progressive Enhancement)。
+// DocsLayout が glossary の用語ページ (intro 以外) のときだけ描画する。
+//
+// 本文 Markdown は一切変更しない。クライアントが各用語 (「## 用語名」+ 箇条書き) を
+// <section.gl-card> に包み、用語名・読み・要約 (一言で言うと) を 1 つの見出し帯
+// (.gl-card__head) にまとめ、「くわしく」ラベルを外して本文の書き出しにする。
+// スクリプトが無くても CSS 側の h2 + ul フォールバックで連結カードの体裁は保たれる。
+// (このコンポーネント自体は DOM を出力せず、上記を行うスクリプトだけを読み込む)
+---
+
+<script>
+  /**
+   * prose 直下の「h2 + 後続ノード」を <section.gl-card> に包む。
+   * 最初の用語より前の導入文 (h2 が現れる前のノード) はそのまま残す。
+   */
+  function wrapCards(root: HTMLElement): void {
+    let current: HTMLElement | null = null;
+    for (const node of Array.from(root.childNodes)) {
+      if (node instanceof HTMLHeadingElement && node.tagName === "H2") {
+        const section = document.createElement("section");
+        section.className = "gl-card";
+        section.setAttribute("data-gl-card", "");
+        root.insertBefore(section, node);
+        section.appendChild(node);
+        current = section;
+      } else if (current) {
+        current.appendChild(node);
+      }
+    }
+  }
+
+  /** li 先頭のラベル <strong> と直後のコロンを外す。期待ラベルと一致したら true。 */
+  function stripLeadingLabel(li: Element, expected: string): boolean {
+    const lbl = li.querySelector("strong");
+    if (!lbl || (lbl.textContent ?? "").trim() !== expected) return false;
+    lbl.remove();
+    const first = li.firstChild;
+    if (first && first.nodeType === Node.TEXT_NODE) {
+      first.textContent = (first.textContent ?? "").replace(/^\s*[：:]\s*/, "");
+    }
+    return true;
+  }
+
+  /** 各カードの見出し帯を組み立てる (用語名 + 読み + 要約、くわしくのラベル外し)。 */
+  function buildCards(root: HTMLElement): void {
+    root.querySelectorAll<HTMLElement>("section.gl-card").forEach((section) => {
+      const h2 = section.querySelector("h2");
+      if (!h2) return;
+
+      // 用語名・読み・要約を 1 つの見出し帯 (.gl-card__head) にまとめる。
+      const head = document.createElement("div");
+      head.className = "gl-card__head";
+      section.insertBefore(head, h2);
+      head.appendChild(h2);
+
+      // 「読み」→ 見出しの副題 (h2 内) へ。
+      const readingLi = section.querySelector("ul > li:first-child");
+      const readingLabel = readingLi?.querySelector("strong");
+      if (readingLi && readingLabel && (readingLabel.textContent ?? "").trim() === "読み") {
+        const after = Array.from(readingLi.childNodes)
+          .slice(1)
+          .map((n) => n.textContent ?? "")
+          .join("");
+        const span = document.createElement("span");
+        span.className = "gl-card__reading";
+        span.textContent = after.replace(/^\s*[：:]\s*/, "").trim();
+        h2.appendChild(span);
+        readingLi.remove();
+      }
+
+      // 「一言で言うと」→ ラベルを外し、見出し帯の中の要約リード文へ移す。
+      const leadLi = section.querySelector("ul > li:first-child");
+      if (leadLi && stripLeadingLabel(leadLi, "一言で言うと")) {
+        const lead = document.createElement("p");
+        lead.className = "gl-card__lead";
+        Array.from(leadLi.childNodes).forEach((n) => lead.appendChild(n));
+        head.appendChild(lead);
+        leadLi.remove();
+      }
+
+      // 「くわしく」→ ラベルだけ外し、本文先頭の解説文として残す。
+      const detailLi = section.querySelector("ul > li:first-child");
+      if (detailLi) stripLeadingLabel(detailLi, "くわしく");
+    });
+  }
+
+  function setup(): void {
+    const root = document.querySelector<HTMLElement>(".prose--glossary");
+    if (!root || root.dataset.glossaryReady) return;
+    root.dataset.glossaryReady = "1";
+    wrapCards(root);
+    buildCards(root);
+  }
+
+  document.addEventListener("astro:page-load", setup);
+  setup();
+</script>

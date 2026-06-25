@@ -1,0 +1,2279 @@
+/* =============================================================================
+   エンジニア入門研修 — 公開教材サイトのスタイル
+   方針: 最新Web標準を「尖り階層3」まで使う。最先端機能 (CSS Carousel / anchor /
+   scroll-driven 等) は @supports で機能検出し、基盤の配色トークンは light-dark() 非対応でも
+   ライト配色へフォールバックする。レイヤー順で素のCSSが予測可能に上書きされるようにする。
+   ========================================================================== */
+@layer reset, tokens, base, layout, components, prose, utilities;
+
+/* -------------------------------------------------------------- tokens --- */
+@layer tokens {
+  :root {
+    /* JS が data-theme を確定する前は OS 設定に従う */
+    color-scheme: light dark;
+
+    /* ブランドパレット (旧公開サイトのパレットを継承) */
+    --c-accent: #d84f2a;
+    --c-green: #4f7f7b;
+
+    /* OKLCH 相対色でアクセントの濃淡を派生 */
+    --accent: var(--c-accent);
+    --accent-strong: oklch(from var(--c-accent) calc(l - 0.08) c h);
+    --accent-soft: oklch(from var(--c-accent) calc(l + 0.06) calc(c - 0.04) h);
+    --accent-weak: color-mix(in oklab, var(--c-accent) 16%, transparent);
+    /* テキスト用アクセント (WCAG AA 4.5:1 を満たすよう一段濃く/明るく) */
+    --accent-text: light-dark(#a3330f, #ef7048);
+    /* ボタン背景用 (白文字 --on-accent に対し 4.5:1 を確保した深いアクセント) */
+    --accent-deep: #c13d18;
+
+    /* 副アクセント (ティール) — UI でのボーダー/差し色 (3:1) 用。文字には --accent-2-text を使う。 */
+    --accent-2: var(--c-green);
+    --accent-2-weak: color-mix(in oklab, var(--c-green) 16%, transparent);
+    /* 文字用ティール (accent-2-weak 背景上で AA 4.5:1 を満たすよう濃く/明るく) */
+    --accent-2-text: light-dark(#33524e, #92c4be);
+
+    /* light-dark() でテーマ配色を一括表現 */
+    --bg: light-dark(#f6f3ec, #131210);
+    --bg-raised: light-dark(#fffaf1, #1d1b16);
+    --bg-sunken: light-dark(#efe9dd, #100f0c);
+    --ink: light-dark(#161616, #ece6d8);
+    --muted: light-dark(#5d625f, #a8a395);
+    --line: light-dark(#d8d0c2, #322e28);
+    --on-accent: #fffaf1;
+    --header-bg: light-dark(rgba(255, 250, 241, 0.72), rgba(19, 18, 16, 0.72));
+    --code-bg: light-dark(#efe9dd, #201e19);
+
+    --max: 1180px;
+    --reading: 74ch;
+    /* sticky ヘッダーの高さ。ヒーローの min-height など、ヘッダー分を差し引く
+       計算で共有する (.site-header の min-height と同じ値に揃える)。 */
+    --header-h: 60px;
+    /* ルートスクローラの上端 inset。sticky ヘッダーの裏にフォーカス/アンカー対象が
+       隠れないようにする量。ヘッダー高 + 余白。狭幅でヘッダーが2段に折り返すぶんは
+       下の @media (max-width: 640px) で増やす。 */
+    --scroll-pad-top: calc(var(--header-h) + 1.5rem);
+    --radius: 6px;
+    --radius-md: 12px;
+    --radius-lg: 18px;
+    --radius-xl: 26px;
+
+    /* 暖色ネイビーで色付けした editorial なソフトシャドウ階層 */
+    --shadow-sm:
+      0 1px 2px color-mix(in oklab, #26313b 14%, transparent),
+      0 6px 16px -10px color-mix(in oklab, #26313b 40%, transparent);
+    --shadow-md:
+      0 4px 10px -6px color-mix(in oklab, #26313b 24%, transparent),
+      0 22px 44px -28px color-mix(in oklab, #26313b 55%, transparent);
+    --shadow-lg:
+      0 8px 18px -10px color-mix(in oklab, #26313b 22%, transparent),
+      0 44px 84px -44px color-mix(in oklab, #26313b 58%, transparent);
+
+    /* 紙にうっすら色を混ぜた面 (カードやバンドの差し色) */
+    --tint-terra: color-mix(in oklab, var(--accent) 9%, var(--bg-raised));
+    --tint-teal: color-mix(in oklab, var(--c-green) 12%, var(--bg-raised));
+
+    /* 欧文は Astro Fonts API がセルフホストした Inter (--font-sans-web)。未生成時は
+       素の Inter→Helvetica/Arial に、日本語は常にシステムフォントへ落ちる。 */
+    --font-sans:
+      var(--font-sans-web, "Inter", "Helvetica Neue", Arial), "Hiragino Sans", "Yu Gothic",
+      sans-serif;
+    --font-mono: "SFMono-Regular", "JetBrains Mono", Menlo, Consolas, monospace;
+
+    /* height:auto 等のキーワードを補間可能にする (開閉アニメ) */
+    interpolate-size: allow-keywords;
+  }
+
+  /* light-dark() 非対応ブラウザ向けに基盤トークンをライト配色で再定義し、配色崩壊を防ぐ */
+  @supports not (color: light-dark(white, black)) {
+    :root {
+      --bg: #f6f3ec;
+      --bg-raised: #fffaf1;
+      --bg-sunken: #efe9dd;
+      --ink: #161616;
+      --muted: #5d625f;
+      --line: #d8d0c2;
+      --header-bg: rgba(255, 250, 241, 0.92);
+      --code-bg: #efe9dd;
+      --accent-text: #a3330f;
+      --accent-2-text: #33524e;
+    }
+  }
+
+  /* トグルで明示選択されたら color-scheme を固定し light-dark() を確定させる */
+  :root[data-theme="light"] {
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+  }
+}
+
+/* --------------------------------------------------------------- reset --- */
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  * {
+    margin: 0;
+  }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    /* sticky ヘッダーの裏に、フォーカスやアンカー遷移の対象が隠れないようにする。
+       scroll-padding はルートスクローラに効くため、アンカージャンプ (#slug) だけでなく
+       キーボード Tab 移動でフォーカスが画面外→可視へスクロールする際にもヘッダー分だけ
+       下げて見せられる。これにより 2.4.12 Focus Not Obscured (Enhanced) を満たす。
+       各要素に散っていた scroll-margin-top はこの一元管理に統合した (二重 inset を避ける)。 */
+    scroll-padding-top: var(--scroll-pad-top);
+  }
+  body {
+    min-height: 100svh;
+  }
+  img,
+  picture,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+  /* astro-icon (Phosphor) のアイコンは、上の svg ルールの block ではなく
+     テキストと同じ行に収まるインライン要素として扱う。サイズは 1em、色は
+     currentColor を引き継ぎ、flex 行内でも潰れない。 */
+  svg[data-icon] {
+    display: inline-block;
+    inline-size: 1em;
+    block-size: 1em;
+    vertical-align: -0.125em;
+    flex: none;
+    fill: currentColor;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  button {
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+/* ---------------------------------------------------------------- base --- */
+@layer base {
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.75;
+    font-feature-settings: "palt";
+    /* 和文と Latin/数字の境界に自動アキを入れる (CSS Text 4)。
+       text-autospace は Baseline 2025 で全エンジン対応。初期値 normal を明示する。
+       text-spacing-trim (行頭/連続する全角約物のアキ詰め) は現状 Chromium のみだが、
+       未対応では無視されるだけなので機能検出なしで progressive enhancement として置く。 */
+    text-autospace: normal;
+    text-spacing-trim: normal;
+  }
+
+  h1,
+  h2,
+  h3 {
+    line-height: 1.18;
+    text-wrap: balance; /* 見出しの改行を均す */
+    letter-spacing: 0.01em;
+  }
+
+  p {
+    text-wrap: pretty; /* 段落末尾の孤立行を避ける */
+  }
+
+  .skip-link {
+    position: fixed;
+    top: 0.5rem;
+    left: 0.5rem;
+    z-index: 100;
+    padding: 0.5rem 0.9rem;
+    /* 白文字に対し AA 4.5:1 を満たす深いアクセント */
+    background: var(--accent-deep);
+    color: var(--on-accent);
+    border-radius: var(--radius);
+    translate: 0 -150%;
+    transition: translate 0.2s;
+  }
+  .skip-link:focus {
+    translate: 0 0;
+  }
+}
+
+/* -------------------------------------------------------------- layout --- */
+@layer layout {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: clamp(12px, 3vw, 28px);
+    min-height: var(--header-h);
+    padding-inline: clamp(16px, 4vw, 48px);
+    background: var(--header-bg);
+    /* 境界は本体 (hero/section/card) と同じ 1px の単色ヘアラインに統一する。
+       2色グラデーションの帯は chrome だけの新規モチーフになるため使わない。 */
+    border-bottom: 1px solid var(--line);
+    backdrop-filter: blur(14px);
+
+    /* scroll で浮く: 影を opacity でフェードインさせ、固定ヘッダーの階層を明確にする。
+       opacity 補間なので影レイヤー数のミスマッチを避けられる。進行は下の
+       @supports (animation-timeline) が担い、非対応/reduce では影なしにフォールバックする。 */
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+    }
+
+    & .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      /* ブランドワードマーク専用書体 (IBM Plex Sans JP Bold, 9文字サブセット)。
+         実フォントの Bold (700) を使う (合成ボールドを避けるため CSS も 700)。
+         未読込・未対応時は var フォールバックでシステム日本語ゴシックへ落ちる。 */
+      font-family: var(--font-brand, "Hiragino Sans", "Yu Gothic", sans-serif);
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    /* ロゴチップに対しタイトルの光学中心を合わせる。本文の line-height(1.75) を
+       継承したままだと行ボックスが高く文字が上寄りに見えるので、ここで詰める。
+       IBM Plex Sans JP のメトリクスで僅かに上に見える分を 1px だけ下げて揃える。 */
+    & .brand__text {
+      line-height: 1;
+      transform: translateY(1px);
+    }
+    /* ブランドマーク: favicon と同じロゴアセットをヘッダーでも使う。 */
+    & .brand__mark {
+      display: grid;
+      place-items: center;
+      inline-size: 30px;
+      block-size: 30px;
+      border-radius: var(--radius-md);
+      box-shadow:
+        var(--shadow-sm),
+        inset 0 1px 0 color-mix(in oklab, white 35%, transparent);
+      transition:
+        scale 0.18s,
+        rotate 0.18s;
+    }
+    & .brand__mark img {
+      inline-size: 100%;
+      block-size: 100%;
+      border-radius: inherit;
+    }
+    & .brand:hover .brand__mark {
+      scale: 1.06;
+      rotate: -4deg;
+    }
+    & .nav-links {
+      position: relative;
+      display: flex;
+      gap: clamp(4px, 1.2vw, 12px);
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+      color: var(--muted);
+
+      & a {
+        position: relative;
+        z-index: 1;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        transition:
+          color 0.18s,
+          background-color 0.18s;
+      }
+      /* hover: 全ブラウザで効く軽いピル。現在地ピルとは別物なので非現在地のみ。 */
+      & a:not(.is-active):hover {
+        color: var(--ink);
+        background: color-mix(in oklab, var(--ink) 7%, transparent);
+      }
+
+      /* アイコンは通常 line、hover/現在地で fill にスワップして「選択中」を強調する。 */
+      & a svg {
+        transition: scale 0.18s;
+      }
+      & a:hover :is(.nav-ico--line, .nav-ico--fill) {
+        scale: 1.1;
+      }
+      & .nav-ico--fill {
+        display: none;
+      }
+      & :is(a:hover, a.is-active) .nav-ico--line {
+        display: none;
+      }
+      & :is(a:hover, a.is-active) .nav-ico--fill {
+        display: inline-block;
+      }
+      /* 外部リンクの矢印。常時表示で「別タブで開く外部リンク」だと一目で分かる。 */
+      & .nav-ico--ext {
+        font-size: 0.78em;
+        color: var(--muted);
+      }
+
+      /* 現在地: 差し色の細い下線で示す。色だけに頼らず HTML 側で aria-current="page"
+         を併用し、アイコンも line→fill にスワップする。anchor 非対応では各リンクに
+         静的な下線(グラデーション1本)を敷き、対応時は @supports でスライドする
+         単一バー(.nav-indicator)に統一する。 */
+      & a.is-active {
+        color: var(--accent-text);
+        font-weight: 620;
+        background: linear-gradient(var(--accent), var(--accent)) no-repeat;
+        background-size: calc(100% - 20px) 2.5px;
+        background-position: 50% calc(100% - 4px);
+      }
+    }
+
+    /* 単一の現在地インジケーター (スライドする下線)。既定は非表示で anchor 対応時のみ描画。 */
+    & .nav-indicator {
+      display: none;
+    }
+    /* 尖り: anchor positioning で現在地リンクの下に細いバーを1本だけ敷き、
+       view-transition-name でページ遷移 (ClientRouter) のたびに現在地へスライドさせる。
+       reduce 時は既存の ::view-transition-group(*) 無効化ルールが瞬時化する。 */
+    @supports (anchor-name: --x) {
+      & .nav-links a.is-active {
+        anchor-name: --nav-active;
+        background: none; /* スライドする単一バーに統一 */
+      }
+      & .nav-links:has(a.is-active) .nav-indicator {
+        display: block;
+        position: absolute;
+        z-index: 0;
+        position-anchor: --nav-active;
+        left: calc(anchor(left) + 10px);
+        right: calc(anchor(right) + 10px);
+        bottom: calc(anchor(bottom) + 4px);
+        block-size: 2.5px;
+        border-radius: 999px;
+        background: var(--accent);
+        pointer-events: none;
+        view-transition-name: nav-indicator;
+      }
+    }
+    & .header-tools {
+      margin-inline-start: auto;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+  }
+
+  /* 尖り: scroll-driven animations でヘッダー影をスクロール量に追従させてフェードイン。
+     非対応では影なし、reduce では発火しない (静的なグラデーション境界にフォールバック)。 */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .site-header::after {
+        animation: header-elevate linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 90px;
+      }
+    }
+  }
+  @keyframes header-elevate {
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* スマホ: ナビが縦折り返し・単語内改行でヘッダーが肥大化するのを防ぐ。
+     1段目=ブランド+ツール、2段目=ナビを横スクロールするチップ列にする。 */
+  @media (max-width: 640px) {
+    /* この幅ではヘッダーが2段 (ブランド/ツール + ナビ) に折り返して高くなるので、
+       フォーカス/アンカー対象がその裏に隠れないよう inset を増やす。 */
+    :root {
+      --scroll-pad-top: calc(var(--header-h) + 3rem);
+    }
+    .site-header {
+      flex-wrap: wrap;
+      gap: 8px 12px;
+      min-height: 0;
+      padding-block: 10px;
+
+      & .nav-links {
+        order: 3;
+        flex-basis: 100%;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        overflow-x: auto;
+        overscroll-behavior-inline: contain;
+        gap: 8px;
+        padding-block: 2px;
+        scrollbar-width: none;
+        /* スナップで気持ちよく止め、両端をフェードして「まだ続く」ことを示す */
+        scroll-snap-type: inline proximity;
+        -webkit-mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 14px,
+          #000 calc(100% - 14px),
+          transparent
+        );
+        mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 14px,
+          #000 calc(100% - 14px),
+          transparent
+        );
+      }
+      & .nav-links::-webkit-scrollbar {
+        display: none;
+      }
+      & .nav-links a {
+        scroll-snap-align: start;
+      }
+    }
+
+    .theme-toggle {
+      inline-size: 40px;
+      block-size: 40px;
+    }
+  }
+
+  /* グローバル検索の起点。虫眼鏡 + 「検索」ラベル + ショートカットキーの3点で
+     「ここで検索できる」と一目で分かる検索ボックス然とした見た目にする。
+     太め(2px)のアクセント枠でヘッダー内でしっかり目立たせる。 */
+  .search-open {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px 6px 12px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    background: var(--bg-raised);
+    border: 2px solid color-mix(in oklab, var(--accent) 40%, var(--line));
+    border-radius: 999px;
+    transition:
+      color 0.18s,
+      border-color 0.18s,
+      background-color 0.18s,
+      box-shadow 0.18s;
+  }
+  /* 虫眼鏡はアクセント色で視線を集め、検索の起点だと分かりやすくする */
+  .search-open__icon {
+    font-size: 1.1rem;
+    color: var(--accent-text);
+  }
+  /* ショートカットのヒント。物理キーボード前提なのでデスクトップのみ表示。
+     表記は OS で出し分ける (html[data-os] は BaseLayout の先頭スクリプトが設定)。 */
+  .search-open__kbd {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    line-height: 1;
+    padding: 3px 6px;
+    color: var(--muted);
+    background: var(--bg-sunken);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+  }
+  .search-open__kbd::before {
+    content: "Ctrl K";
+  }
+  :root[data-os="mac"] .search-open__kbd::before {
+    content: "⌘K";
+  }
+  .search-open:is(:hover, :focus-visible) {
+    color: var(--ink);
+    border-color: var(--accent);
+    background: color-mix(in oklab, var(--accent) 6%, var(--bg-raised));
+    box-shadow: 0 0 0 3px var(--accent-weak);
+  }
+
+  /* スマホ: アイコンのみに縮めず「検索」ラベルを残しつつ、アクセント面で塗って
+     しっかり目立たせる。横幅をコンパクトに保ち、長いタイトルと同じ段に収める
+     (これらは上の基底 .search-open より後に置き、ソース順で確実に上書きする)。 */
+  @media (max-width: 640px) {
+    .search-open {
+      padding: 7px 14px;
+      color: var(--accent-text);
+      background: var(--accent-weak);
+      border-color: color-mix(in oklab, var(--accent) 45%, transparent);
+    }
+    .search-open__icon {
+      color: inherit;
+    }
+    .search-open__kbd {
+      display: none;
+    }
+  }
+
+  .theme-toggle {
+    inline-size: 36px;
+    block-size: 36px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition:
+      color 0.18s,
+      border-color 0.18s,
+      transform 0.18s;
+  }
+  .theme-toggle:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  /* アイコンは「切り替え先」を示す。data-theme は描画前に確定するのでちらつかない。
+     ライト時 = 月(暗くする) / ダーク時 = 太陽(明るくする)。 */
+  .theme-toggle__icon {
+    font-size: 18px;
+  }
+  .theme-toggle__icon--sun {
+    display: none;
+  }
+  :root[data-theme="dark"] .theme-toggle__icon--moon {
+    display: none;
+  }
+  :root[data-theme="dark"] .theme-toggle__icon--sun {
+    display: inline;
+  }
+
+  main {
+    display: block;
+  }
+
+  /* フッター: chrome (ヘッダー) と同じ素材に揃える。装飾グローや縦グラデは使わず、
+     半透明の単色サーフェス + backdrop-blur + 1px ヘアラインだけで構成し、情報設計で見せる。 */
+  .site-footer {
+    position: relative;
+    margin-top: 0;
+    color: var(--muted);
+    /* 境界も背景もヘッダーと同一: 単色ヘアライン + var(--header-bg) のフロスト面。
+       radial グロー1枚と縦グラデ (--bg-raised→--bg-sunken) はここでは使わない。 */
+    border-top: 1px solid var(--line);
+    background: var(--header-bg);
+    backdrop-filter: blur(14px);
+  }
+
+  .site-footer__inner {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max);
+    margin-inline: auto;
+    padding: clamp(36px, 6vw, 64px) clamp(16px, 5vw, 48px) clamp(20px, 3vw, 28px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+
+  /* eyebrow は本体ラベル (.kicker / .section__label) と同じトラッキング・差し色に揃える */
+  .site-footer__eyebrow {
+    margin: 0 0 6px;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+  /* ブランド名はヘッダー/ヒーローと同じ単色ワードマーク。本体の大見出しと同様に
+     アクセント塗りやグラデは使わず --ink にする (差し色は上の eyebrow に限定)。 */
+  .site-footer__name {
+    margin: 0;
+    /* ヘッダー/ヒーローと揃えたブランド専用書体 (IBM Plex Sans JP Bold, 9文字サブセット)。
+       Bold 700。keep-all + HTML 側 <wbr> でカタカナ語を途中で割らない。 */
+    font-family: var(--font-brand, "Hiragino Sans", "Yu Gothic", sans-serif);
+    font-size: clamp(1.55rem, 3.2vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.18;
+    word-break: keep-all;
+    color: var(--ink);
+  }
+  .site-footer__tagline {
+    margin: 12px 0 0;
+    max-width: 40ch;
+    font-size: 0.92rem;
+    line-height: 1.8;
+  }
+  /* CTA は本体の .button primitive を再利用する。GitHub=主 (primary)、YouTube=副 (secondary)。
+     この hook は配置 (上マージン) と横並びだけを担い、見た目はボタン primitive に任せる。 */
+  .site-footer__ctas {
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .site-footer__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(18px, 4vw, 40px);
+  }
+  .site-footer__col h2 {
+    margin: 0 0 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .site-footer__col ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .site-footer__col a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    margin-inline-start: -10px;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.92rem;
+    transition:
+      color 0.18s,
+      background-color 0.18s,
+      transform 0.18s;
+  }
+  .site-footer__col a:hover {
+    color: var(--ink);
+    background: color-mix(in oklab, var(--ink) 7%, transparent);
+    transform: translateX(3px);
+  }
+
+  /* 外部リンクの矢印 (CTA / リスト共通) */
+  .site-footer .ext {
+    font-size: 0.78em;
+    opacity: 0.8;
+  }
+
+  .site-footer__bottom {
+    position: relative;
+    z-index: 1;
+    max-width: var(--max);
+    margin-inline: auto;
+    padding: 14px clamp(16px, 5vw, 48px);
+    border-top: 1px solid color-mix(in oklab, var(--line) 60%, transparent);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+  }
+  /* コピーライトの社名リンク (haya株式会社 → 公式サイト)。下線は控えめに、
+     hover で --ink + アクセント下線に持ち上げて押せると分かるようにする。 */
+  .site-footer__publisher {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, currentColor 35%, transparent);
+    text-underline-offset: 2px;
+    transition:
+      color 0.18s,
+      text-decoration-color 0.18s;
+  }
+  .site-footer__publisher:hover {
+    color: var(--ink);
+    text-decoration-color: var(--accent);
+  }
+
+  /* コピーライトと対になる右側のアクション群: テーマ切り替え + 先頭へ戻る */
+  .site-footer__actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .site-footer__top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--muted);
+    transition:
+      color 0.18s,
+      border-color 0.18s,
+      transform 0.18s;
+  }
+  .site-footer__top:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  @media (max-width: 720px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr;
+      gap: 28px;
+    }
+  }
+
+  /* ドキュメント 3 カラム (サイドバー | 本文 | 目次) */
+  .docs {
+    --sidebar-w: 280px;
+    --toc-w: 240px;
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: clamp(16px, 3vw, 32px);
+    display: grid;
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--toc-w);
+    gap: clamp(20px, 3vw, 44px);
+    align-items: start;
+  }
+  .docs__sidebar,
+  .docs__toc {
+    position: sticky;
+    top: 76px;
+    max-height: calc(100svh - 90px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-block: 12px;
+  }
+  .docs__main {
+    min-width: 0;
+    padding-block: clamp(24px, 4vw, 48px);
+  }
+  .docs__nav-toggle {
+    display: none;
+  }
+
+  @media (max-width: 1080px) {
+    .docs {
+      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+    }
+    .docs__toc {
+      display: none;
+    }
+  }
+  @media (max-width: 760px) {
+    .docs {
+      grid-template-columns: 1fr;
+    }
+    .docs__nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-block: 16px 4px;
+      padding: 8px 14px;
+      background: var(--bg-raised);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 0.9rem;
+    }
+    .docs__sidebar {
+      position: static;
+      max-height: 0;
+      overflow: hidden;
+      padding-block: 0;
+      transition: max-height 0.3s ease;
+    }
+    /* :has() で開状態を親に伝えず、属性で開閉 */
+    .docs__sidebar[data-open] {
+      max-height: 70svh;
+      overflow-y: auto;
+      padding-block: 12px;
+    }
+  }
+}
+
+/* ---------------------------------------------------------- components --- */
+@layer components {
+  /* --- ボタン --- */
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 46px;
+    padding-inline: 22px;
+    border: 1px solid currentColor;
+    border-radius: var(--radius);
+    font-weight: 700;
+    transition:
+      translate 0.18s,
+      background 0.18s,
+      color 0.18s;
+  }
+  .button:hover {
+    translate: 0 -2px;
+  }
+  .button--primary {
+    color: var(--on-accent);
+    /* 白文字に対し AA 4.5:1 を満たす深いアクセント */
+    background: var(--accent-deep);
+    border-color: var(--accent-deep);
+  }
+  .button--primary:hover {
+    background: oklch(from var(--accent-deep) calc(l - 0.06) c h);
+  }
+  .button--secondary {
+    background: transparent;
+  }
+
+  /* --- ヒーロー (左テキスト / 右イラスト 分割) --- */
+  .hero {
+    max-width: var(--max);
+    margin-inline: auto;
+    /* ファーストビューをヒーローで満たし、次の .intro 見出しが下端に
+       見切れて覗かないようにする。sticky ヘッダー分を差し引いた高さを
+       最低高にしておけば、画面の高さに合わせて余白側が伸縮し、intro は
+       スクロールして初めて現れる。min-height なので中身が高い場合
+       (狭幅で縦積みになるなど) は自然に伸びる。 */
+    min-height: calc(100svh - var(--header-h));
+    padding: clamp(36px, 6vw, 88px) clamp(16px, 5vw, 56px) clamp(44px, 6vw, 96px);
+    display: grid;
+    grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+    overflow: clip;
+  }
+  .hero__content {
+    min-width: 0;
+    animation: hero-enter 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .kicker,
+  .section__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-block-end: 16px;
+    color: var(--accent-text);
+    font-size: 0.8rem;
+    font-weight: 780;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .kicker::before {
+    content: "";
+    inline-size: 24px;
+    block-size: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .hero h1 {
+    /* ヒーロー見出しもブランドワードマーク。.brand と同じ専用書体 (IBM Plex Sans JP Bold 700)。
+       漢字主体の見出しなので字間は詰めすぎない。 */
+    font-family: var(--font-brand, "Hiragino Sans", "Yu Gothic", sans-serif);
+    font-weight: 700;
+    font-size: clamp(40px, 6.4vw, 86px);
+    line-height: 1.12;
+    letter-spacing: 0.005em;
+    /* CJK 連続を不可分にし、カタカナ語「エンジニア」を途中で割らせない。
+       折り返しは HTML 側で意味の切れ目に置いた <wbr> でのみ起きる。 */
+    word-break: keep-all;
+  }
+  .hero__copy {
+    max-width: 56ch;
+    margin-block-start: 24px;
+    font-size: clamp(16px, 1.6vw, 20px);
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-block-start: 30px;
+  }
+  /* 右: 額装したエディトリアル・イラスト */
+  .hero__art {
+    position: relative;
+    min-width: 0;
+    animation: hero-enter 0.9s 0.08s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  /* 生成したラスター画像とインライン化した SVG コンポーネントの両対応 */
+  .hero__art :is(img, svg) {
+    position: relative;
+    z-index: 1;
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    box-shadow: var(--shadow-lg);
+  }
+  /* 背後の柔らかな差し色グロー */
+  .hero__art::before {
+    content: "";
+    position: absolute;
+    inset: 12% -8% -10% 8%;
+    z-index: 0;
+    background: radial-gradient(60% 60% at 70% 70%, var(--accent-weak), transparent 70%);
+    filter: blur(36px);
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: clamp(28px, 8vw, 48px);
+    }
+    .hero h1 {
+      font-size: clamp(40px, 11vw, 68px);
+    }
+  }
+
+  /* --- セクション共通 --- */
+  .section {
+    max-width: var(--max);
+    margin-inline: auto;
+    padding: clamp(56px, 9vw, 116px) clamp(16px, 5vw, 56px);
+  }
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.4fr) minmax(0, 1fr);
+    gap: clamp(24px, 6vw, 88px) clamp(24px, 6vw, 88px);
+  }
+  .section h2 {
+    font-size: clamp(30px, 5vw, 66px);
+    line-height: 1.04;
+  }
+  .intro p {
+    margin-block-start: 22px;
+    max-width: var(--reading);
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  /* 概要バンド: 学習の道を描いた横長イラスト (全幅) */
+  .intro__band {
+    grid-column: 1 / -1;
+    margin-block-start: clamp(12px, 3vw, 32px);
+  }
+  .intro__band :is(img, svg) {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-md);
+  }
+  @media (max-width: 720px) {
+    .intro {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* --- CSS Carousel (6 Part) ----------------------------------------------
+     既定: スクロールスナップ式の横カルーセル (全ブラウザで動作)。
+     対応ブラウザ: ::scroll-button / ::scroll-marker で前後ボタンとドットを生成。 */
+  .parts {
+    container-type: inline-size;
+  }
+  .part-carousel {
+    list-style: none;
+    padding: 0;
+    margin-block-start: 40px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(86%, 340px);
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 8px;
+    padding-block-end: 8px;
+  }
+  /* 広い画面では折り返しグリッドに (container query) */
+  @container (min-width: 900px) {
+    .part-carousel {
+      grid-auto-flow: row;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-columns: auto;
+      overflow: visible;
+    }
+  }
+  .part-card {
+    scroll-snap-align: start;
+  }
+  .part-card a {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: clip;
+    box-shadow: var(--shadow-sm);
+    transition:
+      translate 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .part-card a:hover {
+    translate: 0 -4px;
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+  }
+  .part-card__media {
+    aspect-ratio: 680 / 460;
+    background: var(--bg-sunken);
+    border-block-end: 1px solid var(--line);
+    overflow: clip;
+  }
+  .part-card__media :is(img, svg) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: scale 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .part-card a:hover .part-card__media :is(img, svg) {
+    scale: 1.04;
+  }
+  .part-card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 20px 22px 24px;
+  }
+  .part-card__no {
+    color: var(--accent-text);
+    font-weight: 780;
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+  }
+  .part-card__title {
+    font-size: 1.25rem;
+  }
+  .part-card__body {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  /* 尖り: ネイティブ CSS カルーセル UI (Chrome 系のみ) */
+  @supports (scroll-marker-group: after) {
+    .part-carousel {
+      scroll-marker-group: after;
+    }
+    .part-carousel::scroll-marker-group {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-block-start: 18px;
+    }
+    .part-card::scroll-marker {
+      content: "";
+      inline-size: 10px;
+      block-size: 10px;
+      border-radius: 999px;
+      border: 1px solid var(--accent);
+      transition: background 0.2s;
+    }
+    .part-card::scroll-marker:target-current {
+      background: var(--accent);
+    }
+    .part-carousel::scroll-button(left),
+    .part-carousel::scroll-button(right) {
+      position: absolute;
+      inset-block-start: -54px;
+      inline-size: 38px;
+      block-size: 38px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--bg-raised);
+      color: var(--ink);
+      cursor: pointer;
+    }
+    .part-carousel::scroll-button(left) {
+      content: "←";
+      inset-inline-end: 56px;
+    }
+    .part-carousel::scroll-button(right) {
+      content: "→";
+      inset-inline-end: 8px;
+    }
+    .part-carousel::scroll-button(*):disabled {
+      opacity: 0.35;
+    }
+    .parts {
+      position: relative;
+    }
+  }
+
+  /* --- Materials (差し色バンド) --- */
+  /* ダーク反転ではなく、紙にティールを淡く混ぜた帯でセクションを区切る。
+     直後の .cta が --tint-terra なので、ここはティールで補色のリズムを作る。 */
+  .materials {
+    max-width: none;
+    background: var(--tint-teal);
+    border-block: 1px solid var(--line);
+  }
+  .materials__inner {
+    max-width: var(--max);
+    margin-inline: auto;
+  }
+  .material-list {
+    list-style: none;
+    padding: 0;
+    margin-block-start: 40px;
+    border-top: 1px solid var(--line);
+  }
+  .material-list a {
+    display: grid;
+    grid-template-columns: 64px minmax(160px, 0.5fr) minmax(0, 1fr);
+    gap: clamp(14px, 4vw, 40px);
+    align-items: baseline;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--line);
+    transition:
+      padding-inline-start 0.2s,
+      color 0.18s;
+  }
+  .material-list a:hover {
+    padding-inline-start: 8px;
+    color: var(--accent-text);
+  }
+  .material-list__no {
+    color: var(--accent-text);
+    font-weight: 800;
+  }
+  .material-list strong {
+    font-size: clamp(19px, 2.4vw, 30px);
+  }
+  /* 外部リンクの矢印 (ヘッダー/フッターの .ext と同じ見え方に揃える) */
+  .material-list .ext {
+    margin-inline-start: 0.3em;
+    font-size: 0.6em;
+    color: var(--muted);
+    vertical-align: middle;
+  }
+  .material-list a:hover .ext {
+    color: currentColor;
+  }
+  .material-list em {
+    color: var(--muted);
+    font-style: normal;
+  }
+  @media (max-width: 640px) {
+    .material-list a {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+
+  /* --- 末尾 CTA (はじめる) --- */
+  .cta {
+    max-width: var(--max);
+    margin-inline: auto;
+    padding-inline: clamp(16px, 5vw, 56px);
+  }
+  .cta__panel {
+    position: relative;
+    overflow: clip;
+    margin-block: clamp(56px, 9vw, 116px);
+    padding: clamp(44px, 6vw, 84px) clamp(24px, 5vw, 64px);
+    text-align: center;
+    background: var(--tint-terra);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+  }
+  /* 角の柔らかな差し色 */
+  .cta__panel::before {
+    content: "";
+    position: absolute;
+    inset-block-start: -40%;
+    inset-inline-end: -10%;
+    inline-size: 48%;
+    block-size: 160%;
+    background: radial-gradient(closest-side, var(--accent-weak), transparent 72%);
+    pointer-events: none;
+  }
+  .cta__panel > * {
+    position: relative;
+  }
+  .cta__panel h2 {
+    font-size: clamp(28px, 4.5vw, 54px);
+    line-height: 1.05;
+  }
+  .cta__panel p {
+    margin-block-start: 18px;
+    margin-inline: auto;
+    max-width: 52ch;
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .cta__panel .hero__actions {
+    justify-content: center;
+    margin-block-start: 30px;
+  }
+
+  /* --- サイドバー --- */
+  .sidebar__section + .sidebar__section {
+    margin-block-start: 24px;
+  }
+  .sidebar__section-title {
+    font-size: 0.72rem;
+    font-weight: 780;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    margin-block-end: 8px;
+  }
+  .sidebar__group {
+    border-block-end: 1px solid var(--line);
+  }
+  .sidebar__group-title {
+    padding: 8px 4px;
+    font-weight: 700;
+    font-size: 0.92rem;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sidebar__group-title::before {
+    content: "▸";
+    color: var(--muted);
+    transition: rotate 0.2s;
+  }
+  .sidebar__group[open] > .sidebar__group-title::before {
+    rotate: 90deg;
+  }
+  .sidebar__group::details-content {
+    block-size: 0;
+    overflow: hidden;
+    transition:
+      block-size 0.3s ease,
+      content-visibility 0.3s allow-discrete;
+  }
+  .sidebar__group[open]::details-content {
+    block-size: auto; /* interpolate-size により補間 */
+  }
+  .sidebar__list {
+    list-style: none;
+    padding: 0 0 8px;
+    margin: 0;
+  }
+  .sidebar__link {
+    display: block;
+    padding: 5px 10px;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+    color: var(--muted);
+    transition:
+      color 0.15s,
+      background 0.15s;
+  }
+  .sidebar__link:hover {
+    color: var(--ink);
+    background: var(--accent-weak);
+  }
+  .sidebar__link[aria-current="page"] {
+    color: var(--accent-text);
+    background: var(--accent-weak);
+    font-weight: 700;
+  }
+  /* :has() — 現在ページを含むグループの見出しを強調する */
+  .sidebar__group:has(.sidebar__link[aria-current="page"]) > .sidebar__group-title {
+    color: var(--accent-text);
+  }
+
+  /* --- 目次 (TOC) --- */
+  .toc__title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 780;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-block-end: 10px;
+  }
+  .toc__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-inline-start: 1px solid var(--line);
+  }
+  .toc__link {
+    display: block;
+    padding: 3px 12px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    transition: color 0.15s;
+  }
+  .toc__item--depth-3 .toc__link {
+    padding-inline-start: 24px;
+    font-size: 0.8rem;
+  }
+  .toc__link:hover {
+    color: var(--accent-text);
+  }
+
+  /* --- 前後ページャ --- */
+  .doc-pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    margin-block-start: 56px;
+    padding-block-start: 24px;
+    border-block-start: 1px solid var(--line);
+  }
+  .doc-pager__link {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-width: 46%;
+    padding: 14px 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    transition: border-color 0.2s;
+  }
+  .doc-pager__link:hover {
+    border-color: var(--accent);
+  }
+  .doc-pager__link--next {
+    margin-inline-start: auto;
+    text-align: end;
+  }
+  .doc-pager__link span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .doc-pager__link--next span {
+    justify-content: flex-end;
+  }
+
+  /* --- 検索ダイアログ --- */
+  .search-dialog {
+    margin: 10svh auto auto;
+    inline-size: min(640px, 92vw);
+    padding: 0;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-raised);
+    color: var(--ink);
+    /* 離散プロパティ (display / overlay) を CSS だけで補間してダイアログを出し入れする。
+       閉=透明＋少し上、[open]=実値。display/overlay を allow-discrete で遅らせ、退場も
+       フェードさせる。@starting-style は入場の開始フレーム。@supports 不要で、未対応では
+       開始値が無視されて即時表示に退化する。reduced-motion は下の reduce ブロックで瞬時化。 */
+    opacity: 0;
+    translate: 0 -8px;
+    transition:
+      opacity 0.2s ease,
+      translate 0.2s ease,
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete;
+  }
+  .search-dialog[open] {
+    opacity: 1;
+    translate: 0 0;
+  }
+  @starting-style {
+    .search-dialog[open] {
+      opacity: 0;
+      translate: 0 -8px;
+    }
+  }
+  .search-dialog::backdrop {
+    background: rgba(10, 10, 10, 0);
+    backdrop-filter: blur(0);
+    transition:
+      background 0.2s ease,
+      backdrop-filter 0.2s ease,
+      display 0.2s allow-discrete,
+      overlay 0.2s allow-discrete;
+  }
+  .search-dialog[open]::backdrop {
+    background: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(3px);
+  }
+  @starting-style {
+    .search-dialog[open]::backdrop {
+      background: rgba(10, 10, 10, 0);
+      backdrop-filter: blur(0);
+    }
+  }
+  .search-dialog__inner {
+    padding: 18px;
+  }
+  .search-dialog__bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-block-end: 12px;
+  }
+  .search-dialog__title {
+    font-weight: 700;
+  }
+  .search-dialog__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 32px;
+    block-size: 32px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 1.05rem;
+    color: var(--muted);
+    transition:
+      color 0.18s,
+      border-color 0.18s;
+  }
+  .search-dialog__close:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+}
+
+/* ---------------------------------------------------------------- prose --- */
+@layer prose {
+  .docs__header {
+    padding-block-end: 8px;
+    border-block-end: 1px solid var(--line);
+    margin-block-end: 28px;
+  }
+  .docs__eyebrow {
+    color: var(--accent-text);
+    font-size: 0.8rem;
+    font-weight: 720;
+    letter-spacing: 0.04em;
+    margin-block-end: 8px;
+  }
+  .docs__header h1 {
+    font-size: clamp(28px, 4vw, 44px);
+  }
+
+  .prose {
+    max-width: var(--reading);
+    font-size: 1.02rem;
+  }
+  .prose :is(h2, h3, h4) {
+    margin-block: 1.8em 0.6em;
+    text-wrap: balance;
+  }
+  .prose h2 {
+    font-size: 1.6rem;
+    padding-block-end: 0.3em;
+    border-block-end: 1px solid var(--line);
+  }
+  .prose h3 {
+    font-size: 1.3rem;
+  }
+  .prose h4 {
+    font-size: 1.1rem;
+    color: var(--muted);
+  }
+  .prose p,
+  .prose ul,
+  .prose ol,
+  .prose blockquote,
+  .prose table {
+    margin-block: 1em 0;
+  }
+  .prose :is(ul, ol) {
+    padding-inline-start: 1.4em;
+  }
+  .prose li {
+    margin-block: 0.3em;
+  }
+  .prose a {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+  }
+  /* 用語の自動リンク (rehype-glossary-links が初出に付与)。通常の本文リンク (accent 実線下線) とは
+     役割が違うので、地の文の色のまま控えめな点線下線にして「定義へ飛べる用語」だと示す。
+     hover/フォーカスで副アクセント色へ持ち上げ、押せると分かるようにする。 */
+  .prose a.term-link {
+    color: inherit;
+    text-decoration: underline dotted;
+    text-decoration-color: color-mix(in oklab, var(--accent-2) 60%, var(--line));
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+  .prose a.term-link:is(:hover, :focus-visible) {
+    color: var(--accent-2-text);
+    text-decoration-color: currentColor;
+  }
+  .prose strong {
+    font-weight: 700;
+  }
+  .prose blockquote {
+    padding-inline-start: 1em;
+    border-inline-start: 3px solid var(--accent);
+    color: var(--muted);
+  }
+  .prose :not(pre) > code {
+    padding: 0.15em 0.4em;
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--code-bg);
+    border-radius: 4px;
+  }
+  .prose pre {
+    margin-block: 1.2em 0;
+    padding: 16px 18px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    overflow-x: auto;
+    font-size: 0.86rem;
+  }
+  /* 本文の data-theme に応じて shiki のダーク/ライトを切り替える */
+  :root[data-theme="dark"] .prose pre.astro-code {
+    background-color: var(--shiki-dark-bg) !important;
+  }
+  :root[data-theme="dark"] .prose pre.astro-code,
+  :root[data-theme="dark"] .prose pre.astro-code span {
+    color: var(--shiki-dark) !important;
+  }
+  .prose table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+  }
+  .prose :is(th, td) {
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    text-align: start;
+  }
+  .prose th {
+    background: var(--bg-sunken);
+  }
+}
+
+/* ------------------------------------------------------------ utilities --- */
+@layer utilities {
+  /* 圏点 (ぼうてん): 和文で語句を強調する伝統的な組版。italic や bold の代わりに胡麻点を打つ。
+     本文の <strong> 全部には付けず (密度過多になる)、強調したい語に class で意図的に付与する。
+     text-emphasis は Baseline widely (2022) で全エンジン対応。reduce 環境でも点は静止表示。 */
+  .boten {
+    font-style: normal;
+    text-emphasis: filled sesame var(--accent-text);
+    text-emphasis-position: over right;
+  }
+
+  /* スクロール連動: ドキュメント本文の入場をスクロールで進める */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .part-card {
+        animation: card-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 5% cover 22%;
+      }
+      .material-list li {
+        animation: card-reveal linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 18%;
+      }
+    }
+  }
+
+  /* View Transitions: ページ遷移の質感 */
+  @media (prefers-reduced-motion: no-preference) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.3s;
+    }
+  }
+
+  @keyframes hero-enter {
+    from {
+      opacity: 0;
+      translate: 0 24px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+  @keyframes card-reveal {
+    from {
+      opacity: 0.25;
+      translate: 0 18px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+
+  /* モーション抑制設定を尊重 */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    /* 入場アニメは初期 opacity:0 で始まるため、reduce では確実に可視へ倒す */
+    .hero__content,
+    .hero__art {
+      animation: none !important;
+      opacity: 1 !important;
+    }
+    /* details の開閉は瞬時に */
+    .sidebar__group::details-content {
+      transition: none !important;
+    }
+    /* ::backdrop は上の * セレクタに含まれないため個別に瞬時化する (検索ダイアログの登場補間) */
+    .search-dialog::backdrop {
+      transition: none !important;
+    }
+    /* View Transitions の名前付きモーフィング (doc-title / brand / vid-thumb-* / nav-indicator) も
+       上の * セレクタに含まれないので個別に瞬時化する。* は VT 疑似要素の universal 名。 */
+    ::view-transition-group(*),
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      animation: none !important;
+    }
+  }
+}
+
+/* ----------------------------------------------------------- videos --- */
+/* 動画一覧 / 各動画ページ。視聴進捗はクライアントスクリプトが data 属性経由で反映する。 */
+@layer components {
+  .videos,
+  .video-detail {
+    max-width: var(--max);
+    margin-inline: auto;
+    padding: clamp(28px, 5vw, 64px) clamp(16px, 5vw, 56px) clamp(56px, 8vw, 96px);
+  }
+  .video-detail {
+    max-width: 920px;
+  }
+
+  /* 広い画面では「左=動画(スクロール追従) / 右=台本」の2カラムにする。
+     head と pager は全幅。media と script は同じ行に並び、台本が長いほど行が伸びる。 */
+  @media (min-width: 1080px) {
+    .video-detail {
+      max-width: 1280px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, 460px);
+      column-gap: clamp(28px, 4vw, 56px);
+      align-items: start;
+    }
+    .video-detail__head,
+    .video-detail > .doc-pager {
+      grid-column: 1 / -1;
+    }
+    .video-detail__media {
+      grid-column: 1;
+      position: sticky;
+      top: 76px;
+    }
+    /* 下に流していた台本を、動画の右隣・上端そろえに切り替える */
+    .video-detail > .video-script {
+      grid-column: 2;
+      margin-block-start: 0;
+      padding-block-start: 0;
+      border-block-start: 0;
+    }
+  }
+
+  /* --- 一覧ヘッダ + 進捗メーター --- */
+  .videos__head h1 {
+    font-size: clamp(32px, 5vw, 56px);
+  }
+  .videos__lead {
+    margin-block-start: 16px;
+    max-width: var(--reading);
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+  .videos-progress {
+    margin-block-start: 28px;
+    padding: 18px 20px;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: border-color 0.2s;
+  }
+  .videos-progress[data-complete="true"] {
+    border-color: var(--accent-2);
+  }
+  .videos-progress__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 10px 16px;
+  }
+  .videos-progress__count b {
+    font-size: 1.2rem;
+    font-weight: 760;
+  }
+  .videos-progress__pct {
+    color: var(--accent-text);
+    font-weight: 760;
+  }
+  .videos-progress__reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-inline-start: auto;
+    padding: 4px 12px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition:
+      color 0.18s,
+      border-color 0.18s;
+  }
+  .videos-progress__reset:hover {
+    color: var(--ink);
+    border-color: var(--accent);
+  }
+  .videos-progress__track {
+    margin-block-start: 12px;
+    block-size: 10px;
+    background: var(--bg-sunken);
+    border-radius: 999px;
+    overflow: clip;
+  }
+  .videos-progress__bar {
+    display: block;
+    block-size: 100%;
+    inline-size: calc(var(--p, 0) * 1%);
+    background: linear-gradient(90deg, var(--accent-soft), var(--accent));
+    border-radius: 999px;
+    transition: inline-size 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .videos-progress__note {
+    margin-block-start: 10px;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  /* --- Part セクション --- */
+  .videos__part {
+    margin-block-start: clamp(56px, 8vw, 96px);
+  }
+  .videos__part-title {
+    font-size: clamp(1.4rem, 1.15rem + 1vw, 1.85rem);
+    line-height: 1.25;
+    padding-block-end: 12px;
+    border-block-end: 1px solid var(--line);
+    color: var(--accent-text);
+  }
+
+  /* --- カードグリッド --- */
+  .video-grid {
+    list-style: none;
+    padding: 0;
+    margin-block-start: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: clamp(16px, 2.4vw, 24px);
+  }
+  .video-card {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: clip;
+    box-shadow: var(--shadow-sm);
+    transition:
+      translate 0.2s,
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .video-card:hover {
+    translate: 0 -4px;
+    border-color: var(--accent);
+    box-shadow: var(--shadow-md);
+  }
+  .video-card[data-watched="true"] {
+    border-color: var(--accent-2);
+  }
+  .video-card__link {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .video-card__thumb {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background: var(--bg-sunken);
+    border-block-end: 1px solid var(--line);
+    overflow: clip;
+  }
+  .video-card__thumb img {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    transition: scale 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .video-card:hover .video-card__thumb img {
+    scale: 1.04;
+  }
+  /* 個別動画が未確認の章のプレースホルダ (中央は再生アイコンに譲り、隅にタグだけ置く) */
+  .video-card__ph,
+  .video-embed__ph {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(120% 120% at 0% 0%, var(--accent-weak), transparent 60%),
+      linear-gradient(135deg, var(--tint-terra), var(--tint-teal));
+  }
+  .video-card__ph-tag,
+  .video-embed__ph-tag {
+    position: absolute;
+    inset-block-end: 8px;
+    inset-inline-start: 8px;
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--accent-text);
+    background: color-mix(in oklab, var(--bg-raised) 82%, transparent);
+    border-radius: 999px;
+  }
+  /* 再生アイコン (円 + 三角) */
+  .video-card__play,
+  .video-embed__play {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    inline-size: 46px;
+    block-size: 46px;
+    border-radius: 999px;
+    background: color-mix(in oklab, #000 50%, transparent);
+    backdrop-filter: blur(2px);
+    transition:
+      background 0.2s,
+      scale 0.2s;
+  }
+  .video-card__play::before,
+  .video-embed__play::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    inline-size: 0;
+    block-size: 0;
+    border-style: solid;
+    border-width: 9px 0 9px 15px;
+    border-color: transparent transparent transparent #fff;
+    translate: 2px 0;
+  }
+  .video-card__link:hover .video-card__play {
+    background: var(--accent);
+    scale: 1.08;
+  }
+  /* 視聴済みチェック (カードのサムネ右上) */
+  .video-card__check {
+    position: absolute;
+    inset-block-start: 8px;
+    inset-inline-end: 8px;
+    inline-size: 26px;
+    block-size: 26px;
+    border-radius: 999px;
+    background: var(--accent-2);
+    opacity: 0;
+    scale: 0.6;
+    transition:
+      opacity 0.2s,
+      scale 0.2s;
+  }
+  .video-card__check::before {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+  .video-card[data-watched="true"] .video-card__check {
+    opacity: 1;
+    scale: 1;
+  }
+  .video-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 4px;
+    padding: 14px 16px 16px;
+  }
+  .video-card__no {
+    color: var(--accent-text);
+    font-size: 0.78rem;
+    font-weight: 760;
+    letter-spacing: 0.04em;
+  }
+  .video-card__title {
+    font-size: 1.02rem;
+    line-height: 1.4;
+  }
+  .video-card__foot {
+    padding: 0 16px 14px;
+  }
+
+  /* --- 視聴済みトグル --- */
+  .watch-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 14px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    background: var(--bg-sunken);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    transition:
+      color 0.18s,
+      border-color 0.18s,
+      background 0.18s;
+  }
+  .watch-toggle:hover {
+    color: var(--ink);
+    border-color: var(--accent-2);
+  }
+  .watch-toggle__box {
+    position: relative;
+    flex: none;
+    inline-size: 16px;
+    block-size: 16px;
+    border: 1.5px solid currentColor;
+    border-radius: 5px;
+  }
+  .watch-toggle[aria-pressed="true"] {
+    color: var(--accent-2-text);
+    background: var(--accent-2-weak);
+    border-color: var(--accent-2);
+    font-weight: 700;
+  }
+  .watch-toggle[aria-pressed="true"] .watch-toggle__box {
+    background: var(--accent-2);
+    border-color: var(--accent-2);
+  }
+  .watch-toggle[aria-pressed="true"] .watch-toggle__box::before {
+    content: "✓";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+  .watch-toggle--lg {
+    padding: 11px 20px;
+    font-size: 0.95rem;
+  }
+  .watch-toggle--lg .watch-toggle__box {
+    inline-size: 18px;
+    block-size: 18px;
+  }
+
+  /* --- 各動画ページ --- */
+  .video-detail__eyebrow {
+    color: var(--accent-text);
+    font-size: 0.8rem;
+    font-weight: 720;
+    letter-spacing: 0.04em;
+    margin-block-end: 8px;
+  }
+  .video-detail h1 {
+    font-size: clamp(26px, 4vw, 42px);
+  }
+  .video-embed {
+    margin-block-start: 24px;
+  }
+  .video-embed[data-watched="true"] .video-embed__facade {
+    border-color: var(--accent-2);
+  }
+  .video-embed__facade {
+    position: relative;
+    display: block;
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    padding: 0;
+    background: var(--bg-sunken);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: clip;
+  }
+  .video-embed__thumb {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+  .video-embed__play {
+    inline-size: 72px;
+    block-size: 72px;
+  }
+  .video-embed__play::before {
+    border-width: 13px 0 13px 22px;
+  }
+  .video-embed__facade:hover .video-embed__play {
+    background: var(--accent);
+    scale: 1.06;
+  }
+  /* 読み込み後の iframe / noscript フォールバック */
+  .video-embed__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: clip;
+  }
+  .video-embed__frame iframe {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    border: 0;
+  }
+  .video-note {
+    margin-block-start: 14px;
+    padding: 12px 16px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    background: var(--accent-weak);
+    border-radius: var(--radius-md);
+  }
+  .video-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-block-start: 20px;
+  }
+
+  /* --- 教材リンク --- */
+  .video-resources {
+    margin-block-start: 28px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+  }
+  .resource {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 16px;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-md);
+    transition:
+      translate 0.18s,
+      border-color 0.18s;
+  }
+  .resource:hover {
+    translate: 0 -2px;
+    border-color: var(--accent);
+  }
+  .resource__icon {
+    font-size: 1.5rem;
+    color: var(--accent-text);
+    margin-block-end: 6px;
+  }
+  .resource__label {
+    font-size: 0.98rem;
+  }
+  .resource__body {
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  /* --- 動画台本 (ページ内に埋め込む全文) --- */
+  .video-script {
+    margin-block-start: 36px;
+    padding-block-start: 24px;
+    border-block-start: 1px solid var(--line);
+  }
+  .video-script__summary {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    list-style: none;
+    cursor: pointer;
+  }
+  .video-script__summary::-webkit-details-marker {
+    display: none;
+  }
+  .video-script__summary::before {
+    content: "▸";
+    color: var(--muted);
+    transition: rotate 0.2s;
+  }
+  .video-script[open] > .video-script__summary::before {
+    rotate: 90deg;
+  }
+  .video-script__hint {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 400;
+  }
+  .video-script__body {
+    margin-block-start: 16px;
+  }
+  .video-script__source {
+    margin-block-start: 20px;
+    font-size: 0.85rem;
+  }
+  .video-script__source a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* --- 一覧末尾の再生リスト導線 --- */
+  .videos__playlist {
+    margin-block-start: clamp(36px, 5vw, 56px);
+    color: var(--muted);
+  }
+  .videos__playlist a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+/* ---------------------------------------------------------- glossary --- */
+/* 用語解説ページ専用の「用語カード + ページ内索引」。
+   - 本文 Markdown は不変。クライアント (GlossaryIndex) が各用語を <section.gl-card> に包み、
+     用語名・読み・要約 (一言で言うと) を 1 つの見出し帯 (.gl-card__head) にまとめ、
+     「くわしく」ラベルを外し、頭文字索引としぼり込みを後付けする。
+   - スクリプトが無くても CSS 側の h2 + ul フォールバックで連結カードの体裁は保つ。
+   - 配色はテキスト資料の暖色テラコッタと差別化し、副アクセント(ティール)を基調にする。
+   - レイヤ順は components < prose なので、見出し上書きと scroll-margin は prose 側に置く。 */
+@layer prose {
+  /* 章の導入リード文 (最初の用語より前の段落) を少しだけ強める */
+  .prose.prose--glossary > p:first-of-type {
+    font-size: 1.06rem;
+    color: var(--muted);
+  }
+
+  /* カード本体 (JS が <section.gl-card> に包む)。紙面 + 細罫 + 角丸、常時うっすら影、
+     ホバーで一段持ち上がる。 */
+  .prose.prose--glossary .gl-card {
+    margin-block: 1.1em;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: clip;
+    box-shadow: var(--shadow-sm);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .prose.prose--glossary .gl-card:hover {
+    border-color: color-mix(in oklab, var(--accent-2) 38%, var(--line));
+    box-shadow: var(--shadow-md);
+  }
+
+  /* 見出し帯: 用語名 + 読み + 要約 を 1 つの極薄ティール地の領域にまとめる。 */
+  .prose.prose--glossary .gl-card__head {
+    padding: 0.9rem 1.1rem 0.85rem;
+    background: var(--tint-teal);
+    border-block-end: 1px solid var(--line);
+  }
+  /* 用語名 (見出し語)。JS: 見出し帯の中 / no-JS フォールバック: prose 直下の h2。 */
+  .prose.prose--glossary > h2,
+  .prose.prose--glossary .gl-card__head > h2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.1em 0.6em;
+    margin: 0;
+    font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.1rem);
+    font-weight: 800;
+    line-height: 1.18;
+    letter-spacing: -0.005em;
+  }
+  .gl-card__reading {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--muted);
+    letter-spacing: 0.01em;
+  }
+  /* 「一言で言うと」: ラベルを外し、見出し帯の中の要約リード文として置く。 */
+  .prose.prose--glossary .gl-card__lead {
+    margin: 0.5rem 0 0;
+    font-size: 1.05rem;
+    line-height: 1.68;
+    color: var(--ink);
+  }
+
+  /* 本文 = 項目リスト。カードの中なので独自の枠は持たない。 */
+  .prose.prose--glossary > h2 + ul,
+  .prose.prose--glossary .gl-card > ul {
+    margin: 0;
+    padding: 0.1rem 1.05rem 0.45rem;
+    list-style: none;
+    background: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .prose.prose--glossary > h2 + ul > li,
+  .prose.prose--glossary .gl-card > ul > li {
+    margin: 0;
+    padding-block: 0.5rem;
+    line-height: 1.72;
+  }
+  .prose.prose--glossary > h2 + ul > li + li,
+  .prose.prose--glossary .gl-card > ul > li + li {
+    border-block-start: 1px solid color-mix(in oklab, var(--line) 55%, transparent);
+  }
+  /* 各項目の見出し語 (具体例 / つまずきやすい点 / 関連語 …) */
+  .prose.prose--glossary > h2 + ul > li > strong:first-child,
+  .prose.prose--glossary .gl-card > ul > li > strong:first-child {
+    color: var(--accent-2-text);
+    font-weight: 700;
+    font-size: 0.82em;
+    letter-spacing: 0.03em;
+  }
+
+  /* no-JS フォールバック: 包装が無いとき h2 + ul を連結カードとして見せる
+     (一言で言うと・くわしくはラベル付きのまま本文に残る)。 */
+  .prose.prose--glossary > h2 {
+    margin-block-start: 1.3em;
+    padding: 0.9rem 1.1rem 0.85rem;
+    background: var(--tint-teal);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+  .prose.prose--glossary > h2 + ul {
+    border: 1px solid var(--line);
+    border-block-start: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: var(--bg-raised);
+  }
+
+  /* モバイル: 長い読みは用語名の下へ改行させる。 */
+  @media (max-width: 760px) {
+    .gl-card__reading {
+      flex-basis: 100%;
+    }
+  }
+}

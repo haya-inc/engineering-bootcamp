@@ -1,0 +1,154 @@
+---
+// 動画の視聴進捗をブラウザ (localStorage) に記録し、UI へ反映する共通スクリプト。
+// 動画一覧ページ・各動画ページの両方で include して使う。対象はデータ属性で見つける:
+//   [data-video-card][data-chapter]              一覧カード (data-watched を反映)
+//   [data-watch-toggle][data-chapter]            視聴済みトグル (aria-pressed / ラベル)
+//   [data-progress][data-total]                  進捗メーター (role=progressbar)
+//     └ [data-progress-bar] / [data-progress-count] / [data-progress-pct]
+//   [data-progress-reset]                        進捗リセット
+//   [data-yt-facade][data-embed][data-title]     クリックで埋め込みを読み込むファサード
+// View Transitions に対応するため astro:page-load で都度 render() する。
+// click はドキュメント委譲で一度だけ束ねる (window ガードで二重登録を防ぐ)。
+---
+
+<script>
+  const KEY = "eb:videos:watched:v1";
+
+  function loadSet(): Set<number> {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return new Set();
+      const arr: unknown = JSON.parse(raw);
+      return new Set(
+        Array.isArray(arr) ? arr.map(Number).filter((n) => Number.isFinite(n)) : [],
+      );
+    } catch {
+      return new Set();
+    }
+  }
+
+  function saveSet(set: Set<number>): void {
+    try {
+      localStorage.setItem(KEY, JSON.stringify([...set].sort((a, b) => a - b)));
+    } catch {
+      /* プライベートモード等で localStorage 不可なら黙って諦める */
+    }
+  }
+
+  function knownChapters(): Set<number> {
+    const out = new Set<number>();
+    document
+      .querySelectorAll<HTMLElement>("[data-video-card][data-chapter]")
+      .forEach((el) => out.add(Number(el.dataset.chapter)));
+    return out;
+  }
+
+  function render(): void {
+    const watched = loadSet();
+
+    document
+      .querySelectorAll<HTMLElement>("[data-video-card][data-chapter]")
+      .forEach((el) => {
+        el.dataset.watched = watched.has(Number(el.dataset.chapter)) ? "true" : "false";
+      });
+
+    document
+      .querySelectorAll<HTMLElement>("[data-watch-toggle][data-chapter]")
+      .forEach((el) => {
+        const on = watched.has(Number(el.dataset.chapter));
+        el.setAttribute("aria-pressed", String(on));
+        const label = el.querySelector<HTMLElement>("[data-watch-label]");
+        if (label) label.textContent = on ? "視聴済み" : "視聴済みにする";
+      });
+
+    document.querySelectorAll<HTMLElement>("[data-progress]").forEach((el) => {
+      const total = Number(el.dataset.total) || 0;
+      const known = knownChapters();
+      const done = known.size
+        ? [...watched].filter((n) => known.has(n)).length
+        : watched.size;
+      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+      const bar = el.querySelector<HTMLElement>("[data-progress-bar]");
+      if (bar) bar.style.setProperty("--p", String(pct));
+      const count = el.querySelector<HTMLElement>("[data-progress-count]");
+      if (count) count.textContent = `${done} / ${total}`;
+      const pctEl = el.querySelector<HTMLElement>("[data-progress-pct]");
+      if (pctEl) pctEl.textContent = `${pct}%`;
+      const track = el.querySelector<HTMLElement>("[data-progress-track]");
+      if (track) {
+        track.setAttribute("aria-valuenow", String(done));
+        track.setAttribute("aria-valuemax", String(total));
+        track.setAttribute("aria-valuetext", `${total}章中 ${done}章 視聴済み`);
+      }
+      el.dataset.complete = total > 0 && done >= total ? "true" : "false";
+    });
+  }
+
+  function toggle(chapter: number): void {
+    const set = loadSet();
+    if (set.has(chapter)) set.delete(chapter);
+    else set.add(chapter);
+    saveSet(set);
+    render();
+  }
+
+  function loadFacade(facade: HTMLElement): void {
+    const src = facade.dataset.embed;
+    if (!src) return;
+    const frame = document.createElement("div");
+    frame.className = "video-embed__frame";
+    const iframe = document.createElement("iframe");
+    iframe.src = `${src}${src.includes("?") ? "&" : "?"}autoplay=1`;
+    iframe.title = facade.dataset.title || "動画";
+    iframe.loading = "lazy";
+    iframe.allow =
+      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.setAttribute("allowfullscreen", "");
+    iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    frame.appendChild(iframe);
+    facade.replaceWith(frame);
+    // ファサードのボタンが消えるとフォーカスが body 先頭へ飛ぶので、再生領域へ移す。
+    iframe.focus();
+  }
+
+  function onClick(ev: MouseEvent): void {
+    const target = ev.target;
+    if (!(target instanceof Element)) return;
+
+    const toggleBtn = target.closest<HTMLElement>("[data-watch-toggle][data-chapter]");
+    if (toggleBtn) {
+      ev.preventDefault();
+      toggle(Number(toggleBtn.dataset.chapter));
+      return;
+    }
+
+    const resetBtn = target.closest<HTMLElement>("[data-progress-reset]");
+    if (resetBtn) {
+      ev.preventDefault();
+      if (confirm("視聴の進捗をすべてリセットします。よろしいですか？")) {
+        saveSet(new Set());
+        render();
+      }
+      return;
+    }
+
+    const facade = target.closest<HTMLElement>("[data-yt-facade]");
+    if (facade) {
+      ev.preventDefault();
+      loadFacade(facade);
+    }
+  }
+
+  function setup(): void {
+    const w = window as unknown as { __ebProgressBound?: boolean };
+    if (!w.__ebProgressBound) {
+      w.__ebProgressBound = true;
+      document.addEventListener("click", onClick);
+    }
+    render();
+  }
+
+  document.addEventListener("astro:page-load", setup);
+  setup();
+</script>

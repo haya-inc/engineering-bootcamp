@@ -1,0 +1,4 @@
+# CI (.github/workflows/deploy.yml) と同一バージョンに固定し再現性を担保する。
+[tools]
+bun = "1.3.14"
+node = "26.3.1"

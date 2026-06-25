@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/oxc-project/oxc/main/npm/oxlint/configuration_schema.json",
+  "ignorePatterns": [
+    "dist/**",
+    ".astro/**",
+    "node_modules/**",
+    "src/content/docs/textbook/**",
+    "src/content/docs/glossary/**"
+  ],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "warn"
+  }
+}

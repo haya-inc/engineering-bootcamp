@@ -1,0 +1,19 @@
+# ビルド出力
+dist/
+.astro/
+
+# 依存
+node_modules/
+
+# split-book.mjs が textbook/book/ と glossary.md から生成する派生物 (コミットしない)
+src/content/docs/textbook/
+src/content/docs/glossary/
+
+# split-book.mjs が video-scripts/ から生成する動画台本 (コミットしない)
+src/content/scripts/
+
+# split-book.mjs が README.md の動画表から生成する動画メタ (コミットしない)
+src/data/videos.json
+
+# Pagefind 索引の一時物
+.pagefind/

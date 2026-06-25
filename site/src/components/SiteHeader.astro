@@ -1,0 +1,102 @@
+---
+import { Icon } from "astro-icon/components";
+import { docHref } from "../lib/content.ts";
+import { SITE_NAME } from "../lib/site.ts";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+interface NavLink {
+  href: string;
+  label: string;
+  icon: string;
+  /** 現在地判定に使うパス接頭辞。external には不要。 */
+  prefix?: string;
+  /** トップのように前方一致ではなく完全一致で判定する場合 true。 */
+  exact?: boolean;
+  external?: boolean;
+}
+
+const links: NavLink[] = [
+  { href: `${base}/`, label: "ホーム", icon: "ph:house", prefix: base || "/", exact: true },
+  { href: `${base}/videos/`, label: "動画", icon: "ph:play-circle", prefix: `${base}/videos` },
+  {
+    href: docHref("textbook/00-introduction"),
+    label: "テキスト資料",
+    icon: "ph:book-open",
+    prefix: `${base}/textbook`,
+  },
+  {
+    href: docHref("glossary/intro"),
+    label: "用語解説",
+    icon: "ph:cards-three",
+    prefix: `${base}/glossary`,
+  },
+  {
+    href: "https://github.com/haya-inc/engineering-bootcamp",
+    label: "GitHub",
+    icon: "ph:github-logo",
+    external: true,
+  },
+];
+
+// 現在地判定: 末尾スラッシュを正規化し、トップは完全一致、他はセクション接頭辞で前方一致する。
+const current = Astro.url.pathname.replace(/\/+$/, "") || "/";
+const isActive = (l: NavLink): boolean =>
+  !l.external &&
+  l.prefix !== undefined &&
+  (l.exact ? current === l.prefix : current === l.prefix || current.startsWith(`${l.prefix}/`));
+---
+
+<header class="site-header">
+  <a class="brand" href={`${base}/`} aria-label={SITE_NAME} style="view-transition-name: brand">
+    <span class="brand__mark" aria-hidden="true">
+      <img src={`${base}/favicon.svg`} alt="" width="30" height="30" decoding="async" />
+    </span>
+    <span class="brand__text">{SITE_NAME}</span>
+  </a>
+  <nav class="nav-links" aria-label="主要リンク">
+    {
+      links.map((l) => {
+        const active = isActive(l);
+        return (
+          <a
+            href={l.href}
+            class:list={[{ "is-active": active }]}
+            aria-current={active ? "page" : undefined}
+            {...(l.external
+              ? {
+                  target: "_blank",
+                  rel: "noopener noreferrer",
+                  "aria-label": `${l.label}（外部サイト・新しいタブで開く）`,
+                }
+              : {})}
+          >
+            <Icon name={l.icon} class="nav-ico nav-ico--line" aria-hidden="true" />
+            <Icon name={`${l.icon}-fill`} class="nav-ico nav-ico--fill" aria-hidden="true" />
+            {l.label}
+            {l.external && (
+              <Icon name="ph:arrow-up-right" class="nav-ico nav-ico--ext" aria-hidden="true" />
+            )}
+          </a>
+        );
+      })
+    }
+    {/* 現在地インジケーター: anchor 対応時のみ単一の下線が現在地へスライドする */}
+    <span class="nav-indicator" aria-hidden="true" />
+  </nav>
+  <div class="header-tools">
+    <button
+      type="button"
+      class="search-open"
+      data-search-open
+      aria-label="検索"
+      aria-keyshortcuts="Meta+K Control+K"
+    >
+      <Icon name="ph:magnifying-glass" class="search-open__icon" aria-hidden="true" />
+      <span class="search-open__label">検索</span>
+      {/* ショートカット表記は OS で出し分ける (Mac=⌘K / その他=Ctrl K)。中身は CSS の
+          content で描画し、html[data-os] を BaseLayout の先頭スクリプトが立てる。 */}
+      <kbd class="search-open__kbd" aria-hidden="true"></kbd>
+    </button>
+  </div>
+</header>

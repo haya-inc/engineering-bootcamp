@@ -1,0 +1,146 @@
+---
+import { Icon } from "astro-icon/components";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import VideoProgressScript from "../../components/VideoProgressScript.astro";
+import { SITE_NAME } from "../../lib/site.ts";
+import {
+  getVideos,
+  groupByPart,
+  videoHref,
+  youtubeThumb,
+  playlistUrl,
+} from "../../lib/videos.ts";
+
+const videos = await getVideos();
+const parts = groupByPart(videos);
+const total = videos.length;
+---
+
+<BaseLayout
+  title="動画一覧"
+  description={`${SITE_NAME}の全24章の動画を一覧し、各動画を埋め込みで視聴できます。どこまで見たかはブラウザに記録されます。`}
+  contained={false}
+>
+  <section class="videos">
+    <header class="videos__head">
+      <p class="kicker">Videos</p>
+      <h1 style="view-transition-name: doc-title">動画一覧</h1>
+      <p class="videos__lead">
+        全{total}章の動画を Part 順に並べています。各カードから埋め込み再生のページへ進めます。視聴済みにした章はこのブラウザに記録され、進捗バーに反映されます。
+      </p>
+
+      <div
+        class="videos-progress"
+        data-progress
+        data-total={total}
+        role="group"
+        aria-label="視聴の進捗"
+      >
+        <div class="videos-progress__meta" aria-live="polite">
+          <span class="videos-progress__count">
+            <b data-progress-count>0 / {total}</b> 視聴済み
+          </span>
+          <span class="videos-progress__pct" data-progress-pct>0%</span>
+          <button
+            type="button"
+            class="videos-progress__reset"
+            data-progress-reset
+          >
+            <Icon name="ph:arrow-counter-clockwise" aria-hidden="true" />
+            進捗をリセット
+          </button>
+        </div>
+        <div
+          class="videos-progress__track"
+          data-progress-track
+          role="progressbar"
+          aria-label="視聴済みの章数"
+          aria-valuemin="0"
+          aria-valuenow="0"
+          aria-valuemax={total}
+          aria-valuetext={`全${total}章中 0章 視聴済み`}
+        >
+          <span class="videos-progress__bar" data-progress-bar></span>
+        </div>
+        <p class="videos-progress__note">
+          視聴状況はこのブラウザ (localStorage) にのみ保存され、サーバには送信されません。別の端末やブラウザには引き継がれません。
+        </p>
+      </div>
+    </header>
+
+    {
+      parts.map((part) => (
+        <section class="videos__part" aria-labelledby={`part-${part.part}`}>
+          <h2 id={`part-${part.part}`} class="videos__part-title">
+            {part.partLabel}
+          </h2>
+          <ul class="video-grid" role="list">
+            {part.items.map((v) => (
+              <li
+                class="video-card"
+                data-video-card
+                data-chapter={v.chapter}
+                data-watched="false"
+              >
+                <a class="video-card__link" href={videoHref(v.slug)}>
+                  <span
+                    class="video-card__thumb"
+                    transition:name={`vid-thumb-${v.chapter}`}
+                  >
+                    {v.youtubeId ? (
+                      <img
+                        src={youtubeThumb(v.youtubeId)}
+                        alt=""
+                        width="480"
+                        height="360"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                      />
+                    ) : (
+                      <span class="video-card__ph" aria-hidden="true">
+                        <span class="video-card__ph-tag">再生リスト</span>
+                      </span>
+                    )}
+                    <span class="video-card__play" aria-hidden="true" />
+                    <span class="video-card__check" aria-hidden="true" />
+                  </span>
+                  <span class="video-card__body">
+                    <span class="video-card__no">第{v.chapter}章</span>
+                    <strong
+                      class="video-card__title"
+                      transition:name={`vid-title-${v.chapter}`}
+                    >
+                      {v.title}
+                    </strong>
+                  </span>
+                </a>
+                <div class="video-card__foot">
+                  <button
+                    type="button"
+                    class="watch-toggle"
+                    data-watch-toggle
+                    data-chapter={v.chapter}
+                    aria-pressed="false"
+                  >
+                    <span class="watch-toggle__box" aria-hidden="true" />
+                    <span data-watch-label>視聴済みにする</span>
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    <p class="videos__playlist">
+      YouTube で続けて見るなら{" "}
+      <a href={playlistUrl} rel="noopener">
+        <Icon name="ph:youtube-logo" aria-hidden="true" />再生リスト</a
+      >{" "}
+      からどうぞ。
+    </p>
+  </section>
+
+  <VideoProgressScript />
+</BaseLayout>

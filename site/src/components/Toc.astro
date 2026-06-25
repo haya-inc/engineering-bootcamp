@@ -1,0 +1,30 @@
+---
+import type { MarkdownHeading } from "astro";
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  headings: MarkdownHeading[];
+}
+const { headings } = Astro.props;
+// h2 と h3 のみを目次に出す。
+const items = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+{
+  items.length > 0 && (
+    <nav class="toc" aria-label="このページの目次">
+      <p class="toc__title">
+        <Icon name="ph:list-bullets" aria-hidden="true" />このページの目次
+      </p>
+      <ul class="toc__list">
+        {items.map((h) => (
+          <li class:list={["toc__item", `toc__item--depth-${h.depth}`]}>
+            <a href={`#${h.slug}`} class="toc__link">
+              {h.text}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

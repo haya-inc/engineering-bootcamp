@@ -1,0 +1,135 @@
+---
+// Pagefind による静的サイト内検索。ビルド時に dist を索引化し、外部サービス無しで動く。
+// 索引はビルド後にしか存在しないため、dev では結果が出ない (本番ビルドで有効)。
+import { Icon } from "astro-icon/components";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const bundlePath = `${base}/pagefind/`;
+---
+
+<dialog
+  class="search-dialog"
+  data-search-dialog
+  aria-labelledby="search-dialog-title"
+>
+  <div class="search-dialog__inner">
+    <div class="search-dialog__bar">
+      <p class="search-dialog__title" id="search-dialog-title">教材を検索</p>
+      <button
+        type="button"
+        class="search-dialog__close"
+        data-search-close
+        aria-label="検索を閉じる"
+      >
+        <Icon name="ph:x" aria-hidden="true" />
+      </button>
+    </div>
+    <div id="pagefind-search" data-bundle-path={bundlePath}></div>
+  </div>
+</dialog>
+
+<script>
+  // 初回オープン時に Pagefind UI を遅延ロードする。
+  const dialog = document.querySelector<HTMLDialogElement>(
+    "[data-search-dialog]",
+  );
+  const mount = document.getElementById("pagefind-search");
+  let loaded = false;
+
+  async function ensureLoaded() {
+    if (loaded || !mount) return;
+    loaded = true;
+    const bundlePath = mount.dataset.bundlePath || "/pagefind/";
+    // Pagefind UI はビルド成果物 (dist/pagefind/) にしか無く、window.PagefindUI を
+    // 定義する自己実行スクリプト。静的 import() で読み込むと Vite の preload ラッパに
+    // 包まれ、本番ビルドで `__VITE_PRELOAD__ is not defined` になり読み込みに失敗する。
+    // そのため Vite の変換を受けない <script>/<link> 注入で読み込む。
+    try {
+      await new Promise<void>((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = `${bundlePath}pagefind-ui.js`;
+        s.onload = () => resolve();
+        s.onerror = () =>
+          reject(new Error("Pagefind UI の読み込みに失敗しました"));
+        document.head.appendChild(s);
+      });
+    } catch (e) {
+      loaded = false; // 失敗時は再オープンで再試行できるようにする
+      throw e;
+    }
+    const css = document.createElement("link");
+    css.rel = "stylesheet";
+    css.href = `${bundlePath}pagefind-ui.css`;
+    document.head.appendChild(css);
+    // @ts-expect-error: グローバルに公開される PagefindUI
+    new window.PagefindUI({
+      element: "#pagefind-search",
+      bundlePath,
+      showSubResults: true,
+      showImages: false,
+      translations: {
+        placeholder: "キーワードを入力",
+        zero_results: "「[SEARCH_TERM]」に一致する結果はありません",
+      },
+    });
+  }
+
+  const closeBtn = dialog?.querySelector<HTMLElement>("[data-search-close]");
+
+  // 索引が無い/読み込み失敗時に mount へ案内を出す
+  function showMessage(text: string) {
+    if (mount) mount.innerHTML = `<p class="search-dialog__note">${text}</p>`;
+  }
+
+  async function openSearch() {
+    dialog?.showModal();
+    // dev には Pagefind 索引が無い。無言の故障に見えないよう明示する。
+    if (import.meta.env.DEV) {
+      showMessage(
+        "検索はビルド版 (bun run build → preview) でのみ有効です。dev では索引がありません。",
+      );
+      closeBtn?.focus();
+      return;
+    }
+    try {
+      await ensureLoaded();
+    } catch {
+      showMessage("検索の読み込みに失敗しました。ページを再読み込みしてください。");
+      closeBtn?.focus();
+      return;
+    }
+    // Pagefind UI のマウント後に検索入力へフォーカス (無ければ閉じるボタン)
+    requestAnimationFrame(() => {
+      const input = dialog?.querySelector<HTMLInputElement>(
+        "input[type='text']",
+      );
+      (input ?? closeBtn)?.focus();
+    });
+  }
+
+  function bind() {
+    document.querySelectorAll("[data-search-open]").forEach((btn) => {
+      const el = btn as HTMLElement;
+      if (el.dataset.bound) return;
+      el.dataset.bound = "1";
+      el.addEventListener("click", openSearch);
+    });
+  }
+
+  document
+    .querySelector("[data-search-close]")
+    ?.addEventListener("click", () => dialog?.close());
+  dialog?.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  // Cmd/Ctrl+K で検索を開く
+  document.addEventListener("keydown", (e) => {
+    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+
+  bind();
+  document.addEventListener("astro:after-swap", bind);
+</script>

@@ -1,0 +1,152 @@
+---
+import { Icon } from "astro-icon/components";
+import ThemeToggle from "./ThemeToggle.astro";
+import { docHref } from "../lib/content";
+import { playlistUrl } from "../lib/videos";
+import {
+  SITE_ALTERNATE_NAME,
+  SITE_NAME_PARTS,
+  SITE_PUBLISHER,
+  SITE_PUBLISHER_URL,
+} from "../lib/site";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const repo = "https://github.com/haya-inc/engineering-bootcamp";
+const year = new Date().getFullYear();
+
+interface FooterLink {
+  href: string;
+  label: string;
+  icon: string;
+  external?: boolean;
+}
+
+const siteLinks: FooterLink[] = [
+  { href: `${base}/`, label: "ホーム", icon: "ph:house" },
+  { href: `${base}/videos/`, label: "動画", icon: "ph:play-circle" },
+  { href: docHref("textbook/00-introduction"), label: "テキスト資料", icon: "ph:book-open" },
+  { href: docHref("glossary/intro"), label: "用語解説", icon: "ph:cards-three" },
+];
+const repoLinks: FooterLink[] = [
+  {
+    href: `${repo}/blob/main/CONTRIBUTING.md`,
+    label: "コントリビュート",
+    icon: "ph:handshake",
+    external: true,
+  },
+  { href: `${repo}/blob/main/LICENSE`, label: "ライセンス", icon: "ph:scales", external: true },
+  { href: repo, label: "GitHub", icon: "ph:github-logo", external: true },
+];
+
+// 外部リンクは別タブ + noopener、スクリーンリーダーに「外部・新規タブ」を伝える。
+const extAttrs = (l: FooterLink) =>
+  l.external
+    ? {
+        target: "_blank",
+        rel: "noopener noreferrer",
+        "aria-label": `${l.label}（外部サイト・新しいタブで開く）`,
+      }
+    : {};
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__brand">
+      <p class="site-footer__eyebrow">{SITE_ALTERNATE_NAME}</p>
+      {/* ブランド名はヘッダー/ヒーローと同じ専用書体。カタカナ語を途中で割らないよう、
+          意味の切れ目にだけ <wbr> を入れる (CSS の word-break: keep-all と対) */}
+      <p class="site-footer__name">
+        {
+          SITE_NAME_PARTS.map((part, i) => (
+            <Fragment>
+              {i > 0 && <wbr />}
+              {part}
+            </Fragment>
+          ))
+        }
+      </p>
+      <p class="site-footer__tagline">
+        Web開発の基礎から Git/GitHub、DB/API、テスト、運用、AI活用まで。エンジニア入門者が24章で学ぶ教材です。
+      </p>
+      <div class="site-footer__ctas">
+        <a
+          class="button button--primary"
+          href={playlistUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="YouTube再生リスト（外部サイト・新しいタブで開く）"
+        >
+          <Icon name="ph:youtube-logo" aria-hidden="true" />
+          YouTubeで見る
+          <Icon name="ph:arrow-up-right" class="ext" aria-hidden="true" />
+        </a>
+        <a
+          class="button button--secondary"
+          href={repo}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="GitHubリポジトリ（外部サイト・新しいタブで開く）"
+        >
+          <Icon name="ph:github-logo" aria-hidden="true" />
+          GitHubで見る
+          <Icon name="ph:arrow-up-right" class="ext" aria-hidden="true" />
+        </a>
+      </div>
+    </div>
+
+    <div class="site-footer__cols">
+      <section class="site-footer__col">
+        <h2>サイト</h2>
+        <ul>
+          {
+            siteLinks.map((l) => (
+              <li>
+                <a href={l.href}>
+                  <Icon name={l.icon} aria-hidden="true" />
+                  {l.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+      <section class="site-footer__col">
+        <h2>リポジトリ</h2>
+        <ul>
+          {
+            repoLinks.map((l) => (
+              <li>
+                <a href={l.href} {...extAttrs(l)}>
+                  <Icon name={l.icon} aria-hidden="true" />
+                  {l.label}
+                  {l.external && <Icon name="ph:arrow-up-right" class="ext" aria-hidden="true" />}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <div class="site-footer__bottom">
+    <p>
+      © {year}{" "}
+      <a
+        class="site-footer__publisher"
+        href={SITE_PUBLISHER_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={`${SITE_PUBLISHER}（外部サイト・新しいタブで開く）`}
+      >
+        {SITE_PUBLISHER}
+      </a>
+    </p>
+    <div class="site-footer__actions">
+      <ThemeToggle />
+      <a class="site-footer__top" href="#main">
+        ページの先頭へ <Icon name="ph:arrow-up" aria-hidden="true" />
+      </a>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,144 @@
+---
+import { ClientRouter } from "astro:transitions";
+import { Font } from "astro:assets";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+import SearchDialog from "../components/SearchDialog.astro";
+import {
+  SITE_ALTERNATE_NAME,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_OG_IMAGE_ALT,
+  SITE_PUBLISHER,
+  SITE_PUBLISHER_URL,
+} from "../lib/site.ts";
+import "../styles/custom.css";
+
+interface Props {
+  title: string;
+  description?: string;
+  /** ドキュメントページなど、本文を中央寄せの prose 幅にしない場合は false */
+  contained?: boolean;
+  ogType?: "website" | "article";
+  structuredData?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description = SITE_DESCRIPTION,
+  contained = true,
+  ogType = "website",
+  structuredData = [],
+} = Astro.props;
+
+const siteName = SITE_NAME;
+const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const siteUrl = new URL(`${base}/`, Astro.site);
+const ogImage = new URL(`${base}/og-image.png`, Astro.site);
+const favicon = `${base}/favicon.svg`;
+const faviconPng = `${base}/favicon-32x32.png`;
+const faviconIco = `${base}/favicon.ico`;
+const appleTouchIcon = `${base}/apple-touch-icon.png`;
+const structuredDataItems = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteName,
+    alternateName: SITE_ALTERNATE_NAME,
+    url: siteUrl.toString(),
+    inLanguage: "ja",
+    description: SITE_DESCRIPTION,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_PUBLISHER,
+      url: SITE_PUBLISHER_URL,
+    },
+  },
+  ...(Array.isArray(structuredData) ? structuredData : [structuredData]),
+];
+const jsonLd = JSON.stringify(structuredDataItems).replace(/</g, "\\u003c");
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="application-name" content={siteName} />
+    <meta name="author" content={SITE_PUBLISHER} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#d84f2a" />
+    <link rel="icon" href={favicon} type="image/svg+xml" />
+    <link rel="icon" href={faviconPng} type="image/png" sizes="32x32" />
+    <link rel="icon" href={faviconIco} sizes="any" />
+    <link rel="apple-touch-icon" href={appleTouchIcon} />
+    {/* 欧文 Inter をセルフホスト。@font-face 生成 + above-the-fold 用に preload */}
+    <Font cssVariable="--font-sans-web" preload />
+    {/* ブランドワードマーク「エンジニア入門研修」専用書体 (9文字サブセット)。
+        ヘッダーのブランド名とヒーロー見出しは above-the-fold なので preload する。 */}
+    <Font cssVariable="--font-brand" preload />
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href={new URL(`${base}/sitemap-index.xml`, Astro.site)} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="ja_JP" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={SITE_OG_IMAGE_ALT} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={SITE_OG_IMAGE_ALT} />
+    <script type="application/ld+json" is:inline set:html={jsonLd} />
+    {/* テーマ初期化: 描画前に data-theme を確定させ、ちらつきを防ぐ */}
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        const saved = localStorage.getItem("theme");
+        const theme =
+          saved ??
+          (matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        root.dataset.theme = theme;
+        // 検索ショートカットの表記を OS に合わせる (Mac=⌘K / その他=Ctrl K)。
+        // 描画前に html[data-os] を確定させ、表記のちらつきを防ぐ。
+        const detectOS = () => {
+          const ua =
+            navigator.userAgentData?.platform ||
+            navigator.platform ||
+            navigator.userAgent ||
+            "";
+          root.dataset.os = /mac|iphone|ipad|ipod/i.test(ua) ? "mac" : "other";
+        };
+        detectOS();
+        // View Transitions のページ遷移後も テーマ / OS 表記を維持する
+        document.addEventListener("astro:after-swap", () => {
+          const t = localStorage.getItem("theme");
+          if (t) root.dataset.theme = t;
+          detectOS();
+        });
+      })();
+    </script>
+    <ClientRouter />
+  </head>
+  <body data-contained={contained ? "" : undefined}>
+    <a class="skip-link" href="#main">本文へスキップ</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+    <SearchDialog />
+  </body>
+</html>

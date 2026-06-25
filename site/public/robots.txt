@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /engineering-bootcamp/
+
+Sitemap: https://haya-inc.github.io/engineering-bootcamp/sitemap-index.xml

@@ -1,0 +1,54 @@
+---
+import { Icon } from "astro-icon/components";
+// ライト/ダークを data-theme で切り替え、localStorage に保存する。
+// 配色自体は CSS の light-dark() と [data-theme] で表現する。
+// aria-pressed と aria-label で現在の配色と操作内容をスクリーンリーダーへ伝える。
+// アイコンは「切り替え先」を示す: ライト時は月(=暗くする)、ダーク時は太陽(=明るくする)。
+// 両方を描画し、CSS の [data-theme] で表示側だけを出す (ちらつき防止)。
+---
+
+<button
+  type="button"
+  class="theme-toggle"
+  data-theme-toggle
+  aria-label="ダークモードに切り替え"
+  aria-pressed="false"
+>
+  <Icon name="ph:moon" class="theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true" />
+  <Icon name="ph:sun" class="theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true" />
+</button>
+
+<script is:inline>
+  (() => {
+    // ボタンの ARIA を現在のテーマに同期する
+    const sync = (btn) => {
+      const dark = document.documentElement.dataset.theme === "dark";
+      btn.setAttribute("aria-pressed", String(dark));
+      btn.setAttribute(
+        "aria-label",
+        dark ? "ライトモードに切り替え" : "ダークモードに切り替え",
+      );
+    };
+    const apply = (t) => {
+      document.documentElement.dataset.theme = t;
+      localStorage.setItem("theme", t);
+      document.querySelectorAll("[data-theme-toggle]").forEach(sync);
+    };
+    const bind = () => {
+      document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
+        sync(btn);
+        if (btn.dataset.bound) return;
+        btn.dataset.bound = "1";
+        btn.addEventListener("click", () => {
+          const next =
+            document.documentElement.dataset.theme === "dark"
+              ? "light"
+              : "dark";
+          apply(next);
+        });
+      });
+    };
+    bind();
+    document.addEventListener("astro:after-swap", bind);
+  })();
+</script>

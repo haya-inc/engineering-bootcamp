@@ -1,0 +1,212 @@
+---
+import { getEntry, render } from "astro:content";
+import { Icon } from "astro-icon/components";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import VideoProgressScript from "../../components/VideoProgressScript.astro";
+import {
+  getVideos,
+  videoHref,
+  docHref,
+  youtubeThumb,
+  youtubeEmbed,
+  playlistEmbed,
+  watchUrl,
+  type VideoMeta,
+} from "../../lib/videos.ts";
+
+export async function getStaticPaths() {
+  const videos = await getVideos();
+  return videos.map((video, i) => ({
+    params: { slug: video.slug },
+    props: {
+      video,
+      prev: videos[i - 1],
+      next: videos[i + 1],
+    },
+  }));
+}
+
+interface Props {
+  video: VideoMeta;
+  prev?: VideoMeta;
+  next?: VideoMeta;
+}
+
+const { video, prev, next } = Astro.props;
+const embed = video.youtubeId ? youtubeEmbed(video.youtubeId) : playlistEmbed();
+const heading = `第${video.chapter}章 ${video.title}`;
+const iframeAllow =
+  "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+
+// 動画台本 (scripts コレクション) があればページ内に描画する。
+const scriptEntry = await getEntry("scripts", video.scriptId);
+const ScriptContent = scriptEntry ? (await render(scriptEntry)).Content : null;
+
+// 台本はページ内 (.video-script) に常時表示するので、教材リンクには「動画台本」を置かない。
+const resources = [
+  { label: "テキスト資料", body: "実務の考え方を読む", href: docHref(video.textbookId), external: false, icon: "ph:book-open" },
+  { label: "用語解説", body: "専門用語を確認する", href: docHref(video.glossaryId), external: false, icon: "ph:cards-three" },
+  { label: "課題", body: "手を動かして残す", href: video.assignmentUrl, external: true, icon: "ph:pencil-simple-line" },
+];
+---
+
+<BaseLayout
+  title={heading}
+  description={`第${video.chapter}章「${video.title}」の動画を視聴し、テキスト・用語解説・台本・課題へ進めます。`}
+  contained={false}
+  ogType="article"
+>
+  <article class="video-detail">
+    <header class="video-detail__head">
+      <p class="video-detail__eyebrow">{video.partLabel}・動画</p>
+      {/* 一覧のカードタイトル (vid-title-N) から見出しへ morph させる。サムネ (vid-thumb-N)
+          と連動し、クリックしたカードがそのまま再生面+見出しへ展開する。 */}
+      <h1 transition:name={`vid-title-${video.chapter}`}>{heading}</h1>
+    </header>
+
+    <div class="video-detail__media">
+      <div
+        class="video-embed"
+        data-video-card
+        data-chapter={video.chapter}
+        data-watched="false"
+      >
+        <button
+          type="button"
+          class="video-embed__facade"
+          transition:name={`vid-thumb-${video.chapter}`}
+          data-yt-facade
+          data-embed={embed}
+          data-title={heading}
+          aria-label={`動画を再生: ${heading}`}
+        >
+          {
+            video.youtubeId ? (
+              <img
+                class="video-embed__thumb"
+                src={youtubeThumb(video.youtubeId)}
+                alt=""
+                width="480"
+                height="360"
+                loading="lazy"
+                referrerpolicy="no-referrer"
+              />
+            ) : (
+              <span class="video-embed__ph" aria-hidden="true">
+                <span class="video-embed__ph-tag">再生リストで視聴</span>
+              </span>
+            )
+          }
+          <span class="video-embed__play" aria-hidden="true"></span>
+        </button>
+        <noscript>
+          <div class="video-embed__frame">
+            <iframe
+              src={embed}
+              title={heading}
+              loading="lazy"
+              allow={iframeAllow}
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </noscript>
+      </div>
+
+      {
+        !video.youtubeId && (
+          <p class="video-note">
+            この章の個別動画 URL は未確認のため、再生すると再生リスト全体を表示します。最新の対応は
+            README のチャプター一覧で確認できます。
+          </p>
+        )
+      }
+
+      <div class="video-actions">
+        <button
+          type="button"
+          class="watch-toggle watch-toggle--lg"
+          data-watch-toggle
+          data-chapter={video.chapter}
+          aria-pressed="false"
+        >
+          <span class="watch-toggle__box" aria-hidden="true"></span>
+          <span data-watch-label>視聴済みにする</span>
+        </button>
+        <a class="button button--secondary" href={watchUrl(video)} rel="noopener">
+          <Icon name="ph:youtube-logo" aria-hidden="true" />
+          YouTube で開く
+        </a>
+      </div>
+
+      <section class="video-resources" aria-label="この章の教材">
+        {
+          resources.map((r) => (
+            <a
+              class="resource"
+              href={r.href}
+              {...(r.external ? { rel: "noopener" } : {})}
+            >
+              <Icon class="resource__icon" name={r.icon} aria-hidden="true" />
+              <strong class="resource__label">{r.label}</strong>
+              <span class="resource__body">{r.body}</span>
+            </a>
+          ))
+        }
+      </section>
+    </div>
+
+    {
+      ScriptContent && (
+        <details class="video-script" id="script" open>
+          <summary class="video-script__summary">
+            動画台本
+            <span class="video-script__hint">ナレーション全文</span>
+          </summary>
+          <div class="prose video-script__body">
+            <ScriptContent />
+          </div>
+          <p class="video-script__source">
+            <a href={video.scriptUrl} rel="noopener">
+              <Icon name="ph:github-logo" aria-hidden="true" />
+              GitHub で台本を見る
+            </a>
+          </p>
+        </details>
+      )
+    }
+
+    <nav class="doc-pager" aria-label="前後の動画">
+      {
+        prev ? (
+          <a class="doc-pager__link doc-pager__link--prev" href={videoHref(prev.slug)}>
+            <span>
+              <Icon name="ph:arrow-left" aria-hidden="true" />前の動画
+            </span>
+            <strong>
+              第{prev.chapter}章 {prev.title}
+            </strong>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a class="doc-pager__link doc-pager__link--next" href={videoHref(next.slug)}>
+            <span>
+              次の動画<Icon name="ph:arrow-right" aria-hidden="true" />
+            </span>
+            <strong>
+              第{next.chapter}章 {next.title}
+            </strong>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+    </nav>
+  </article>
+
+  <VideoProgressScript />
+</BaseLayout>

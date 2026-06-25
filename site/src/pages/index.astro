@@ -1,0 +1,303 @@
+---
+import { Icon } from "astro-icon/components";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { docHref } from "../lib/content.ts";
+import {
+  SITE_ALTERNATE_NAME,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_NAME_PARTS,
+  SITE_PUBLISHER,
+  SITE_PUBLISHER_URL,
+  SITE_REPOSITORY_URL,
+} from "../lib/site.ts";
+import HeroTop from "../assets/illustrations/hero-top.webp";
+import IntroImage from "../assets/illustrations/intro-flow.webp";
+import Part1Image from "../assets/illustrations/part-1-orientation.webp";
+import Part2Image from "../assets/illustrations/part-2-development-basics.webp";
+import Part3Image from "../assets/illustrations/part-3-web-application.webp";
+import Part4Image from "../assets/illustrations/part-4-operations.webp";
+import Part5Image from "../assets/illustrations/part-5-ai-knowledge-work.webp";
+import Part6Image from "../assets/illustrations/part-6-final-project.webp";
+
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const repo = SITE_REPOSITORY_URL;
+const videos = `${base}/videos/`;
+const courseStructuredData = {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  name: SITE_NAME,
+  alternateName: SITE_ALTERNATE_NAME,
+  description: SITE_DESCRIPTION,
+  inLanguage: "ja",
+  provider: {
+    "@type": "Organization",
+    name: SITE_PUBLISHER,
+    url: SITE_PUBLISHER_URL,
+  },
+  teaches: [
+    "Webアプリケーション開発",
+    "Git/GitHub",
+    "データベースとAPI",
+    "テストとセキュリティ",
+    "運用とオブザーバビリティ",
+    "AI活用",
+  ],
+};
+
+// href は動画一覧 (/videos/) の各 Part 見出し (id="part-N") へのアンカー。
+// 動画ページ側の <h2 id={`part-${part.part}`}> と対応する。
+const parts = [
+  {
+    no: "Part 1",
+    title: "オリエンテーション",
+    body: "研修の地図、価値、AI検証、チーム連携",
+    href: `${videos}#part-1`,
+    art: Part1Image,
+  },
+  {
+    no: "Part 2",
+    title: "開発の基本動作",
+    body: "開発環境、Git/GitHub、Web、既存コード読解",
+    href: `${videos}#part-2`,
+    art: Part2Image,
+  },
+  {
+    no: "Part 3",
+    title: "Webアプリケーション開発",
+    body: "要件、DB、API、フロントエンド、テスト、セキュリティ",
+    href: `${videos}#part-3`,
+    art: Part3Image,
+  },
+  {
+    no: "Part 4",
+    title: "実行環境と運用",
+    body: "コンテナ、クラウド、CI/CD、オブザーバビリティ",
+    href: `${videos}#part-4`,
+    art: Part4Image,
+  },
+  {
+    no: "Part 5",
+    title: "AIと知識作業",
+    body: "LLM、AIコーディング、テクニカルライティング",
+    href: `${videos}#part-5`,
+    art: Part5Image,
+  },
+  {
+    no: "Part 6",
+    title: "最終プロジェクト",
+    body: "個人開発、既存改善、PRR、最終発表",
+    href: `${videos}#part-6`,
+    art: Part6Image,
+  },
+];
+
+const materials = [
+  {
+    no: "01",
+    title: "動画一覧",
+    body: "全24章をその場で視聴し、進捗を記録します。",
+    href: videos,
+  },
+  {
+    no: "02",
+    title: "テキスト資料",
+    body: "24章を書籍形式で通読します。",
+    href: docHref("textbook/00-introduction"),
+  },
+  {
+    no: "03",
+    title: "用語解説",
+    body: "本文の専門用語を章ごとに調べます。",
+    href: docHref("glossary/intro"),
+  },
+  {
+    no: "04",
+    title: "動画スクリプト",
+    body: "各章の動画ナレーション台本を読みます。",
+    href: `${repo}/blob/main/video-scripts/README.md`,
+  },
+  {
+    no: "05",
+    title: "課題",
+    body: "観察・判断・検証の結果を残します。",
+    href: `${repo}/blob/main/assignments/README.md`,
+  },
+  {
+    no: "06",
+    title: "スターターアプリ",
+    body: "ローカルで動かして動作を確認します。",
+    href: `${repo}/blob/main/starter-apps/README.md`,
+  },
+];
+---
+
+<BaseLayout
+  title={SITE_NAME}
+  description={SITE_DESCRIPTION}
+  structuredData={courseStructuredData}
+>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="hero__content">
+      <p class="kicker">{SITE_ALTERNATE_NAME}</p>
+      {/* ワードマークは折り返し位置を制御する。CSS の word-break: keep-all で
+          「エンジニア」のようなカタカナ語を途中で割らせず、意味の切れ目にだけ
+          <wbr> で改行機会を与える (狭幅では「エンジニア / 入門研修」で折り返す)。 */}
+      <h1 id="hero-title" style="view-transition-name: doc-title">
+        {
+          SITE_NAME_PARTS.map((part, i) => (
+            <Fragment>
+              {i > 0 && <wbr />}
+              {part}
+            </Fragment>
+          ))
+        }
+      </h1>
+      <p class="hero__copy">
+        Webアプリケーション開発を、目的から検証まで<span
+          class="boten">説明できる</span
+        >ようにする教材です。
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href={videos}>
+          <Icon name="ph:play-circle" aria-hidden="true" />
+          動画を見る
+        </a>
+        <a
+          class="button button--secondary"
+          href={docHref("textbook/00-introduction")}
+        >
+          <Icon name="ph:book-open" aria-hidden="true" />
+          テキストを読む
+        </a>
+      </div>
+    </div>
+    <div class="hero__art">
+      <img
+        src={HeroTop.src}
+        alt="教材、動画、コード、検証、最終プロジェクトまでを一本の道でつなぐ学習サイトのイラスト"
+        width={1184}
+        height={1328}
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
+      />
+    </div>
+  </section>
+
+  <section class="section intro" aria-labelledby="intro-title">
+    <p class="section__label">Intro</p>
+    <div>
+      <h2 id="intro-title">自分の言葉で説明できるエンジニアへ。</h2>
+      <p>
+        この教材は、価値、実装、品質、運用、共有を24章でつなげます。動画で流れをつかみ、テキストと用語解説で確認し、課題で手を動かします。
+      </p>
+    </div>
+    <div class="intro__band">
+      <img
+        src={IntroImage.src}
+        alt="目的、実装、検証、共有、最終到達点へ進む学習の道を描いた概観図"
+        width={IntroImage.width}
+        height={IntroImage.height}
+        loading="lazy"
+        decoding="async"
+      />
+    </div>
+  </section>
+
+  <section class="section parts" aria-labelledby="parts-title">
+    <p class="section__label">Chapters</p>
+    <h2 id="parts-title">6つのPartで進む</h2>
+    {/* CSS Carousel: 対応ブラウザでは ::scroll-button / ::scroll-marker による
+        JSなしカルーセル、非対応では通常の横スクロール/グリッドに退化する。 */}
+    <ul class="part-carousel" role="list">
+      {
+        parts.map((p) => {
+          return (
+            <li class="part-card">
+              <a href={p.href}>
+                <span class="part-card__media">
+                  <img
+                    src={p.art.src}
+                    alt=""
+                    width={p.art.width}
+                    height={p.art.height}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+                <span class="part-card__text">
+                  <span class="part-card__no">{p.no}</span>
+                  <strong class="part-card__title">{p.title}</strong>
+                  <span class="part-card__body">{p.body}</span>
+                </span>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ul>
+  </section>
+
+  <section class="section materials" aria-labelledby="materials-title">
+    <div class="materials__inner">
+      <p class="section__label">Materials</p>
+      <h2 id="materials-title">視聴する、読む、手を動かす。</h2>
+      <ul class="material-list" role="list">
+        {
+          materials.map((m) => {
+            // GitHub などサイト外への導線。ヘッダー/フッターと同じ作法で
+            // 別タブ + noopener、矢印アイコン、スクリーンリーダー向けの注記を添える。
+            const external = m.href.startsWith("http");
+            return (
+              <li>
+                <a
+                  href={m.href}
+                  {...(external
+                    ? {
+                        target: "_blank",
+                        rel: "noopener noreferrer",
+                        "aria-label": `${m.title}。${m.body}（外部サイト・新しいタブで開く）`,
+                      }
+                    : {})}
+                >
+                  <span class="material-list__no">{m.no}</span>
+                  <strong>
+                    {m.title}
+                    {external && (
+                      <Icon name="ph:arrow-up-right" class="ext" aria-hidden="true" />
+                    )}
+                  </strong>
+                  <em>{m.body}</em>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="cta" aria-labelledby="cta-title">
+    <div class="cta__panel">
+      <p class="section__label">Start here</p>
+      <h2 id="cta-title">さあ、最初の一歩を。</h2>
+      <p>
+        序章から読み始めても、動画で流れをつかんでも構いません。あなたのペースで、説明できる変更を作れるようになりましょう。
+      </p>
+      <div class="hero__actions">
+        <a class="button button--primary" href={videos}>
+          <Icon name="ph:play-circle" aria-hidden="true" />
+          動画を見る
+        </a>
+        <a
+          class="button button--secondary"
+          href={docHref("textbook/00-introduction")}
+        >
+          <Icon name="ph:book-open" aria-hidden="true" />
+          テキストを読む
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
