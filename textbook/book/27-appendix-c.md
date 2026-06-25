@@ -16,4 +16,4 @@ order: 3
 - **Nicole Forsgren, Jez Humble, Gene Kim『Accelerate』**：デリバリー、品質、組織パフォーマンスを結びつける研究ベースの参考図書。
 - **Betsy Beyerほか『Site Reliability Engineering』**：SLO、トイル、モニタリング、インシデント対応の体系的な参考図書。
 - **Jared Bhattiほか『Docs for Developers』**：開発者向け文書を設計し、レビューし、保守するための参考図書。
-- **Adam Gordon Bell『Exercises for Programmers』**：小さな実装課題を積み上げる練習の補助図書。
+- **Brian P. Hogan『Exercises for Programmers』**：小さな実装課題を積み上げる練習の補助図書。
