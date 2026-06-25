@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learning Log Sample</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">Bootcamp sample app</p>
+        <h1>Mentor progress</h1>
+      </div>
+      <button id="refreshButton" type="button">Refresh</button>
+    </header>
+
+    <section class="toolbar" aria-label="Filters">
+      <label>
+        Submission
+        <select id="filterSelect">
+          <option value="all">All learners</option>
+          <option value="unsubmitted">Unsubmitted only</option>
+          <option value="submitted">Submitted only</option>
+        </select>
+      </label>
+
+      <label>
+        Support status
+        <select id="supportStatusSelect">
+          <option value="">Any</option>
+          <option value="none">None</option>
+          <option value="needs_support">Needs support</option>
+          <option value="in_progress">In progress</option>
+          <option value="resolved">Resolved</option>
+        </select>
+      </label>
+    </section>
+
+    <p id="message" class="message" role="status"></p>
+
+    <section class="table-wrap" aria-label="Learners">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Submitted at</th>
+            <th>Trouble</th>
+            <th>Support</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="learnerRows"></tbody>
+      </table>
+    </section>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>

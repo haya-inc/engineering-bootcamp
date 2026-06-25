@@ -1,0 +1,9 @@
+services:
+  app:
+    build: .
+    environment:
+      PORT: "4000"
+      SERVICE_NAME: "ops-observability-sample"
+      APP_VERSION: "compose-local"
+    ports:
+      - "4000:4000"

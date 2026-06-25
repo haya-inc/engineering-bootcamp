@@ -1,0 +1,14 @@
+{
+  "name": "learning-log-sample",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Small bootcamp sample app for local development, Web, API, debugging, testing, security, and containers exercises.",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18.18"
+  }
+}

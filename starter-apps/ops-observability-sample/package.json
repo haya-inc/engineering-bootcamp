@@ -1,0 +1,14 @@
+{
+  "name": "ops-observability-sample",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Small service for cloud, CI/CD, observability, SRE, and runbook exercises.",
+  "scripts": {
+    "dev": "node src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=18.18"
+  }
+}
