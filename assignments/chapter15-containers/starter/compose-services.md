@@ -24,7 +24,7 @@ services:
       - db
 
   db:
-    image: postgres:16
+    image: postgres:18
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}

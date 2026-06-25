@@ -8,7 +8,7 @@
 
 ```dockerfile
 # 研修用のたたき台。実際の実行環境やコマンドはプロジェクトに合わせて調整する。
-FROM node:22
+FROM node:26
 
 WORKDIR /app
 

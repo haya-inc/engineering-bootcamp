@@ -98,7 +98,7 @@ Dockerfileは、imageの作り方を記録するファイルである。
 外部npm packageに依存しないため、`npm ci` を実行せず、`package.json` と `src` だけをcopyしている。
 
 ```dockerfile
-FROM node:20-alpine
+FROM node:26-alpine
 
 WORKDIR /app
 
@@ -115,7 +115,7 @@ CMD ["npm", "start"]
 その場合のたたき台は次のように考えられる。
 
 ```dockerfile
-FROM node:22
+FROM node:26
 
 WORKDIR /app
 
@@ -132,8 +132,8 @@ CMD ["npm", "start"]
 大切なのは、何を先にcopyすると依存関係のinstallを再利用しやすいか、どのcommandで起動するか、imageに入れてはいけないものは何かを説明できることである。
 
 base imageのversionは、README、`package.json` の `engines`、チームの標準、公式imageのサポート状況に合わせて選ぶ。
-`learning-log-sample` は `package.json` でNode.js 18.18以上を前提にし、Dockerfileでは `node:20-alpine` を使っている。
-教材内の `node:22` は汎用例であり、実際の課題では自分のプロジェクトが使うversionを明記する。
+`learning-log-sample` は `package.json` でNode.js 26以上を前提にし、Dockerfileでは `node:26-alpine` を使っている。
+教材内の `node:26` は汎用例であり、実際の課題では自分のプロジェクトが使うversionを明記する。
 
 本番相当のimageでは、実行ユーザーも確認する。
 Dockerfileのprocessは、指定しなければrootで動くことがある。
@@ -260,7 +260,7 @@ services:
       - db
 
   db:
-    image: postgres:16
+    image: postgres:18
     environment:
       POSTGRES_USER: ${DB_USER}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
@@ -284,7 +284,7 @@ DBのデータはnamed volumeである `db-data` に残す。
 
 - appはDockerfileからbuildする。
 - appには `PORT`、`MENTOR_ID`、`DATABASE_URL` を渡す。
-- dbは `postgres:16-alpine` を使う。
+- dbは `postgres:18-alpine` を使う。
 - `schema.sql` を `/docker-entrypoint-initdb.d/001-schema.sql` へ読み取り専用でmountする。
 - DBの永続化用named volumeは定義していない。
 
@@ -346,7 +346,7 @@ Composeでは、named volumeを次のように定義できる。
 ```yaml
 services:
   db:
-    image: postgres:16
+    image: postgres:18
     volumes:
       - db-data:/var/lib/postgresql/data
 
@@ -429,7 +429,7 @@ services:
         condition: service_healthy
 
   db:
-    image: postgres:16-alpine
+    image: postgres:18-alpine
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U bootcamp -d learning_log"]
       interval: 5s
@@ -523,7 +523,7 @@ build時にどうしても秘密情報が必要な場合は、Dockerのsecret mo
 研修では、secretをbuildに必要としない構成を基本にする。
 
 base imageは、固定と更新の両方を考える。
-`node:20-alpine` のようにmajor versionを明記すると再現性は上がるが、脆弱性対応のために定期的な更新確認は必要である。
+`node:26-alpine` のようにmajor versionを明記すると再現性は上がるが、脆弱性対応のために定期的な更新確認は必要である。
 `latest` だけに頼ると、意図しない更新で動作が変わることがある。
 どのtagを使い、いつ見直すかを `dockerfile-note.md` に残す。
 
@@ -652,7 +652,7 @@ base image、依存関係のinstall、build、start、build context、`.dockerig
 ## Dockerfileのたたき台
 
 ```dockerfile
-FROM node:20-alpine
+FROM node:26-alpine
 WORKDIR /app
 COPY package.json ./
 COPY src ./src

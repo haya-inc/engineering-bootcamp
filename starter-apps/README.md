@@ -21,4 +21,4 @@ cd starter-apps/ops-observability-sample
 npm test
 ```
 
-どちらも外部npmパッケージに依存しないため、Node.js 18.18 以上があれば起動できます。
+どちらも外部npmパッケージに依存しないため、Node.js 26 以上があれば起動できます。
