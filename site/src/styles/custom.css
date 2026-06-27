@@ -51,8 +51,8 @@
        直値 (旧 76px/90px) の散在を避ける。--header-h を変えれば追従する。 */
     --sticky-top: calc(var(--header-h) + 16px);
     /* ルートスクローラの上端 inset。sticky ヘッダーの裏にフォーカス/アンカー対象が
-       隠れないようにする量。ヘッダー高 + 余白。狭幅でヘッダーが2段に折り返すぶんは
-       下の @media (max-width: 640px) で増やす。 */
+       隠れないようにする量。ヘッダー高 + 余白。ヘッダーが2段に切り替わる幅では
+       下のメディアクエリで増やす。 */
     --scroll-pad-top: calc(var(--header-h) + 1.5rem);
     --radius: 6px;
     --radius-md: 12px;
@@ -392,13 +392,14 @@
     }
   }
 
-  /* スマホ: ナビが縦折り返し・単語内改行でヘッダーが肥大化するのを防ぐ。
+  /* 中幅以下: ナビが中途半端に縦折り返しするのを防ぐ。
      1段目=ブランド+ツール、2段目=ナビを横スクロールするチップ列にする。 */
-  @media (max-width: 640px) {
-    /* この幅ではヘッダーが2段 (ブランド/ツール + ナビ) に折り返して高くなるので、
+  @media (max-width: 1180px) {
+    /* ヘッダーが2段 (ブランド/ツール + ナビ) になるので、sticky 要素と
        フォーカス/アンカー対象がその裏に隠れないよう inset を増やす。 */
     :root {
-      --scroll-pad-top: calc(var(--header-h) + 3rem);
+      --sticky-top: calc(var(--header-h) + 4rem);
+      --scroll-pad-top: calc(var(--header-h) + 4rem);
     }
     .site-header {
       flex-wrap: wrap;
@@ -440,7 +441,9 @@
         scroll-snap-align: start;
       }
     }
+  }
 
+  @media (max-width: 640px) {
     .theme-toggle {
       inline-size: 40px;
       block-size: 40px;
@@ -496,9 +499,8 @@
     box-shadow: 0 0 0 3px var(--accent-weak);
   }
 
-  /* スマホ: アイコンのみに縮めず「検索」ラベルを残しつつ、アクセント面で塗って
-     しっかり目立たせる。横幅をコンパクトに保ち、長いタイトルと同じ段に収める
-     (これらは上の基底 .search-open より後に置き、ソース順で確実に上書きする)。 */
+  /* スマホ: 基本は「検索」ラベルを残しつつ、アクセント面で塗って
+     しっかり目立たせる。極狭幅では下の追加ルールでアイコンだけに縮める。 */
   @media (max-width: 640px) {
     .search-open {
       padding: 7px 14px;
@@ -510,6 +512,17 @@
       color: inherit;
     }
     .search-open__kbd {
+      display: none;
+    }
+  }
+  @media (max-width: 360px) {
+    .search-open {
+      inline-size: 44px;
+      block-size: 44px;
+      justify-content: center;
+      padding: 0;
+    }
+    .search-open__label {
       display: none;
     }
   }
@@ -725,7 +738,7 @@
 
   /* ドキュメント 3 カラム (サイドバー | 本文 | 目次) */
   .docs {
-    --sidebar-w: 280px;
+    --sidebar-w: 300px;
     --toc-w: 240px;
     max-width: 1320px;
     margin-inline: auto;
