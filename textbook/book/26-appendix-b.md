@@ -532,7 +532,7 @@ order: 2
 - **release note**：利用者や運用者に、何が変わったか、既存データや互換性に何があるかを伝える短い文書。
 - **improvement PR summary**：改善PRの目的、変更内容、互換性、データ移行、確認結果、レビュー観点をまとめる文書。
 
-## 第23章 Production Readiness Review
+## 第23章 本番リリース判定
 
 - **Production Readiness Review**：本番または本番相当へ出す前に、出してよいか、止めるべきか、追跡課題つきで進めるかを判断する確認。
 - **release candidate**：リリース判断の対象になる、候補版の成果物。

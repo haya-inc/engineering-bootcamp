@@ -44,7 +44,7 @@
 
 - [第21章 個人開発プロジェクト](21-individual-project.md)
 - [第22章 既存プロダクト改善](22-existing-product-improvement.md)
-- [第23章 Production Readiness Review](23-production-readiness.md)
+- [第23章 本番リリース判定](23-production-readiness.md)
 - [第24章 最終発表と次の学習計画](24-final-presentation.md)
 
 ### 付録

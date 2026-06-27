@@ -10,10 +10,20 @@
 | --- | --- | --- |
 | AWS account |    | account idは公開資料に書かない |
 | region |    |    |
-| IAM role |    |    |
+| deploy role（GitHub Actionsが借りる） |    | OIDCで借りるrole。task execution roleとは分ける |
+| task execution role（ECSタスクに紐づく） |    | ECR pull / CloudWatch Logs出力 |
 | OIDC provider | GitHub Actions |    |
 | 許可するリポジトリ |    |    |
 | 許可するブランチ/環境 |    |    |
+
+## deploy roleに許可する操作（最小権限）
+
+| 操作 | 何のため | メモ |
+| --- | --- | --- |
+| ECR push |    | imageをECRへ送る |
+| ECS更新（task definition登録 + service更新） |    | 新revisionを登録しserviceを更新する（ローリング更新） |
+| iam:PassRole |    | taskにtask execution roleを渡すために必要 |
+| logs参照 |    | 必要な範囲だけ |
 
 ## イメージタグ方針
 

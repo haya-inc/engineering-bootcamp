@@ -1,7 +1,7 @@
 # 第19章 AIコーディングの実務ワークフロー
 
 - Part: Part 5: AIと知識作業
-- 動画: https://www.youtube.com/watch?v=jSE25SC1P7w
+- 動画: https://www.youtube.com/watch?v=O88W3gUe0oA
 - 課題: [../assignments/chapter19-ai-coding-workflow/](../assignments/chapter19-ai-coding-workflow/)
 - テキスト資料: [../textbook/](../textbook/)
 

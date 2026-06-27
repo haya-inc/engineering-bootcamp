@@ -1,7 +1,7 @@
 # 第22章 既存プロダクト改善
 
 - Part: Part 6: 最終プロジェクト
-- 動画: https://www.youtube.com/watch?v=jQNxE8nudBE
+- 動画: https://www.youtube.com/watch?v=1v-2Vhnk_1E
 - 課題: [../assignments/chapter22-existing-product-improvement/](../assignments/chapter22-existing-product-improvement/)
 - テキスト資料: [../textbook/](../textbook/)
 

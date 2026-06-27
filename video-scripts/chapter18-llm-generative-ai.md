@@ -1,7 +1,7 @@
 # 第18章 LLMと生成AIの基礎
 
 - Part: Part 5: AIと知識作業
-- 動画: https://www.youtube.com/watch?v=T_KjsNsp3SU
+- 動画: https://www.youtube.com/watch?v=WZEwsYJ0y5A
 - 課題: [../assignments/chapter18-llm-generative-ai/](../assignments/chapter18-llm-generative-ai/)
 - テキスト資料: [../textbook/](../textbook/)
 

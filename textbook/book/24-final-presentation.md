@@ -16,7 +16,7 @@ order: 24
 
 第21章では、個人開発プロジェクトを作った。
 第22章では、そのプロダクトを既存プロダクトとして改善した。
-第23章では、Production Readiness Reviewを行い、go、go with follow-up、no-goのいずれかのrelease decisionを作った。
+第23章では、本番リリース判定を行い、go、go with follow-up、no-goのいずれかのrelease decisionを作った。
 第24章では、それらを最終発表と次の90日計画へ変換する。
 
 この章で重視するのは、見栄えのよい資料を作ることではない。

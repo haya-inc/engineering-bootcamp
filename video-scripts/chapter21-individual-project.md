@@ -1,7 +1,7 @@
 # 第21章 個人開発プロジェクト
 
 - Part: Part 6: 最終プロジェクト
-- 動画: https://www.youtube.com/watch?v=TrVwOPM7esw
+- 動画: https://www.youtube.com/watch?v=rMWr144DzLU
 - 課題: [../assignments/chapter21-individual-project/](../assignments/chapter21-individual-project/)
 - テキスト資料: [../textbook/](../textbook/)
 

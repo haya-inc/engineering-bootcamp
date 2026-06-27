@@ -30,5 +30,5 @@ order: 1
 - **第20章 テクニカルライティングと知識共有**：doc-audience-plan.md、readme-update-draft.md、feature-design-note.md、adr-0001-filtering-support-status.md、doc-review-note.md を作る。余裕があれば incident-report-draft.md も作る。
 - **第21章 個人開発プロジェクト**：project-brief.md、mvp-scope.md、delivery-plan.md、project-progress-log.md、self-review.md、demo-script.md、mentor-review-request.md を作り、READMEに起動方法と確認方法を追記する。
 - **第22章 既存プロダクト改善**：existing-behavior-inventory.md、change-impact-analysis.md、regression-test-plan.md、safe-change-plan.md、migration-note.md、improvement-pr-summary.md、release-note.md を作り、READMEを更新する。
-- **第23章 Production Readiness Review**：release-candidate-summary.md、production-readiness-checklist.md、security-accessibility-readiness.md、performance-observability-readiness.md、release-runbook.md、smoke-test-plan.md、release-decision.md、follow-up-issues.md を作る。
+- **第23章 本番リリース判定**：release-candidate-summary.md、production-readiness-checklist.md、security-accessibility-readiness.md、performance-observability-readiness.md、release-runbook.md、smoke-test-plan.md、release-decision.md、follow-up-issues.md を作る。
 - **第24章 最終発表と次の学習計画**：final-evidence-index.md、final-presentation-brief.md、final-demo-script.md、learning-reflection.md、next-90-days-plan.md を作る。

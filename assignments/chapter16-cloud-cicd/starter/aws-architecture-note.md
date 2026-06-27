@@ -8,7 +8,10 @@
 | AWS auth | IAM OIDC provider / IAM role | shared |    |
 | image registry | Amazon ECR | shared or per environment |    |
 | Webアプリのランタイム | Amazon ECS（Fargate 起動タイプ） | staging / production |    |
+| GitHub deploy role | IAM role | staging / production | GitHub ActionsがOIDCで借りるrole。ECR push、ECS更新（task definition登録 + service更新）、task execution roleを渡す iam:PassRole |
+| task execution role | IAM role | staging / production | ECSのタスクに紐づくrole。private ECRからのpullとCloudWatch Logsへの出力。deploy roleとは別 |
 | database | Amazon RDS for PostgreSQL | staging / production |    |
+| public access | task public IP（assignPublicIp=ENABLED） | staging / production | 学習用の最小公開。taskが入れ替わるとpublic IPも変わる。本番はALB+HTTPS推奨 |
 | config | ECS task definition の環境変数 | staging / production |    |
 | secrets | Secrets Manager / Parameter Store | staging / production |    |
 | logs | CloudWatch Logs | staging / production |    |

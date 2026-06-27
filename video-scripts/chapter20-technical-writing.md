@@ -1,7 +1,7 @@
 # 第20章 テクニカルライティングと知識共有
 
 - Part: Part 5: AIと知識作業
-- 動画: https://www.youtube.com/watch?v=7mGktu2DCxI
+- 動画: https://www.youtube.com/watch?v=oWLKP_0n_fo
 - 課題: [../assignments/chapter20-technical-writing/](../assignments/chapter20-technical-writing/)
 - テキスト資料: [../textbook/](../textbook/)
 

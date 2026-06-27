@@ -1,7 +1,7 @@
 # 第24章 最終発表と次の学習計画
 
 - Part: Part 6: 最終プロジェクト
-- 動画: https://www.youtube.com/watch?v=TmmhM6QTVLo
+- 動画: https://www.youtube.com/watch?v=V7h1XVgtrhk
 - 課題: [../assignments/chapter24-final-presentation/](../assignments/chapter24-final-presentation/)
 - テキスト資料: [../textbook/](../textbook/)
 

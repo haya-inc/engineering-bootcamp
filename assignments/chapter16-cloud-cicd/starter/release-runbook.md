@@ -26,19 +26,33 @@
 ## デプロイ後チェック
 
 - [ ] ECS service（Fargate）のタスクがrunning
+- [ ] 現在の接続先を確認した（実行中taskのENI → public IP / port）
 - [ ] health endpointが成功する
 - [ ] 主要画面が表示される
 - [ ] DB接続が成功する
 - [ ] CloudWatch Logsに重大なerrorがない
 - [ ] versionまたはcommit SHAを確認した
 
+## 現在の接続先確認（スモークテストの前段）
+
+最小公開ではtaskにpublic IPを直接割り当てるため、taskが入れ替わるとpublic IPも変わる。スモークテストの前に、ECS serviceの実行中taskからENI（ネットワークインターフェース）をたどり、現在のpublic IPとportを確認する。
+
+| 項目 | 値 | メモ |
+| --- | --- | --- |
+| 確認時刻 |    |    |
+| 実行中task |    | service名やtask IDで特定 |
+| public IP / port |    | account idや実URLは公開資料に書かない |
+
 ## スモークテスト
 
-| 確認 | 期待結果 | 結果 | メモ |
-| --- | --- | --- | --- |
-| health | 200 |    |    |
-| support status list | displayed |    |    |
-| update status | success |    |    |
+実行したURL、時刻、結果を残す。
+
+| 確認 | 期待結果 | 実行時刻 | 対象URL | 結果 | メモ |
+| --- | --- | --- | --- | --- | --- |
+| `/healthz` | 200 |    |    |    | processが応答できるか |
+| `/readyz` | 200 |    |    |    | requestを受ける準備ができているか |
+| support status list | displayed |    |    |    |    |
+| update status | success |    |    |    |    |
 
 ## ロールバック
 

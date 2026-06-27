@@ -74,15 +74,15 @@ AGENTS.md         AI学習支援のためのリポジトリ方針
 | 13 | Part 3: Webアプリケーション開発 | テストとコード品質 | [YouTube](https://www.youtube.com/watch?v=LsNlAVn2FD0) | [台本](video-scripts/chapter13-testing.md) | [課題](assignments/chapter13-testing/) |
 | 14 | Part 3: Webアプリケーション開発 | セキュリティの基本 | [YouTube](https://www.youtube.com/watch?v=yhjkNwj2peY) | [台本](video-scripts/chapter14-security.md) | [課題](assignments/chapter14-security/) |
 | 15 | Part 4: 実行環境と運用 | コンテナと実行環境 | [YouTube](https://www.youtube.com/watch?v=0En-JTVTZ0o) | [台本](video-scripts/chapter15-containers.md) | [課題](assignments/chapter15-containers/) |
-| 16 | Part 4: 実行環境と運用 | クラウドとCI/CD | [YouTube](https://www.youtube.com/watch?v=IoLfMJnyNR8) | [台本](video-scripts/chapter16-cloud-cicd.md) | [課題](assignments/chapter16-cloud-cicd/) |
-| 17 | Part 4: 実行環境と運用 | オブザーバビリティとSRE | [YouTube](https://www.youtube.com/watch?v=WodFHiQiBto) | [台本](video-scripts/chapter17-observability-sre.md) | [課題](assignments/chapter17-observability-sre/) |
-| 18 | Part 5: AIと知識作業 | LLMと生成AIの基礎 | [YouTube](https://www.youtube.com/watch?v=T_KjsNsp3SU) | [台本](video-scripts/chapter18-llm-generative-ai.md) | [課題](assignments/chapter18-llm-generative-ai/) |
-| 19 | Part 5: AIと知識作業 | AIコーディングの実務ワークフロー | [YouTube](https://www.youtube.com/watch?v=jSE25SC1P7w) | [台本](video-scripts/chapter19-ai-coding-workflow.md) | [課題](assignments/chapter19-ai-coding-workflow/) |
-| 20 | Part 5: AIと知識作業 | テクニカルライティングと知識共有 | [YouTube](https://www.youtube.com/watch?v=7mGktu2DCxI) | [台本](video-scripts/chapter20-technical-writing.md) | [課題](assignments/chapter20-technical-writing/) |
-| 21 | Part 6: 最終プロジェクト | 個人開発プロジェクト | [YouTube](https://www.youtube.com/watch?v=TrVwOPM7esw) | [台本](video-scripts/chapter21-individual-project.md) | [課題](assignments/chapter21-individual-project/) |
-| 22 | Part 6: 最終プロジェクト | 既存プロダクト改善 | [YouTube](https://www.youtube.com/watch?v=jQNxE8nudBE) | [台本](video-scripts/chapter22-existing-product-improvement.md) | [課題](assignments/chapter22-existing-product-improvement/) |
-| 23 | Part 6: 最終プロジェクト | Production Readiness Review | [YouTube](https://www.youtube.com/watch?v=HtL-1DEa7QE) | [台本](video-scripts/chapter23-production-readiness.md) | [課題](assignments/chapter23-production-readiness/) |
-| 24 | Part 6: 最終プロジェクト | 最終発表と次の学習計画 | [YouTube](https://www.youtube.com/watch?v=TmmhM6QTVLo) | [台本](video-scripts/chapter24-final-presentation.md) | [課題](assignments/chapter24-final-presentation/) |
+| 16 | Part 4: 実行環境と運用 | クラウドとCI/CD | [YouTube](https://www.youtube.com/watch?v=s0zjzlcgaus) | [台本](video-scripts/chapter16-cloud-cicd.md) | [課題](assignments/chapter16-cloud-cicd/) |
+| 17 | Part 4: 実行環境と運用 | オブザーバビリティとSRE | [YouTube](https://www.youtube.com/watch?v=U9wpEuTV70Y) | [台本](video-scripts/chapter17-observability-sre.md) | [課題](assignments/chapter17-observability-sre/) |
+| 18 | Part 5: AIと知識作業 | LLMと生成AIの基礎 | [YouTube](https://www.youtube.com/watch?v=WZEwsYJ0y5A) | [台本](video-scripts/chapter18-llm-generative-ai.md) | [課題](assignments/chapter18-llm-generative-ai/) |
+| 19 | Part 5: AIと知識作業 | AIコーディングの実務ワークフロー | [YouTube](https://www.youtube.com/watch?v=O88W3gUe0oA) | [台本](video-scripts/chapter19-ai-coding-workflow.md) | [課題](assignments/chapter19-ai-coding-workflow/) |
+| 20 | Part 5: AIと知識作業 | テクニカルライティングと知識共有 | [YouTube](https://www.youtube.com/watch?v=oWLKP_0n_fo) | [台本](video-scripts/chapter20-technical-writing.md) | [課題](assignments/chapter20-technical-writing/) |
+| 21 | Part 6: 最終プロジェクト | 個人開発プロジェクト | [YouTube](https://www.youtube.com/watch?v=rMWr144DzLU) | [台本](video-scripts/chapter21-individual-project.md) | [課題](assignments/chapter21-individual-project/) |
+| 22 | Part 6: 最終プロジェクト | 既存プロダクト改善 | [YouTube](https://www.youtube.com/watch?v=1v-2Vhnk_1E) | [台本](video-scripts/chapter22-existing-product-improvement.md) | [課題](assignments/chapter22-existing-product-improvement/) |
+| 23 | Part 6: 最終プロジェクト | 本番リリース判定 | [YouTube](https://www.youtube.com/watch?v=x0qZyDC_0nA) | [台本](video-scripts/chapter23-production-readiness.md) | [課題](assignments/chapter23-production-readiness/) |
+| 24 | Part 6: 最終プロジェクト | 最終発表と次の学習計画 | [YouTube](https://www.youtube.com/watch?v=V7h1XVgtrhk) | [台本](video-scripts/chapter24-final-presentation.md) | [課題](assignments/chapter24-final-presentation/) |
 
 ## 課題の進め方
 

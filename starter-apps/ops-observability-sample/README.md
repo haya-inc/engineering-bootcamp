@@ -25,7 +25,7 @@ npm test
 | --- | --- |
 | `GET /healthz` | プロセスが生きているか |
 | `GET /readyz` | サービスがリクエストを受けられるか |
-| `GET /api/work?delayMs=100` | レイテンシ観察用の正常系 |
+| `GET /api/work?delayMs=300` | レイテンシ観察用の正常系 |
 | `GET /api/flaky?fail=true` | エラー率観察用の失敗系 |
 | `GET /metrics` | Prometheus風の最小メトリクス |
 

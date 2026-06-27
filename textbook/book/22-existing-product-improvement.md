@@ -673,7 +673,7 @@ GitHubのPull Requestは変更の提案とレビューの場所であり、Googl
 ```
 
 PR Summaryは、レビュアーのためだけではない。
-第23章のProduction Readiness Reviewへ渡す入力にもなる。
+第23章の本番リリース判定へ渡す入力にもなる。
 既存動作、新機能、互換性、データ移行、残課題が揃っていると、本番前確認へ進みやすい。
 
 ### Release Noteは、利用者に見える変化を書く
@@ -845,9 +845,9 @@ AIは、影響範囲や確認観点の候補出しに役立つ。
 この章のゴールは、良さそうな変更を速く入れることではない。
 今ある価値を守りながら、小さく変え、確認し、戻せる状態で説明することである。
 
-### Production Readiness Reviewの章へ
+### 本番リリース判定の章へ
 
-次章では、Production Readiness Reviewを扱う。
+次章では、本番リリース判定を扱う。
 第22章で作ったexisting behavior inventory、change impact analysis、regression test plan、safe change plan、migration note、improvement PR summary、release noteは、そのまま第23章の入力になる。
 本番に出してよいかを判断するには、変更内容だけでなく、既存動作、互換性、データ、確認結果、残課題が必要である。
 第22章の成果物は、その判断材料になる。

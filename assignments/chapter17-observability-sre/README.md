@@ -23,7 +23,7 @@
 - Amazon ECS（Fargate 起動タイプ）
 - CloudWatch Logs
 - CloudWatch metrics（Container Insights を含む）
-- 必要に応じたOpenTelemetryまたはX-Rayの概念
+- traceは、新規ならまずOpenTelemetry/ADOTを標準の集め方とし、X-Rayは集めたtraceを見る場所と考える
 
 ローカルでログ、metrics、health check、error rateを観察する練習には、このリポジトリの `starter-apps/ops-observability-sample` を使ってよい。
 
