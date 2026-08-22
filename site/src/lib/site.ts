@@ -13,6 +13,7 @@ export const SITE_ALTERNATE_NAME = "Engineering Bootcamp";
 export const SITE_PUBLISHER = "haya株式会社";
 export const SITE_PUBLISHER_URL = "https://www.haya.company/";
 export const SITE_REPOSITORY_URL = "https://github.com/haya-inc/engineering-bootcamp";
+export const ZENN_ENGINEERING_BOOK_URL = "https://zenn.dev/yhay81/books/software-engineering-2026";
 // モバイル SERP のスニペットは先頭〜60文字前後で切れるため、固有の主要語
 // (Webアプリ開発 / AI活用 / 24章) を冒頭へ前寄せし、末尾切れでも価値が伝わるようにする。
 export const SITE_DESCRIPTION =

@@ -9,6 +9,7 @@
     "dev": "node scripts/split-book.mjs && astro dev",
     "build": "node scripts/split-book.mjs && astro build && pagefind --site dist",
     "preview": "astro preview",
+    "deploy": "wrangler deploy",
     "check": "node scripts/split-book.mjs && vp check",
     "typecheck": "node scripts/split-book.mjs && astro check",
     "lint": "vp lint",
@@ -26,7 +27,8 @@
     "@iconify-json/ph": "1.2.2",
     "pagefind": "1.5.2",
     "typescript": "6.0.3",
-    "vite-plus": "0.2.1"
+    "vite-plus": "0.2.1",
+    "wrangler": "4.125.0"
   },
   "engines": {
     "node": ">=26"

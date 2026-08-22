@@ -3,7 +3,7 @@ import { defineConfig, fontProviders } from "astro/config";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
 
-// GitHub Pages + カスタムドメイン (ルート配信) 用の公開設定。
+// Cloudflare Workers Static Assets + カスタムドメイン (ルート配信) 用の公開設定。
 // 想定URL: https://bootcamp.haya-inc.co.jp/
 export default defineConfig({
   site: "https://bootcamp.haya-inc.co.jp",

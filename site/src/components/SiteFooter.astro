@@ -9,6 +9,7 @@ import {
   SITE_PUBLISHER,
   SITE_PUBLISHER_URL,
   SITE_REPOSITORY_URL,
+  ZENN_ENGINEERING_BOOK_URL,
 } from "../lib/site";
 
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -27,6 +28,12 @@ const siteLinks: FooterLink[] = [
   { href: `${base}/videos/`, label: "動画", icon: "ph:play-circle" },
   { href: docHref("textbook/00-introduction"), label: "テキスト資料", icon: "ph:book-open" },
   { href: docHref("glossary/intro"), label: "用語解説", icon: "ph:cards-three" },
+  {
+    href: ZENN_ENGINEERING_BOOK_URL,
+    label: "Zenn書籍",
+    icon: "ph:books",
+    external: true,
+  },
 ];
 const repoLinks: FooterLink[] = [
   {
@@ -102,9 +109,10 @@ const extAttrs = (l: FooterLink) =>
           {
             siteLinks.map((l) => (
               <li>
-                <a href={l.href}>
+                <a href={l.href} {...extAttrs(l)}>
                   <Icon name={l.icon} aria-hidden="true" />
                   {l.label}
+                  {l.external && <Icon name="ph:arrow-up-right" class="ext" aria-hidden="true" />}
                 </a>
               </li>
             ))

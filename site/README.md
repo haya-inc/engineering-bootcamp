@@ -82,8 +82,8 @@ README の動画列が個別 URL（`watch?v=` 等）の章はその動画を、`
 
 ## デプロイ
 
-`main` への push で GitHub Actions（[../.github/workflows/deploy.yml](../.github/workflows/deploy.yml)）がビルドし、GitHub Pages へ公開します。
-初回のみ、リポジトリの Settings → Pages で Source を「GitHub Actions」に設定する必要があります（管理者操作）。
+Cloudflare Workers Static Assets へ公開します。ローカルからは `bun run build && bun run deploy` でデプロイできます。
+Cloudflare Workers Builds を GitHub リポジトリの `main` ブランチへ接続すると、push 時に自動更新できます。
 
 ## 最新Web標準について
 

@@ -16,9 +16,10 @@
 - [動画プレイリスト](https://www.youtube.com/playlist?list=PLhpCGFN2YpZ7DiryhbTWChiynuN86k_X_)
 - [動画スクリプト](video-scripts/README.md)
 - [テキスト資料](textbook/README.md)
+- [Zenn書籍「ソフトウェアエンジニアリング 知識体系 2025-2026」](https://zenn.dev/yhay81/books/software-engineering-2026)
 - [課題](assignments/README.md)
 - [スターターアプリ](starter-apps/README.md)
-- [公開サイト](https://haya-inc.github.io/engineering-bootcamp/)
+- [公開サイト](https://bootcamp.haya-inc.co.jp/)
 - [貢献ルール](CONTRIBUTING.md)
 - [ライセンス](LICENSE)
 
@@ -115,13 +116,11 @@ assignments/chapter08-debugging/submission/<github-account>/
 
 IssueやPull Requestを作る前に、[CONTRIBUTING.md](CONTRIBUTING.md) を確認してください。
 
-## GitHub Pages
+## 公開サイト
 
 公開サイトは `site/`（Astro + Vite+）のソースから生成し、テキスト資料（[textbook/book/](textbook/book/) の章ファイルと [textbook/glossary.md](textbook/glossary.md)）から、検索付きの教材ポータルとして公開します。
-デプロイは GitHub Actions（[.github/workflows/deploy.yml](.github/workflows/deploy.yml)）で行い、`main` への push で自動更新されます。
-想定URLは `https://haya-inc.github.io/engineering-bootcamp/` です。
-
-GitHub Pages の Source は「GitHub Actions」を使います（リポジトリの Settings → Pages で設定）。
+公開先は Cloudflare Workers Static Assets です。設定は [site/wrangler.jsonc](site/wrangler.jsonc) にまとめ、`bootcamp.haya-inc.co.jp` で配信します。
+Cloudflare Workers Builds を GitHub リポジトリの `main` ブランチへ接続すると、push 時に自動更新できます。
 ローカルでの開発・ビルド手順は [site/README.md](site/README.md) を参照してください。
 
 ## ライセンス
